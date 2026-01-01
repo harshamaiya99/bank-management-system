@@ -4,110 +4,134 @@
     <meta charset="UTF-8">
     <title>Bank Account Management</title>
     <style>
-        body { font-family: Arial; margin: 30px; }
-        input { padding: 6px; }
-        button { padding: 6px 10px; margin-left: 5px; }
-        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-        th { background-color: #f2f2f2; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+        }
+        .search-section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+        }
+        .search-section h2 {
+            margin-top: 0;
+            color: #555;
+            font-size: 18px;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn-search {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-search:hover {
+            background-color: #0056b3;
+        }
+        .btn-create {
+            width: 100%;
+            background-color: #28a745;
+            color: white;
+            padding: 15px;
+            font-size: 18px;
+        }
+        .btn-create:hover {
+            background-color: #218838;
+        }
+        .error {
+            color: #dc3545;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .create-section {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Bank Account Management</h1>
 
-<h2>Create Account</h2>
+        <div class="search-section">
+            <h2>Search Account</h2>
+            <div class="search-box">
+                <input
+                    type="text"
+                    id="accountId"
+                    placeholder="Enter 7-digit Account ID"
+                    maxlength="7"
+                    pattern="[0-9]{7}"
+                >
+                <button class="btn-search" onclick="searchAccount()">Search</button>
+            </div>
+            <div class="error" id="errorMessage"></div>
+        </div>
 
-<form onsubmit="createAccount(event)">
-    Name: <input type="text" id="name" required>
-    Email: <input type="email" id="email" required>
-    <button type="submit">Create</button>
-</form>
+        <div class="create-section">
+            <button class="btn-create" onclick="goToCreateAccount()">Create New Account</button>
+        </div>
+    </div>
 
-<p id="message"></p>
+    <script>
+        const API = "http://127.0.0.1:9000";
 
-<h2>Accounts</h2>
+        function searchAccount() {
+            const accountId = document.getElementById("accountId").value.trim();
+            const errorMsg = document.getElementById("errorMessage");
 
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody id="accountsTable"></tbody>
-</table>
+            errorMsg.textContent = "";
 
-<script>
-const API = "http://127.0.0.1:9000";
+            if (accountId.length !== 7 || !/^\d{7}$/.test(accountId)) {
+                errorMsg.textContent = "Please enter a valid 7-digit account ID";
+                return;
+            }
 
-async function createAccount(event) {
-    event.preventDefault();
+            window.location.href = `/accountDetails.html?account_id=${accountId}`;
+        }
 
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
+        function goToCreateAccount() {
+            window.location.href = "/createAccount.html";
+        }
 
-    await fetch(`${API}/accounts`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({name, email})
-    });
-
-    document.getElementById("name").value = "";
-    document.getElementById("email").value = "";
-    loadAccounts();
-}
-
-async function loadAccounts() {
-    const response = await fetch(`${API}/accounts`);
-    const accounts = await response.json();
-
-    const table = document.getElementById("accountsTable");
-    table.innerHTML = "";
-
-    accounts.forEach(acc => {
-        table.innerHTML += `
-            <tr>
-                <td>${acc.id}</td>
-                <td>
-                    <input value="${acc.name}" id="name-${acc.id}">
-                </td>
-                <td>
-                    <input value="${acc.email}" id="email-${acc.id}">
-                </td>
-                <td>
-                    <button onclick="updateAccount(${acc.id})">Update</button>
-                    <button onclick="deleteAccount(${acc.id})">Delete</button>
-                </td>
-            </tr>
-        `;
-    });
-}
-
-async function updateAccount(id) {
-    const name = document.getElementById(`name-${id}`).value;
-    const email = document.getElementById(`email-${id}`).value;
-
-    await fetch(`${API}/accounts/${id}`, {
-        method: "PUT",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({name, email})
-    });
-
-    loadAccounts();
-}
-
-async function deleteAccount(id) {
-    await fetch(`${API}/accounts/${id}`, {
-        method: "DELETE"
-    });
-
-    loadAccounts();
-}
-
-// Load accounts on page load
-loadAccounts();
-</script>
-
+        // Allow Enter key to search
+        document.getElementById("accountId").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                searchAccount();
+            }
+        });
+    </script>
 </body>
 </html>
