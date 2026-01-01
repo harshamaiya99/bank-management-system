@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Account Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 700px;
+            margin: 30px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-cancel:hover {
+            background-color: #5a6268;
+        }
+        .btn-update {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-update:hover {
+            background-color: #0056b3;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+        .error {
+            color: #dc3545;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Account Details</h1>
+
+        <div id="loadingMessage" class="loading">Loading account details...</div>
+        <div id="errorMessage" class="error" style="display: none;"></div>
+
+        <form id="accountForm" style="display: none;">
+            <div class="form-group">
+                <label>Account ID:</label>
+                <input type="text" id="accountId" readonly style="background-color: #e9ecef;">
+            </div>
+
+            <div class="form-group">
+                <label>Account Holder Name:</label>
+                <input type="text" id="accountHolderName" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="email" required>
+            </div>
+
+            <div class="form-group">
+                <label>Phone:</label>
+                <input type="tel" id="phone" required>
+            </div>
+
+            <div class="form-group">
+                <label>Address:</label>
+                <input type="text" id="address" required>
+            </div>
+
+            <div class="form-group">
+                <label>Account Type:</label>
+                <select id="accountType" required>
+                    <option value="Savings">Savings</option>
+                    <option value="Current">Current</option>
+                    <option value="Fixed Deposit">Fixed Deposit</option>
+                    <option value="Salary">Salary</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Balance:</label>
+                <input type="number" id="balance" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+                <label>Date Opened:</label>
+                <input type="date" id="dateOpened" required>
+            </div>
+
+            <div class="form-group">
+                <label>Status:</label>
+                <select id="status" required>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                    <option value="Suspended">Suspended</option>
+                    <option value="Closed">Closed</option>
+                </select>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn-cancel" onclick="cancelAction()">Cancel</button>
+                <button type="button" class="btn-update" onclick="updateAccount()">Update</button>
+                <button type="button" class="btn-delete" onclick="deleteAccount()">Delete</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const API = "http://127.0.0.1:9000";
+        let currentAccountId = "";
+
+        async function loadAccountDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            currentAccountId = urlParams.get('account_id');
+
+            if (!currentAccountId) {
+                showError("No account ID provided");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API}/accounts/${currentAccountId}`);
+
+                if (!response.ok) {
+                    throw new Error("Account not found");
+                }
+
+                const account = await response.json();
+
+                document.getElementById("accountId").value = account.account_id;
+                document.getElementById("accountHolderName").value = account.account_holder_name;
+                document.getElementById("email").value = account.email;
+                document.getElementById("phone").value = account.phone;
+                document.getElementById("address").value = account.address;
+                document.getElementById("accountType").value = account.account_type;
+                document.getElementById("balance").value = account.balance;
+                document.getElementById("dateOpened").value = account.date_opened;
+                document.getElementById("status").value = account.status;
+
+                document.getElementById("loadingMessage").style.display = "none";
+                document.getElementById("accountForm").style.display = "block";
+            } catch (error) {
+                showError("Account not found. Please check the account ID.");
+            }
+        }
+
+        function showError(message) {
+            document.getElementById("loadingMessage").style.display = "none";
+            document.getElementById("errorMessage").textContent = message;
+            document.getElementById("errorMessage").style.display = "block";
+
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 2000);
+        }
+
+        async function updateAccount() {
+            const accountData = {
+                account_holder_name: document.getElementById("accountHolderName").value,
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value,
+                address: document.getElementById("address").value,
+                account_type: document.getElementById("accountType").value,
+                balance: parseFloat(document.getElementById("balance").value),
+                date_opened: document.getElementById("dateOpened").value,
+                status: document.getElementById("status").value
+            };
+
+            try {
+                const response = await fetch(`${API}/accounts/${currentAccountId}`, {
+                    method: "PUT",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(accountData)
+                });
+
+                if (response.ok) {
+                    alert("Account updated successfully!");
+                    window.location.href = "/";
+                } else {
+                    alert("Failed to update account");
+                }
+            } catch (error) {
+                alert("Error updating account");
+            }
+        }
+
+        async function deleteAccount() {
+            if (!confirm("Are you sure you want to delete this account? This action cannot be undone.")) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API}/accounts/${currentAccountId}`, {
+                    method: "DELETE"
+                });
+
+                if (response.ok) {
+                    alert("Account deleted successfully!");
+                    window.location.href = "/";
+                } else {
+                    alert("Failed to delete account");
+                }
+            } catch (error) {
+                alert("Error deleting account");
+            }
+        }
+
+        function cancelAction() {
+            window.location.href = "/";
+        }
+
+        loadAccountDetails();
+    </script>
+</body>
+</html>
