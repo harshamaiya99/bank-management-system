@@ -34,7 +34,7 @@ def get_all_accounts():
     accounts = crud.get_all_accounts()
     return accounts
 
-@api_router.post("", status_code=201)
+@api_router.post("", status_code=200)
 def create_account(account: AccountCreate):
     """Create a new account"""
     result = crud.create_account(account)
