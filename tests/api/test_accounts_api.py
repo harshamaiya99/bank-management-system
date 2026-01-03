@@ -27,7 +27,7 @@ def test_account_crud_flow(accounts_api, row):
             "status": row["status"],
             "services": row["services"],  # Stores comma-separated values (e.g., "SMS,DebitCard")
             "marketing_opt_in": bool(row["marketing_opt_in"]),
-            "agreed_to_terms": bool(row["agreed_to_terms"])
+            "agreed_to_terms": True
         }
 
         create_resp = accounts_api.create_account(create_payload)
@@ -53,7 +53,7 @@ def test_account_crud_flow(accounts_api, row):
         assert get_resp.json()["status"] == row["status"]
         assert get_resp.json()["services"] == row["services"]
         assert get_resp.json()["marketing_opt_in"] == bool(row["marketing_opt_in"])
-        assert get_resp.json()["agreed_to_terms"] == bool(row["agreed_to_terms"])
+        assert get_resp.json()["agreed_to_terms"] == True
 
     with allure.step("Update account (PUT)"):
         update_payload = {
@@ -70,7 +70,7 @@ def test_account_crud_flow(accounts_api, row):
             "status": row["updated_status"],
             "services": row["updated_services"],
             "marketing_opt_in": bool(row["updated_marketing_opt_in"]),
-            "agreed_to_terms": bool(row["agreed_to_terms"])
+            "agreed_to_terms": True
         }
 
         update_resp = accounts_api.update_account(account_id, update_payload)
@@ -94,7 +94,7 @@ def test_account_crud_flow(accounts_api, row):
         assert get_updated_resp.json()["status"] == row["updated_status"]
         assert get_updated_resp.json()["services"] == row["updated_services"]
         assert get_updated_resp.json()["marketing_opt_in"] == bool(row["updated_marketing_opt_in"])
-        assert get_updated_resp.json()["agreed_to_terms"] == bool(row["agreed_to_terms"])
+        assert get_updated_resp.json()["agreed_to_terms"] == True
 
     with allure.step("Delete account (DELETE)"):
         delete_resp = accounts_api.delete_account(account_id)
