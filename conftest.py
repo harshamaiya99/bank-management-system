@@ -1,6 +1,6 @@
 import os
-import subprocess
 import shutil
+import subprocess
 import pytest
 from tests.api.services.accounts_api import AccountsAPI
 
@@ -13,27 +13,35 @@ def accounts_api():
 
 
 def pytest_sessionfinish(session, exitstatus):
-    """ Automatically generate Allure report after pytest execution """
+    """
+    Generate Allure report with history (trend charts)
+    """
     allure_cmd = shutil.which("allure")
-
     if not allure_cmd:
         print("\nAllure CLI not found in PATH. Skipping report generation.")
         return
 
-    allure_results = "tests/api/reports/allure-results"
-    allure_report = "tests/api/reports/allure-reports"
+    results_dir = "tests/api/reports/allure-results"
+    report_dir = "tests/api/reports/allure-reports"
+    history_src = os.path.join(report_dir, "history")
+    history_dest = os.path.join(results_dir, "history")
 
-    if os.path.exists(allure_results):
-        subprocess.run(
-            [
-                allure_cmd,
-                "generate",
-                allure_results,
-                "--clean",
-                "--single-file",
-                "-o",
-                allure_report
-            ],
-            check=False
-        )
-        print(f"\nAllure report generated at: {allure_report}")
+    # 1️⃣ Copy previous history → allure-results
+    if os.path.exists(history_src):
+        shutil.copytree(history_src, history_dest, dirs_exist_ok=True)
+
+    # 2️⃣ Generate new report
+    subprocess.run(
+        [
+            allure_cmd,
+            "generate",
+            results_dir,
+            "--clean",
+            # "--single-file",
+            "-o",
+            report_dir
+        ],
+        check=False
+    )
+
+    print("\nAllure report generated with history support.")
