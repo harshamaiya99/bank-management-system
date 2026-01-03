@@ -1,0 +1,2 @@
+account_holder_name,email,phone,address,account_type,balance,date_opened,status,updated_account_holder_name,updated_email,updated_phone,updated_address,updated_account_type,updated_balance,updated_date_opened,updated_status
+John Doe,john.doe@example.com,+1-555-0199,"123 Main St, New York, NY",Savings,1000.50,2023-10-27,Active,John Doe Updated,john.new@example.com,+1-555-0199,"456 New Ave, New York, NY",Current,5000.00,2023-10-27,Active

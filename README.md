@@ -1,4 +1,4 @@
-uvicorn main:app --app-dir backend --reload --port 9000
+uvicorn main:app --app-dir src/backend --reload --port 9000
 
 C:\Users\maiya>netstat -ano | findstr :9000
   TCP    127.0.0.1:9000         0.0.0.0:0              LISTENING       23996
