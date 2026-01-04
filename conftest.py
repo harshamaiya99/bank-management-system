@@ -21,8 +21,8 @@ def pytest_sessionfinish(session, exitstatus):
         print("\nAllure CLI not found in PATH. Skipping report generation.")
         return
 
-    results_dir = "tests/api/reports/allure-results"
-    report_dir = "tests/api/reports/allure-reports"
+    results_dir = "tests/reports/allure-results"
+    report_dir = "tests/reports/allure-reports"
     history_src = os.path.join(report_dir, "history")
     history_dest = os.path.join(results_dir, "history")
 

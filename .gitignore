@@ -21,7 +21,7 @@ dist/
 pip-wheel-metadata/
 .eggs/
 
-allure-results/
-allure-reports/
+reports/
 
 git-commands/
+run_app.txt
