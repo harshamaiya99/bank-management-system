@@ -1,4 +1,8 @@
-tc_name,account_id
-no input entry,
-non 7 digit number,123
-non 7 digit alphabet,abc
+test_context,tc_name,account_id,account_holder_name,dob,gender,email,phone,address,zip_code,account_type,balance,services,marketing_opt_in,agreed_to_terms,target_selector,expected_message
+home_search,invalid_chars_id,abc1234,,,,,,,,,,,,,#errorMessage,Please enter a valid 7-digit account ID
+home_search,invalid_length_id,12345,,,,,,,,,,,,,#errorMessage,Please enter a valid 7-digit account ID
+detail_search,non_existent_id,9999999,,,,,,,,,,,,,alert,Not found
+create_validation,missing_mandatory_name,,,,,john@test.com,1234567890,123 St,00000,Savings,100,,False,True,#accountHolderName,Please fill out this field.
+create_validation,missing_gender,,John Doe,2000-01-01,,john@test.com,1234567890,123 St,00000,Savings,100,,False,True,input[name='gender'],Please select one of these options.
+create_validation,missing_account_type,,John Doe,2000-01-01,Male,john@test.com,1234567890,123 St,00000,,100,,False,True,#accountType,Please select an item in the list.
+create_validation,missing_terms_agreement,,John Doe,2000-01-01,Male,john@test.com,1234567890,123 St,00000,Savings,100,,False,False,#agreedToTerms,Please check this box if you want to proceed.

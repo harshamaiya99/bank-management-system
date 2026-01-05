@@ -29,3 +29,10 @@ class BasePage:
 
     def is_visible(self, selector: str) -> bool:
         return self.page.locator(selector).is_visible()
+
+    def get_validation_message(self, selector: str) -> str:
+        """
+        Returns the browser's native validation message (the tooltip text).
+        Using .first is useful for radio groups where multiple inputs have the same name.
+        """
+        return self.page.locator(selector).first.evaluate("element => element.validationMessage")
