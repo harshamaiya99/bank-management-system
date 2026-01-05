@@ -1,8 +1,13 @@
-test_context,tc_name,account_id,account_holder_name,dob,gender,email,phone,address,zip_code,account_type,balance,services,marketing_opt_in,agreed_to_terms,target_selector,expected_message
-home_search,invalid_chars_id,abc1234,,,,,,,,,,,,,#errorMessage,Please enter a valid 7-digit account ID
-home_search,invalid_length_id,12345,,,,,,,,,,,,,#errorMessage,Please enter a valid 7-digit account ID
+test_context,tc_name,account_id,account_holder_name,dob,gender,email,phone,address,zip_code,account_type,balance,services,marketing_opt_in,agreed_to_terms,field_name,expected_message
+home_search,invalid_chars_id,abc1234,,,,,,,,,,,,,search_input,Please enter a valid 7-digit account ID
+home_search,invalid_length_id,12345,,,,,,,,,,,,,search_input,Please enter a valid 7-digit account ID
 detail_search,non_existent_id,9999999,,,,,,,,,,,,,alert,Not found
-create_validation,missing_mandatory_name,,,,,john@test.com,1234567890,123 St,00000,Savings,100,,False,True,#accountHolderName,Please fill out this field.
-create_validation,missing_gender,,John Doe,2000-01-01,,john@test.com,1234567890,123 St,00000,Savings,100,,False,True,input[name='gender'],Please select one of these options.
-create_validation,missing_account_type,,John Doe,2000-01-01,Male,john@test.com,1234567890,123 St,00000,,100,,False,True,#accountType,Please select an item in the list.
-create_validation,missing_terms_agreement,,John Doe,2000-01-01,Male,john@test.com,1234567890,123 St,00000,Savings,100,,False,False,#agreedToTerms,Please check this box if you want to proceed.
+create_validation,missing_mandatory_name,,,2000-01-01,Male,john@test.com,1234567890,123 St,00000,Savings,100,,False,True,name,Please fill out this field.
+create_validation,missing_mandatory_dob,,John Doe,,Male,john@test.com,1234567890,123 St,00000,Savings,100,,False,True,dob,Please fill out this field.
+create_validation,missing_gender,,John Doe,2000-01-01,,john@test.com,1234567890,123 St,00000,Savings,100,,False,True,gender,Please select one of these options.
+create_validation,missing_mandatory_email,,John Doe,2000-01-01,Male,,1234567890,123 St,00000,Savings,100,,False,True,email,Please fill out this field.
+create_validation,missing_mandatory_phone,,John Doe,2000-01-01,Male,john@test.com,,123 St,00000,Savings,100,,False,True,phone,Please fill out this field.
+create_validation,missing_mandatory_address,,John Doe,2000-01-01,Male,john@test.com,1234567890,,00000,Savings,100,,False,True,address,Please fill out this field.
+create_validation,missing_mandatory_zip,,John Doe,2000-01-01,Male,john@test.com,1234567890,123 St,,Savings,100,,False,True,zip,Please fill out this field.
+create_validation,missing_account_type,,John Doe,2000-01-01,Male,john@test.com,1234567890,123 St,00000,,100,,False,True,account_type,Please select an item in the list.
+create_validation,missing_terms_agreement,,John Doe,2000-01-01,Male,john@test.com,1234567890,123 St,00000,Savings,100,,False,False,terms,Please check this box if you want to proceed.

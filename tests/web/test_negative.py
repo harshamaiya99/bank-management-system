@@ -43,7 +43,7 @@ def test_negative_scenarios(home_page, create_page, details_page, row):
             home_page.navigate_to_home()
             home_page.go_to_create_account()
 
-            # Fill Form Data (Partial/Invalid data)
+            # Fill Form Data
             if row["account_holder_name"]: create_page.enter_name(row["account_holder_name"])
             if row["dob"]: create_page.enter_dob(row["dob"])
             if row["gender"]: create_page.select_gender(row["gender"])
@@ -57,13 +57,10 @@ def test_negative_scenarios(home_page, create_page, details_page, row):
             if row["marketing_opt_in"] == "True": create_page.set_marketing_opt_in("True")
             if row["agreed_to_terms"] == "True": create_page.accept_terms()
 
-            # Click Submit (This triggers the browser validation tooltip)
+            # Trigger Submit
             create_page.click(create_page.SUBMIT_BTN)
 
-            # Get the HTML5 validation message from the specific target element
-            # This corresponds to the text in the bubble (e.g., "Please fill out this field.")
-            actual_message = create_page.get_validation_message(row["target_selector"])
-            print(actual_message)
-            print(row["expected_message"])
+            # verify using the Logical Name
+            actual_message = create_page.get_validation_message_for_field(row["field_name"])
 
             assert actual_message == row["expected_message"]
