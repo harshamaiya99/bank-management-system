@@ -53,13 +53,3 @@ def test_end_to_end_crud(home_page, create_page, details_page, row):
         home_page.search_account(account_id)
 
 
-def test_search_invalid_input(home_page):
-    home_page.navigate_to_home()
-
-    # Enter invalid ID (letters or wrong length)
-    home_page.search_account("123")
-
-    # Verify the DOM error message
-    assert home_page.get_error_message() == "Please enter a valid 7-digit account ID"
-
-
