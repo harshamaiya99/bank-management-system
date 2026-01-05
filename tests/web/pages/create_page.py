@@ -6,6 +6,7 @@ from tests.web.pages.base_page import BasePage
 class CreatePage(BasePage):
     NAME_INPUT = "#accountHolderName"
     DOB_INPUT = "#dob"
+    GENDER_RADIO = "input[name='gender']"  # Common locator for the group
     EMAIL_INPUT = "#email"
     PHONE_INPUT = "#phone"
     ADDRESS_INPUT = "#address"
@@ -97,3 +98,27 @@ class CreatePage(BasePage):
         self.set_marketing_opt_in(data["marketing_opt_in"])
         self.accept_terms()
         return self.submit_form_and_capture_account_id()
+
+    def get_validation_message_for_field(self, field_name: str) -> str:
+        """
+        Maps a logical field name (from CSV) to the actual Page Object selector
+        and returns the browser validation message.
+        """
+        locator_map = {
+            "name": self.NAME_INPUT,
+            "dob": self.DOB_INPUT,
+            "gender": self.GENDER_RADIO,
+            "email": self.EMAIL_INPUT,
+            "phone": self.PHONE_INPUT,
+            "address": self.ADDRESS_INPUT,
+            "zip": self.ZIP_INPUT,
+            "account_type": self.TYPE_SELECT,
+            "balance": self.BALANCE_INPUT,
+            "terms": self.TERMS_CHK
+        }
+
+        if field_name not in locator_map:
+            raise ValueError(f"Field name '{field_name}' is not defined in CreatePage locator map")
+
+        # Reuse the generic method from BasePage
+        return self.get_validation_message(locator_map[field_name])
