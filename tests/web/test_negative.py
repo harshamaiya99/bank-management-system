@@ -57,10 +57,11 @@ def test_negative_scenarios(home_page, create_page, details_page, row):
             if row["marketing_opt_in"] == "True": create_page.set_marketing_opt_in("True")
             if row["agreed_to_terms"] == "True": create_page.accept_terms()
 
-            # Trigger Submit
-            create_page.click(create_page.SUBMIT_BTN)
+            with allure.step("Submit Form and Verify Validation Message"):
+                # Trigger Submit
+                create_page.click(create_page.SUBMIT_BTN)
 
-            # verify using the Logical Name
-            actual_message = create_page.get_validation_message_for_field(row["field_name"])
+                # verify using the Logical Name
+                actual_message = create_page.get_validation_message_for_field(row["field_name"])
 
-            assert actual_message == row["expected_message"]
+                assert actual_message == row["expected_message"]
