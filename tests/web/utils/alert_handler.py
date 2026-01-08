@@ -30,17 +30,16 @@ class AlertHandler:
         Returns:
             str: The text content of the alert.
         """
-        dialog_message = []
+        # Use expect_event context manager to WAIT for the dialog to appear.
+        # This handles the timing gap between the click and the async fetch alert.
+        with self.page.expect_event("dialog") as event_info:
+            trigger_action()
 
-        def handle_dialog(dialog):
-            dialog_message.append(dialog.message)
-            dialog.accept()
+        # event_info.value contains the actual Dialog object
+        dialog = event_info.value
+        message = dialog.message
 
-        # 1. Set listener
-        self.page.once("dialog", handle_dialog)
+        # Accept the dialog to close it
+        dialog.accept()
 
-        # 2. Trigger the action that causes the alert
-        trigger_action()
-
-        # 3. Return captured text
-        return dialog_message[0] if dialog_message else ""
+        return message
