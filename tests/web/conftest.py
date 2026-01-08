@@ -45,7 +45,7 @@ def details_page(page: Page):
 # =========================================================
 # Hook: Capture Screenshot on Failure
 # =========================================================
-
+# This decorator ensures the hook runs at the correct time to inspect the test outcome.
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     """
@@ -53,15 +53,15 @@ def pytest_runtest_makereport(item, call):
     It checks if the 'page' fixture is present (indicating a UI test).
     """
     # Execute all other hooks to obtain the report object
-    outcome = yield
-    report = outcome.get_result()
+    outcome = yield # This yields control to execute the test
+    report = outcome.get_result() # retrieves the test report (pass/fail status).
 
     # We only care about the "call" phase (actual test execution) and if it failed
     if report.when == "call" and report.failed:
 
         # Check if the test used the 'page' fixture (Playwright)
         if "page" in item.funcargs:
-            page = item.funcargs["page"]
+            page = item.funcargs["page"] # dynamically retrieve the page fixture instance used in the failed test to take the screenshot.
 
             try:
                 # Capture screenshot as bytes

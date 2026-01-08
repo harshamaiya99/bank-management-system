@@ -5,6 +5,8 @@ on:
     branches: [ "main", "master" ]
   pull_request:
     branches: [ "main", "master" ]
+  schedule:
+    - cron: "30 18 * * *"   # 12:00 AM IST daily (18:30 UTC)
 
 jobs:
   test:
@@ -31,16 +33,15 @@ jobs:
 
     - name: Start FastAPI Backend
       run: |
-        # Use --app-dir to run correctly from root without 'cd'
-        # Removed --reload for better CI performance
+        # Use --app-dir to run correctly from root
         nohup uvicorn main:app --app-dir src/backend --host 127.0.0.1 --port 9000 > server.log 2>&1 &
         
         echo "Waiting for server to start..."
         sleep 5
-        
+
     - name: Run Tests
       env:
-        BASE_URL: http://127.0.0.1:9000  # Now the tests listen to this!
+        BASE_URL: http://127.0.0.1:9000
       run: |
         pytest tests/ --alluredir=allure-results
 
