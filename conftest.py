@@ -4,8 +4,9 @@ import subprocess
 import pytest
 
 # Base URL of the application (UI + API)
-# Later this can be overridden via environment variable in CI
-BASE_URL = "http://127.0.0.1:9000"
+
+# Read from env variable, default to localhost for local testing
+BASE_URL = os.getenv("BASE_URL", "http://127.0.0.1:9000")
 
 
 @pytest.fixture(scope="session")

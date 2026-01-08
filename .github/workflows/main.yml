@@ -37,7 +37,8 @@ jobs:
         sleep 5  # Give the server a few seconds to initialize
 
     - name: Run Tests
-      # Running headless is the default for Playwright in CI
+      env:
+        BASE_URL: http://127.0.0.1:9000  # Now the tests listen to this!
       run: |
         pytest tests/ --alluredir=allure-results
 
