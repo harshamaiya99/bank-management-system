@@ -104,5 +104,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: allure-report
-        path: allure-report/complete.html
+        path: allure-report/allure-report.html
         retention-days: 15
