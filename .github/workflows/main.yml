@@ -73,7 +73,7 @@ jobs:
         pytest tests/ --alluredir=allure-results
 
     # --- INSERT THIS STEP AFTER 'Run Tests' ---
-    - name: Add Allure Metadata (Env, Executor, Categories)
+    - name: Add Allure Metadata (Environment and Executor)
       if: always() # Always run this, even if tests fail
       run: |
         # 1. CREATE ENVIRONMENT FILE
@@ -89,29 +89,14 @@ jobs:
         echo '{
           "name": "GitHub Actions",
           "type": "github",
-          "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+          "url": "https://github.com/${{ github.repository }}",
           "buildOrder": ${{ github.run_number }},
           "buildName": "Run #${{ github.run_number }}",
-          "reportName": "Automated Tests Report"
+          "buildUrl": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+          "reportName": "Allure Report",
+          "reportUrl": "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
         }' > allure-results/executor.json
-        
-        # 3. CREATE CATEGORIES FILE
-        # This groups errors by regex match
-        echo '[
-          {
-            "name": "Ignored Tests",
-            "matchedStatuses": ["skipped"]
-          },
-          {
-            "name": "Infrastructure Problems",
-            "matchedStatuses": ["broken"],
-            "messageRegex": ".*Timeout.*|.*Connection refused.*"
-          },
-          {
-            "name": "Product Defects",
-            "matchedStatuses": ["failed"]
-          }
-        ]' > allure-results/categories.json
+
 
     # --- STEP 3: GENERATE & COMBINE ---
     - name: Generate Allure Report
