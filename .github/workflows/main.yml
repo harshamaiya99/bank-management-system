@@ -72,6 +72,29 @@ jobs:
       run: |
         pytest tests/ --alluredir=allure-results
 
+    # --- INSERT THIS STEP AFTER 'Run Tests' ---
+    - name: Add Allure Metadata (Env, Executor, Categories)
+      if: always() # Always run this, even if tests fail
+      run: |
+        # 1. CREATE ENVIRONMENT FILE
+        # We manually write key=value pairs to environment.properties
+        echo "Project=FastAPI Backend" >> allure-results/environment.properties
+        echo "Environment=Staging (Localhost)" >> allure-results/environment.properties
+        echo "Python_Version=3.10" >> allure-results/environment.properties
+        echo "OS=Ubuntu-Latest" >> allure-results/environment.properties
+        echo "Executor=GitHub Actions" >> allure-results/environment.properties
+
+        # 2. CREATE EXECUTOR FILE
+        # This adds the link to the GitHub build in the report
+        echo '{
+          "name": "GitHub Actions",
+          "type": "github",
+          "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+          "buildOrder": ${{ github.run_number }},
+          "buildName": "Run #${{ github.run_number }}",
+          "reportName": "Automated Tests Report"
+        }' > allure-results/executor.json
+
     # --- STEP 3: GENERATE & COMBINE ---
     - name: Generate Allure Report
       if: always()
