@@ -1,15 +1,15 @@
-# Backend Dependencies
+# Backend
 fastapi==0.100.0
 uvicorn[standard]
 pydantic
 Jinja2
-aiofiles  # Often needed for static file serving in FastAPI
+aiofiles
 
-# Testing Dependencies
+# Testing
 pytest
 requests
 allure-pytest
-
-# UI Automation
-# We use pytest-playwright instead of just playwright to get the 'page' fixture automatically
 pytest-playwright
+
+# Reporting
+allure-combine
