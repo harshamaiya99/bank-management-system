@@ -94,6 +94,24 @@ jobs:
           "buildName": "Run #${{ github.run_number }}",
           "reportName": "Automated Tests Report"
         }' > allure-results/executor.json
+        
+        # 3. CREATE CATEGORIES FILE
+        # This groups errors by regex match
+        echo '[
+          {
+            "name": "Ignored Tests",
+            "matchedStatuses": ["skipped"]
+          },
+          {
+            "name": "Infrastructure Problems",
+            "matchedStatuses": ["broken"],
+            "messageRegex": ".*Timeout.*|.*Connection refused.*"
+          },
+          {
+            "name": "Product Defects",
+            "matchedStatuses": ["failed"]
+          }
+        ]' > allure-results/categories.json
 
     # --- STEP 3: GENERATE & COMBINE ---
     - name: Generate Allure Report
