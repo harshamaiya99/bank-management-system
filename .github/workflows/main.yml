@@ -1,14 +1,19 @@
 name: Automated Tests
 
+# --- TRIGGERS ---
+# Defines when this pipeline runs.
 on:
   push:
     branches: [ "main", "master" ]
   pull_request:
     branches: [ "main", "master" ]
   schedule:
-    - cron: "30 18 * * *"   # 12:00 AM IST daily (18:30 UTC)
+    # Runs at 18:30 UTC, which translates to 12:00 AM IST (Indian Standard Time)
+    - cron: "30 18 * * *"
 
-# Permissions needed to push the history back to the branch
+# --- PERMISSIONS ---
+# Explicit permissions are required for the 'peaceiris/actions-gh-pages' action
+# to push the history files back to the 'allure-history' branch later.
 permissions:
   contents: write
 
@@ -17,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # 1. SETUP & CHECKOUT
     - name: Checkout Code
       uses: actions/checkout@v4
 
@@ -28,8 +34,9 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
+        # MUST include 'pytest', 'playwright', and 'allure-combine'
         pip install -r requirements.txt
-        # Install Allure CLI (needed for report generation)
+        # Installs the Java-based Allure CLI tool required to generate the HTML report
         npm install -g allure-commandline
 
     - name: Install Playwright Browsers
@@ -37,17 +44,18 @@ jobs:
         playwright install chromium
         playwright install-deps
 
-    # --- STEP 1: RETRIEVE HISTORY ---
-    # We checkout the 'allure-history' branch into a subdirectory.
-    # 'continue-on-error: true' handles the very first run (when branch doesn't exist yet).
+    # --- STEP 1: RETRIEVE HISTORY (The "Trend" Logic) ---
+    # To show trend graphs, we need the history from the LAST run.
+    # We fetch the orphan branch 'allure-history' to a temporary folder.
     - name: Checkout History Branch
       uses: actions/checkout@v4
-      continue-on-error: true
+      continue-on-error: true  # Vital: Prevents failure on the very first run when the branch doesn't exist yet
       with:
         ref: allure-history
         path: allure-history-branch
 
-    # We copy the history from that branch into our results folder so Allure sees it.
+    # We copy the old history into 'allure-results'.
+    # Allure will see these files and realize "Oh, this is a continuation of previous tests."
     - name: Restore History
       run: |
         mkdir -p allure-results/history
@@ -59,33 +67,37 @@ jobs:
         fi
 
     # --- STEP 2: RUN TESTS ---
+    # We start the API server in the background so tests can hit it.
     - name: Start FastAPI Backend
       run: |
+        # 'nohup' keeps it running; '&' puts it in background; outputs to server.log
         nohup uvicorn main:app --app-dir src/backend --host 127.0.0.1 --port 9000 > server.log 2>&1 &
         echo "Waiting for server to start..."
         sleep 5
 
     - name: Run Tests
       env:
-        # Matches your conftest.py logic
         BASE_URL: http://127.0.0.1:9000
       run: |
+        # --alluredir tells pytest where to dump the raw JSON results
         pytest tests/ --alluredir=allure-results
 
-    # --- INSERT THIS STEP AFTER 'Run Tests' ---
+    # --- METADATA INJECTION (New Step) ---
+    # This creates the files Allure needs to populate the "Environment" and "Executors" widgets.
+    # 'if: always()' ensures this runs even if tests fail (so we get a report on WHY it failed).
     - name: Add Allure Metadata (Environment and Executor)
-      if: always() # Always run this, even if tests fail
+      if: always()
       run: |
-        # 1. CREATE ENVIRONMENT FILE
-        # We manually write key=value pairs to environment.properties
+        # 1. ENVIRONMENT.PROPERTIES
+        # Fills the "Environment" box in the dashboard.
         echo "Project=FastAPI Backend" >> allure-results/environment.properties
         echo "Environment=Staging (Localhost)" >> allure-results/environment.properties
         echo "Python_Version=3.10" >> allure-results/environment.properties
         echo "OS=Ubuntu-Latest" >> allure-results/environment.properties
         echo "Executor=GitHub Actions" >> allure-results/environment.properties
 
-        # 2. CREATE EXECUTOR FILE
-        # This adds the link to the GitHub build in the report
+        # 2. EXECUTOR.JSON
+        # Adds the GitHub icon and links the report back to this specific pipeline run.
         echo '{
           "name": "GitHub Actions",
           "type": "github",
@@ -97,34 +109,35 @@ jobs:
           "reportUrl": "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
         }' > allure-results/executor.json
 
-
-    # --- STEP 3: GENERATE & COMBINE ---
+    # --- STEP 3: GENERATE REPORT ---
     - name: Generate Allure Report
       if: always()
       run: |
-        # Generates the full HTML report into the 'allure-report' folder
+        # Converts the raw JSON in 'allure-results' into a full HTML site in 'allure-report'
         allure generate allure-results --clean -o allure-report
 
+    # This Python package combines the multi-file HTML site into a Single File
     - name: Combine into Single HTML
       if: always()
       run: |
-        # Combines everything into 'allure-report/complete.html'
+        # Result: allure-report/complete.html
         allure-combine allure-report
 
-    # --- STEP 4: UPDATE HISTORY BRANCH ---
-    # We push ONLY the 'history' folder to the 'allure-history' branch.
-    # This keeps the branch light and ensures trends persist.
+    # --- STEP 4: UPDATE HISTORY ---
+    # We take the *new* history generated in this run and push it back to the branch.
+    # This ensures the NEXT run will see the data from THIS run.
     - name: Save History to Branch
       if: always()
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: allure-history
-        publish_dir: allure-report/history
+        publish_branch: allure-history    # The branch storing only history data
+        publish_dir: allure-report/history # The specific folder we want to save
         destination_dir: history
-        keep_files: true  # Keep existing history if we are appending
+        keep_files: true                  # Append, don't overwrite the whole branch
 
-    # --- STEP 5: UPLOAD ARTIFACT ---
+    # --- STEP 5: ARTIFACTS ---
+    # Allows you to download the "complete.html" from the GitHub Actions Summary page.
     - name: Upload Single File Report
       if: always()
       uses: actions/upload-artifact@v4
