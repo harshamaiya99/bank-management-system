@@ -3,6 +3,11 @@ from tests.api.services.base_api import BaseAPI
 class AccountsAPI(BaseAPI):
 
     def create_account(self, row):
+        headers = {
+            "content-type": "application/json",
+            "accept": "application/json"
+        }
+
         create_payload = {
             "account_holder_name": row["account_holder_name"],
             "dob": row["dob"],
@@ -19,12 +24,21 @@ class AccountsAPI(BaseAPI):
             "marketing_opt_in": row["marketing_opt_in"].lower() == "true",
             "agreed_to_terms": True
         }
-        return self.post("/accounts", create_payload)
+        return self.post("/accounts", headers, create_payload)
 
     def get_account(self, account_id):
-        return self.get(f"/accounts/{account_id}")
+        headers = {
+            "content-type": "application/json",
+            "accept": "application/json"
+        }
+        return self.get(f"/accounts/{account_id}", headers)
 
     def update_account(self, row, account_id):
+        headers = {
+            "content-type": "application/json",
+            "accept": "application/json"
+        }
+
         update_payload = {
             "account_holder_name": row["updated_account_holder_name"],
             "dob": row["updated_dob"],
@@ -42,7 +56,11 @@ class AccountsAPI(BaseAPI):
             "agreed_to_terms": True
         }
 
-        return self.put(f"/accounts/{account_id}", update_payload)
+        return self.put(f"/accounts/{account_id}", headers, update_payload)
 
     def delete_account(self, account_id):
-        return self.delete(f"/accounts/{account_id}")
+        headers = {
+            "content-type": "application/json",
+            "accept": "application/json"
+        }
+        return self.delete(f"/accounts/{account_id}", headers)

@@ -5,30 +5,30 @@ class BaseAPI:
     def __init__(self, base_url):
         self.base_url = base_url
 
-    def post(self, endpoint, payload):
+    def post(self, endpoint, headers, payload):
         url = self.base_url + endpoint
-        attach_request("POST", url, payload=payload)
-        response = requests.post(url, json=payload)
+        attach_request("POST", url, headers=headers, payload=payload)
+        response = requests.post(url, headers=headers, json=payload)
         attach_response(response)
         return response
 
-    def get(self, endpoint):
+    def get(self, endpoint, headers):
         url = self.base_url + endpoint
-        attach_request("GET", url)
-        response = requests.get(url)
+        attach_request("GET", url, headers=headers)
+        response = requests.get(url, headers=headers)
         attach_response(response)
         return response
 
-    def put(self, endpoint, payload):
+    def put(self, endpoint, headers, payload):
         url = self.base_url + endpoint
-        attach_request("PUT", url, payload=payload)
-        response = requests.put(url, json=payload)
+        attach_request("PUT", url, headers=headers, payload=payload)
+        response = requests.put(url, headers=headers, json=payload)
         attach_response(response)
         return response
 
-    def delete(self, endpoint):
+    def delete(self, endpoint, headers):
         url = self.base_url + endpoint
-        attach_request("DELETE", url)
-        response = requests.delete(url)
+        attach_request("DELETE", url, headers=headers)
+        response = requests.delete(url, headers=headers)
         attach_response(response)
         return response
