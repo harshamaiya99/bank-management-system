@@ -1,0 +1,22 @@
+name: "Restore Allure History"
+description: "Fetches history from the orphan branch"
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout History Branch
+      uses: actions/checkout@v4
+      continue-on-error: true
+      with:
+        ref: allure-history
+        path: allure-history-branch
+
+    - name: Restore History
+      shell: bash
+      run: |
+        mkdir -p allure-results/history
+        if [ -d "allure-history-branch/history" ]; then
+          cp -R allure-history-branch/history/* allure-results/history/
+          echo "History restored successfully."
+        else
+          echo "No history found (first run?), skipping restoration."
+        fi

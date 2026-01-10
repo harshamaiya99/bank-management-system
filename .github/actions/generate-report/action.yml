@@ -1,0 +1,46 @@
+name: "Generate Allure Report"
+description: "Injects metadata and builds HTML report"
+inputs:
+  github_run_number:
+    required: true
+  github_run_id:
+    required: true
+  github_repository:
+    required: true
+  github_repository_owner:
+    required: true
+  github_repo_name:
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Add Allure Metadata
+      if: always()
+      shell: bash
+      run: |
+        echo "Project=FastAPI Backend" >> allure-results/environment.properties
+        echo "Environment=Staging (Localhost)" >> allure-results/environment.properties
+        echo "Executor=GitHub Actions" >> allure-results/environment.properties
+        
+        echo '{
+          "name": "GitHub Actions",
+          "type": "github",
+          "url": "https://github.com/${{ inputs.github_repository }}",
+          "buildOrder": ${{ inputs.github_run_number }},
+          "buildName": "Run #${{ inputs.github_run_number }}",
+          "buildUrl": "https://github.com/${{ inputs.github_repository }}/actions/runs/${{ inputs.github_run_id }}",
+          "reportName": "Allure Report",
+          "reportUrl": "https://${{ inputs.github_repository_owner }}.github.io/${{ inputs.github_repo_name }}/"
+        }' > allure-results/executor.json
+
+    - name: Generate Allure Report
+      if: always()
+      shell: bash
+      run: |
+        allure generate allure-results --clean -o allure-report
+
+    - name: Combine into Single HTML
+      if: always()
+      shell: bash
+      run: |
+        allure-combine allure-report
