@@ -18,8 +18,8 @@ class Any(Validator):
 
     def __repr__(self):
         if self.expected_type:
-            return f"<Any {self.expected_type.__name__}>"
-        return "<Any Value>"
+            return f"[Any {self.expected_type.__name__}]"
+        return "[Any Value]"
 
 class Regex(Validator):
     """Matches a string against a regex pattern."""
@@ -37,4 +37,4 @@ class Regex(Validator):
         return bool(re.match(self.pattern, other))
 
     def __repr__(self):
-        return f"<{self.description}>"
+        return f"[{self.description}]"
