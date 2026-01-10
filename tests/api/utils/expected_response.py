@@ -1,9 +1,11 @@
+from datetime import date # Import date
 class ExpectedResponse:
 
     @staticmethod
-    def expected_response_create_account(account_id):
+    def expected_response_create_account(account_id, date_opened):
         return {
             "account_id": account_id,
+            "date_opened": date_opened,  # Add this expectation
             "message": "Account created successfully"
         }
 
@@ -20,7 +22,7 @@ class ExpectedResponse:
         }
 
     @staticmethod
-    def expected_response_get_account_create(row, account_id):
+    def expected_response_get_account_create(row, account_id, date_opened):
 
         return {
             "account_id": account_id,
@@ -33,7 +35,7 @@ class ExpectedResponse:
             "zip_code": row["zip_code"],
             "account_type": row["account_type"],
             "balance": float(row["balance"]),
-            "date_opened": row["date_opened"],
+            "date_opened": date_opened,
             "status": row["status"],
             "services": row["services"],
             "marketing_opt_in": row["marketing_opt_in"].lower() == "true",
@@ -41,7 +43,7 @@ class ExpectedResponse:
         }
 
     @staticmethod
-    def expected_response_get_account_update(row, account_id):
+    def expected_response_get_account_update(row, account_id, date_opened):
 
         return {
             "account_id": account_id,
@@ -54,7 +56,7 @@ class ExpectedResponse:
             "zip_code": row["updated_zip_code"],
             "account_type": row["updated_account_type"],
             "balance": float(row["updated_balance"]),
-            "date_opened": row["updated_date_opened"],
+            "date_opened": date_opened,
             "status": row["updated_status"],
             "services": row["updated_services"],
             "marketing_opt_in": row["updated_marketing_opt_in"].lower() == "true",

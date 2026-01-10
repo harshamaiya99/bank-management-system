@@ -16,7 +16,6 @@ class AccountCreate(BaseModel):
     # Account Details
     account_type: str
     balance: float = 0.0
-    date_opened: str
     status: str = "Active"
 
     # Preferences / Checkboxes
@@ -34,7 +33,6 @@ class AccountUpdate(BaseModel):
     zip_code: str
     account_type: str
     balance: float
-    date_opened: str
     status: str
     services: str
     marketing_opt_in: bool
