@@ -1,4 +1,5 @@
 import random
+from datetime import date # Import date
 from typing import Optional, Dict, List
 from database import get_connection
 from models import AccountCreate, AccountUpdate
@@ -18,19 +19,53 @@ def create_account(account: AccountCreate) -> Dict:
     cursor = conn.cursor()
     account_id = generate_account_id()
 
+    # Generate the date in the backend
+    date_opened = date.today().isoformat()
+
     cursor.execute(
-        """INSERT INTO accounts 
-        (account_id, account_holder_name, dob, gender, email, phone, address, zip_code, 
-         account_type, balance, date_opened, status, services, marketing_opt_in, agreed_to_terms) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-        (account_id, account.account_holder_name, account.dob, account.gender,
-         account.email, account.phone, account.address, account.zip_code,
-         account.account_type, account.balance, account.date_opened, account.status,
-         account.services, account.marketing_opt_in, account.agreed_to_terms)
+        """
+            INSERT INTO accounts (
+            account_id, 
+            account_holder_name, 
+            dob, 
+            gender, 
+            email, 
+            phone, 
+            address, 
+            zip_code,
+            account_type, 
+            balance, 
+            date_opened, 
+            status, 
+            services, 
+            marketing_opt_in, 
+            agreed_to_terms
+            ) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+        (account_id,
+         account.account_holder_name,
+         account.dob, account.gender,
+         account.email,
+         account.phone,
+         account.address,
+         account.zip_code,
+         account.account_type,
+         account.balance,
+         date_opened,
+         account.status,
+         account.services,
+         account.marketing_opt_in,
+         account.agreed_to_terms)
     )
     conn.commit()
     conn.close()
-    return {"account_id": account_id, "message": "Account created successfully"}
+
+    return {
+        "account_id": account_id,
+        "date_opened": date_opened,
+        "message": "Account created successfully"
+    }
 
 def get_all_accounts() -> List[Dict]:
     conn = get_connection()
@@ -53,13 +88,35 @@ def update_account(account_id: str, account: AccountUpdate) -> bool:
     cursor = conn.cursor()
 
     cursor.execute(
-        """UPDATE accounts SET 
-        account_holder_name=?, dob=?, gender=?, email=?, phone=?, address=?, zip_code=?, 
-        account_type=?, balance=?, date_opened=?, status=?, services=?, marketing_opt_in=?
-        WHERE account_id=?""",
-        (account.account_holder_name, account.dob, account.gender, account.email, account.phone,
-         account.address, account.zip_code, account.account_type, account.balance,
-         account.date_opened, account.status, account.services, account.marketing_opt_in, account_id)
+        """
+        UPDATE accounts SET 
+        account_holder_name=?, 
+        dob=?, 
+        gender=?, 
+        email=?, 
+        phone=?, 
+        address=?, 
+        zip_code=?, 
+        account_type=?, 
+        balance=?, 
+        status=?, 
+        services=?, 
+        marketing_opt_in=?
+        WHERE account_id=?
+        """,
+        (account.account_holder_name,
+         account.dob,
+         account.gender,
+         account.email,
+         account.phone,
+         account.address,
+         account.zip_code,
+         account.account_type,
+         account.balance,
+         account.status,
+         account.services,
+         account.marketing_opt_in,
+         account_id)
     )
     conn.commit()
     rows_affected = cursor.rowcount

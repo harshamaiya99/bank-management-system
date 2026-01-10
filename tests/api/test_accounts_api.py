@@ -21,15 +21,16 @@ def test_account_crud_flow(accounts_api, row):
         assert create_response.status_code == 200
 
         account_id = create_response.json()["account_id"]
+        date_opened = create_response.json()["date_opened"]
 
-        expected_response = ExpectedResponse.expected_response_create_account(account_id)
+        expected_response = ExpectedResponse.expected_response_create_account(account_id, date_opened)
         assert_json_match(create_response.json(), expected_response)
 
     with allure.step("Get account after creation (GET)"):
         get_response = accounts_api.get_account(account_id)
         assert get_response.status_code == 200
 
-        expected_response = ExpectedResponse.expected_response_get_account_create(row, account_id)
+        expected_response = ExpectedResponse.expected_response_get_account_create(row, account_id, date_opened)
         assert_json_match(get_response.json(), expected_response)
 
     with allure.step("Update account (PUT)"):
@@ -43,7 +44,7 @@ def test_account_crud_flow(accounts_api, row):
         get_updated_response = accounts_api.get_account(account_id)
         assert get_updated_response.status_code == 200
 
-        expected_response = ExpectedResponse.expected_response_get_account_update(row, account_id)
+        expected_response = ExpectedResponse.expected_response_get_account_update(row, account_id, date_opened)
         assert_json_match(get_updated_response.json(), expected_response)
 
     with allure.step("Delete account (DELETE)"):

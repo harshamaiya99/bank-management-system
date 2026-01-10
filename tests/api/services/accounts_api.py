@@ -18,7 +18,6 @@ class AccountsAPI(BaseAPI):
             "zip_code": row["zip_code"],
             "account_type": row["account_type"],
             "balance": float(row["balance"]),
-            "date_opened": row["date_opened"],
             "status": row["status"],
             "services": row["services"],  # Stores comma-separated values (e.g., "SMS,DebitCard")
             "marketing_opt_in": row["marketing_opt_in"].lower() == "true",
@@ -49,7 +48,6 @@ class AccountsAPI(BaseAPI):
             "zip_code": row["updated_zip_code"],
             "account_type": row["updated_account_type"],
             "balance": float(row["updated_balance"]),
-            "date_opened": row["updated_date_opened"],
             "status": row["updated_status"],
             "services": row["updated_services"],
             "marketing_opt_in": row["updated_marketing_opt_in"].lower() == "true",
