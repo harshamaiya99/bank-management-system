@@ -36,7 +36,7 @@ class ExpectedResponse:
             "date_opened": row["date_opened"],
             "status": row["status"],
             "services": row["services"],
-            "marketing_opt_in": bool(row["marketing_opt_in"]),
+            "marketing_opt_in": row["marketing_opt_in"].lower() == "true",
             "agreed_to_terms": True
         }
 
@@ -57,6 +57,6 @@ class ExpectedResponse:
             "date_opened": row["updated_date_opened"],
             "status": row["updated_status"],
             "services": row["updated_services"],
-            "marketing_opt_in": bool(["updated_marketing_opt_in"]),
+            "marketing_opt_in": row["updated_marketing_opt_in"].lower() == "true",
             "agreed_to_terms": True
         }
