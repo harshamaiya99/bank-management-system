@@ -1,6 +1,8 @@
 import allure
 import json
 
+from tests.api.utils.validators import Validator
+
 def allure_attach(method, url, response, headers=None, payload=None):
     allure.attach(
         json.dumps(
@@ -40,9 +42,16 @@ def assert_json_match(actual, expected):
     Attaches Expected and Actual JSONs to the Allure report
     and performs the dictionary assertion.
     """
+
+    # Custom serializer to handle the Any() class in JSON reports
+    def json_serializer(obj):
+        if isinstance(obj, Validator):
+            return str(obj)
+        raise TypeError(f"Type {type(obj)} not serializable")
+
     # 1. Attach Expected Data
     allure.attach(
-        json.dumps(expected, indent=2, sort_keys=True),
+        json.dumps(expected, indent=2, sort_keys=True, default=json_serializer),
         name="Assertion - Expected",
         attachment_type=allure.attachment_type.JSON
     )
@@ -55,5 +64,4 @@ def assert_json_match(actual, expected):
     )
 
     # 3. Perform Assertion
-    # Pytest will still generate a diff in the log if this fails
     assert actual == expected
