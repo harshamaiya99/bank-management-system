@@ -26,7 +26,6 @@ def test_end_to_end_crud(home_page, create_page, details_page, row):
 
     # --- 2. Search & Verify Created Account ---
     with allure.step(f"Search & Verify Created Account"):
-        home_page.navigate_to_home()  # Go back to search
         home_page.search_account(account_id)
 
         # A. Capture Actual State from UI
@@ -58,7 +57,6 @@ def test_end_to_end_crud(home_page, create_page, details_page, row):
 
     # --- 4. Verify Update (Reload Data) ---
     with allure.step(f"Search & Verify Update (Reload Data) Account"):
-        home_page.navigate_to_home()  # Go back to search
         home_page.search_account(account_id)
 
         # A. Capture Actual Updated State

@@ -155,14 +155,14 @@ class DetailsPage(BasePage):
         # Prepare to accept the "Updated!" alert
         self.alert.accept_next()
         self.click(self.UPDATE_BTN)
-        self.page.wait_for_load_state("networkidle")
+        self.page.wait_for_url("**/")
 
     @allure.step("Click on Delete account button")
     def delete_account(self):
         # Prepare to accept the "Delete this account?" confirmation
         self.alert.accept_next()
         self.click(self.DELETE_BTN)
-        self.page.wait_for_load_state("networkidle")
+        self.page.wait_for_url("**/")
 
     def update_account_details(self, data: dict) -> None:
         self.update_name(data["updated_account_holder_name"])
