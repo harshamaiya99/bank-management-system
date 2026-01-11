@@ -81,7 +81,7 @@ class CreatePage(BasePage):
         match = re.search(r"ID:\s*(\d+)", alert_text)
         if match:
             account_id = match.group(1)
-            self.page.wait_for_load_state("networkidle")
+            self.page.wait_for_url("**/")
             return account_id
         return None
 
