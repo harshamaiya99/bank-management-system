@@ -149,13 +149,18 @@ class DetailsPage(BasePage):
         elif opt_in == "false" and checkbox.is_checked():
             checkbox.uncheck()
 
-
     @allure.step("Click on Update button")
-    def update_account(self):
-        # Prepare to accept the "Updated!" alert
-        self.alert.accept_next()
-        self.click(self.UPDATE_BTN)
+    def update_account(self) -> str:
+        # Define the trigger (clicking the button)
+        trigger = lambda: self.click(self.UPDATE_BTN)
+
+        # Capture the alert text, accept it, and return the text
+        alert_text = self.alert.get_text_and_accept(trigger)
+
+        # Wait for the redirect/reload to complete (as discussed previously)
         self.page.wait_for_url("**/")
+
+        return alert_text
 
     @allure.step("Click on Delete account button")
     def delete_account(self):
@@ -164,7 +169,7 @@ class DetailsPage(BasePage):
         self.click(self.DELETE_BTN)
         self.page.wait_for_url("**/")
 
-    def update_account_details(self, data: dict) -> None:
+    def update_account_details(self, data: dict) -> str:
         self.update_name(data["updated_account_holder_name"])
         self.update_dob(data["updated_dob"])
         self.update_gender(data["updated_gender"])
@@ -177,7 +182,7 @@ class DetailsPage(BasePage):
         self.update_status(data["updated_status"])
         self.update_services(data["updated_services"])
         self.update_marketing_opt_in(data["updated_marketing_opt_in"])
-        self.update_account()
+        return self.update_account() # Return the message
 
     def get_account_details_as_dict(self) -> dict:
         """

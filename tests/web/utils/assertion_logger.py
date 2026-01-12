@@ -63,3 +63,32 @@ def assert_ui_match(actual: dict, expected: dict):
 
     if mismatches:
         pytest.fail(f"UI State Verification Failed:\n" + "\n".join(mismatches))
+
+
+def assert_message_match(actual: str, expected: str, context: str = "Validation Message"):
+    """
+    Asserts that a specific action message (e.g., Alert text) matches the expectation.
+    Logs the result to Allure for visibility.
+    """
+    # with allure.step(f"Assert '{context}'"):
+    allure.attach(
+        f"Expected: {expected}\nActual:   {actual}",
+        name=f"Assertion - {context}",
+        attachment_type=allure.attachment_type.TEXT
+    )
+
+    assert actual == expected, f"{context} Mismatch! Expected '{expected}', but got '{actual}'"
+
+
+def assert_message_contains(actual: str, expected_substring: str, context: str = "Validation Message"):
+    """
+    Asserts that the actual message contains the expected substring.
+    Useful for dynamic alerts like 'Account Created! ID: 12345'.
+    """
+    allure.attach(
+        f"Expected to contain: {expected_substring}\nActual:              {actual}",
+        name=f"Assertion - {context}",
+        attachment_type=allure.attachment_type.TEXT
+    )
+
+    assert expected_substring in actual, f"{context} Failed! Expected substring '{expected_substring}' not found in '{actual}'"

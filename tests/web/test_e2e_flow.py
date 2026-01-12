@@ -3,7 +3,7 @@ import allure
 import os
 from playwright.sync_api import expect
 from tests.web.utils.csv_reader import read_csv_data
-from tests.web.utils.assertion_logger import assert_ui_match
+from tests.web.utils.assertion_logger import assert_ui_match, assert_message_match, assert_message_contains
 
 TEST_DATA_FILE = os.path.join(os.path.dirname(__file__), "data", "test_data.csv")
 
@@ -22,7 +22,11 @@ def test_end_to_end_crud(home_page, create_page, details_page, row):
     with allure.step(f"Create Account"):
         home_page.go_to_create_account()
 
-        account_id = create_page.create_new_account(row)
+        # Unpack the tuple returned by the page object
+        account_id, alert_text = create_page.create_new_account(row)
+
+        # 1. Assert the Alert Message (Validation)
+        assert_message_contains(alert_text, "Account Created!", context="Creation Success Alert")
 
     # --- 2. Search & Verify Created Account ---
     with allure.step(f"Search & Verify Created Account"):
@@ -51,9 +55,11 @@ def test_end_to_end_crud(home_page, create_page, details_page, row):
         # C. Perform Standardized Assertion
         assert_ui_match(actual_data, expected_data)
 
-    # --- 3. Update Account ---
+        # --- 3. Update Account ---
     with allure.step(f"Update Account"):
-        details_page.update_account_details(row)
+        alert_text = details_page.update_account_details(row)
+        # Use the logger to assert and attach to report
+        assert_message_match(alert_text, "Updated!", context="Update Success Alert")
 
     # --- 4. Verify Update (Reload Data) ---
     with allure.step(f"Search & Verify Update (Reload Data) Account"):
@@ -88,7 +94,15 @@ def test_end_to_end_crud(home_page, create_page, details_page, row):
 
     # --- 6. Verify Deletion ---
     with allure.step(f"Verify Account Deletion"):
-        # Search should now fail
-        home_page.search_account(account_id)
+        # Define the trigger: Searching for the deleted ID
+        trigger = lambda: home_page.search_account(account_id)
+
+        # Capture the "Not found" alert that appears
+        not_found_msg = home_page.alert.get_text_and_accept(trigger)
+
+        # Assert the message
+        assert_message_match(not_found_msg, "Not found", context="Deleted Account Search Alert")
+
+
 
 
