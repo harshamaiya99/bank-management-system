@@ -2,12 +2,12 @@ import pytest
 import allure
 import os
 from playwright.sync_api import expect
-from tests.web.utils.csv_reader import read_csv_data
-from tests.web.utils.assertion_logger import assert_ui_match, assert_message_match, assert_message_contains
+from tests.web_playwright.utils.csv_reader import read_csv_data
+from tests.web_playwright.utils.assertion_logger import assert_ui_match, assert_message_match, assert_message_contains
 
 TEST_DATA_FILE = os.path.join(os.path.dirname(__file__), "data", "test_data.csv")
 
-@allure.epic("Web UI")
+@allure.epic("Web UI (Playwright)")
 @allure.feature("End to End Banking Flow")
 @pytest.mark.parametrize("row", read_csv_data(TEST_DATA_FILE), ids=lambda r: r["account_holder_name"])
 def test_end_to_end_crud(home_page, create_page, details_page, row):

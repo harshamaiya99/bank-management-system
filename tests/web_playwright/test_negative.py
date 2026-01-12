@@ -1,7 +1,7 @@
 import pytest
 import allure
 import os
-from tests.web.utils.csv_reader import read_csv_data
+from tests.web_playwright.utils.csv_reader import read_csv_data
 
 TEST_DATA_FILE = os.path.join(os.path.dirname(__file__), "data", "test_data_negative.csv")
 

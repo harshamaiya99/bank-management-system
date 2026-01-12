@@ -1,5 +1,5 @@
 import allure
-from tests.web.pages.base_page import BasePage
+from tests.web_playwright.pages.base_page import BasePage
 
 
 class HomePage(BasePage):

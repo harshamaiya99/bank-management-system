@@ -1,15 +1,11 @@
 import pytest
 import allure
-import os
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from tests.web_selenium.pages.home_page import HomePage
 from tests.web_selenium.pages.create_page import CreatePage
 from tests.web_selenium.pages.details_page import DetailsPage
-
-# Read global BASE_URL (reuse existing env var or default)
-BASE_URL = os.getenv("BASE_URL", "http://127.0.0.1:9000")
 
 
 @pytest.fixture(scope="function")
@@ -28,9 +24,9 @@ def driver():
 
 # --- Page Objects Fixtures ---
 @pytest.fixture
-def home_page(driver):
+def home_page(driver, base_url):
     hp = HomePage(driver)
-    hp.URL = BASE_URL  # Inject base URL
+    hp.URL = base_url
     return hp
 
 

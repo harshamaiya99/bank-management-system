@@ -135,7 +135,7 @@ Follow these steps to set up and run the Bank Account Management API locally.
 
     ```bash
     git clone <repository-url>
-    cd web-FastAPI-SQLlite
+    cd web_playwright-FastAPI-SQLlite
     ```
 
 2.  **Create and activate a virtual environment:**
@@ -254,13 +254,13 @@ Web UI end-to-end tests are located in `tests/web/`. They use `pytest` and `Play
 To run Web UI tests:
 
 ```bash
-pytest tests/web/ --alluredir=tests/reports/allure-results
+pytest tests/web_playwright/ --alluredir=tests/reports/allure-results
 ```
 
 You can specify a browser (e.g., `firefox`, `webkit`) using `--browser`:
 
 ```bash
-pytest tests/web/ --browser=firefox --alluredir=tests/reports/allure-results
+pytest tests/web_playwright/ --browser=firefox --alluredir=tests/reports/allure-results
 ```
 
 ### Generating Allure Report

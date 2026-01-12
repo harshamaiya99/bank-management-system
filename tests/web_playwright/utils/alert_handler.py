@@ -1,4 +1,3 @@
-# tests/web/utils/alert_handler.py
 from typing import Callable, Optional
 
 

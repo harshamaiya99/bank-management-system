@@ -3,9 +3,9 @@ import allure
 from playwright.sync_api import Page
 
 # ---------------- UI Page Object imports ----------------
-from tests.web.pages.home_page import HomePage
-from tests.web.pages.create_page import CreatePage
-from tests.web.pages.details_page import DetailsPage
+from tests.web_playwright.pages.home_page import HomePage
+from tests.web_playwright.pages.create_page import CreatePage
+from tests.web_playwright.pages.details_page import DetailsPage
 
 
 # =========================================================
