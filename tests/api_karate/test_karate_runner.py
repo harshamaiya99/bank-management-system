@@ -13,7 +13,7 @@ def test_execute_karate_tests():
     # 2. Run the Maven command
     #    cwd=test_dir ensures we run it from 'tests/api_karate/' folder
     result = subprocess.run(
-        ["mvn", "test"],
+        "mvn test",
         cwd=test_dir,
         capture_output=True,
         text=True,
