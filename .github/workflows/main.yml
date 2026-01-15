@@ -61,3 +61,12 @@ jobs:
         name: allure-report
         path: allure-report/complete.html
         retention-days: 15
+
+    - name: Upload Karate Reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: karate-reports
+        # The specific folder where Karate generates HTML reports
+        path: tests/api_karate/target/karate-reports/
+        retention-days: 15
