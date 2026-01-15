@@ -3,6 +3,12 @@ description: "Installs Python, dependencies, and Playwright browsers"
 runs:
   using: "composite"
   steps:
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:

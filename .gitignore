@@ -23,5 +23,8 @@ pip-wheel-metadata/
 
 reports/
 
+target/
+
+
 git-commands/
 run_app.txt
