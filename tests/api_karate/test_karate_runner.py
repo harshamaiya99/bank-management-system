@@ -13,11 +13,11 @@ def test_execute_karate_tests():
     # 2. Run the Maven command
     #    cwd=test_dir ensures we run it from 'tests/api_karate/' folder
     result = subprocess.run(
-        "mvn test",
+        "mvn test -B --no-transfer-progress", # '-B' (Batch mode) and '--no-transfer-progress' to silence download logs
         cwd=test_dir,
         capture_output=True,
         text=True,
-        shell=True  # Required for Windows (PS/CMD) usually
+        shell=True
     )
 
     # 3. Print the output so you can see it in pytest (use -s to view)
