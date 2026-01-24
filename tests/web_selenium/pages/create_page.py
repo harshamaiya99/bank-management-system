@@ -91,8 +91,8 @@ class CreatePage(BasePage):
         return account_id, alert_text
 
     def create_new_account(self, data: dict) -> tuple[str, str]:
-        # --- SYNC FIX: Wait for page load ---
-        self.find(self.HEADER)
+        # --- SYNC FIX: Wait for specific text to ensure page transition ---
+        self.wait_for_text(self.HEADER, "Open New Bank Account")
         # ------------------------------------
 
         self.enter_name(data["account_holder_name"])
@@ -108,21 +108,3 @@ class CreatePage(BasePage):
         self.set_marketing_opt_in(data["marketing_opt_in"])
         self.accept_terms()
         return self.submit_form_and_capture_account_id()
-
-    # def get_validation_message_for_field(self, field_name: str) -> str:
-    #     # For radio buttons, we pick one to get the group validation message
-    #     gender_locator = (By.CSS_SELECTOR, "input[name='gender'][value='Male']")
-    #
-    #     locator_map = {
-    #         "name": self.NAME_INPUT,
-    #         "dob": self.DOB_INPUT,
-    #         "gender": gender_locator,
-    #         "email": self.EMAIL_INPUT,
-    #         "phone": self.PHONE_INPUT,
-    #         "address": self.ADDRESS_INPUT,
-    #         "zip": self.ZIP_INPUT,
-    #         "account_type": self.TYPE_SELECT,
-    #         "balance": self.BALANCE_INPUT,
-    #         "terms": self.TERMS_CHK
-    #     }
-    #     return self.get_validation_message(locator_map[field_name])

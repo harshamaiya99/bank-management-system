@@ -19,6 +19,13 @@ class BasePage:
         """
         return self.wait.until(EC.visibility_of_element_located(locator))
 
+    def wait_for_text(self, locator, text):
+        """
+        Waits until the element contains the specific text.
+        Essential for distinguishing between pages that share similar elements (like H1).
+        """
+        self.wait.until(EC.text_to_be_present_in_element(locator, text))
+
     def find_all(self, locator):
         """
         Locates all matching elements.
@@ -72,10 +79,6 @@ class BasePage:
         """
         element = self.find(locator)
         self.driver.execute_script("arguments[0].value = arguments[1];", element, str(value))
-
-    # def get_validation_message(self, locator):
-    #     element = self.find(locator)
-    #     return element.get_property("validationMessage")
 
     def get_alert_text(self):
         """
