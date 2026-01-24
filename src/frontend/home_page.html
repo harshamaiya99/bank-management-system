@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Bank Account Management</title>
+    <style>
+        :root {
+          --primary-color: #0056b3;
+          --bg-color: #f4f7f6;
+        }
+        body {
+          font-family: "Segoe UI", sans-serif;
+          background-color: var(--bg-color);
+          color: #333;
+          margin: 0;
+          padding: 0;
+        }
+        .container {
+          max-width: 600px;
+          margin: 80px auto;
+          background: white;
+          padding: 40px;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          border-top: 5px solid var(--primary-color);
+          position: relative;
+        }
+        h1 {
+          color: var(--primary-color);
+          text-align: center;
+        }
+
+        .search-section {
+          margin-bottom: 40px;
+          padding: 30px;
+          background-color: #f9f9f9;
+          border-radius: 6px;
+        }
+        .search-section h2 {
+          margin-top: 0;
+          color: #555;
+          font-size: 18px;
+        }
+        .search-box {
+          display: flex;
+          gap: 10px;
+          margin-top: 15px;
+        }
+        input[type="text"] {
+          flex: 1;
+          padding: 12px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 16px;
+        }
+        button {
+          padding: 12px 24px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 16px;
+          transition: background-color 0.3s;
+        }
+        .btn-search {
+          background-color: #007bff;
+          color: white;
+        }
+        .btn-search:hover {
+          background-color: #0056b3;
+        }
+        .btn-create {
+          width: 100%;
+          background-color: #28a745;
+          color: white;
+          padding: 15px;
+          font-size: 18px;
+        }
+        .btn-create:hover {
+          background-color: #218838;
+        }
+        .error {
+          color: #dc3545;
+          margin-top: 10px;
+          font-size: 14px;
+        }
+        .create-section {
+          text-align: center;
+        }
+
+        .logout-btn {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          background-color: #6c757d;
+          color: white;
+          font-size: 13px;
+          padding: 8px 12px;
+          border-radius: 4px;
+          cursor: pointer;
+          border: none;
+        }
+        .logout-btn:hover {
+          background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        <h1>Bank Account Management</h1>
+        <p style="text-align:center; color: #666; font-size: 0.9em;">Logged in as: <strong id="userDisplay">...</strong></p>
+
+        <div class="search-section">
+            <h2>Search Account</h2>
+            <div class="search-box">
+                <input
+                    type="text"
+                    id="accountId"
+                    placeholder="Enter 7-digit Account ID"
+                    maxlength="7"
+                    pattern="[0-9]{7}"
+                >
+                <button class="btn-search" onclick="searchAccount()">Search</button>
+            </div>
+            <div class="error" id="errorMessage"></div>
+        </div>
+
+        <div class="create-section">
+            <button class="btn-create" onclick="goToCreateAccount()">Create New Account</button>
+        </div>
+    </div>
+
+    <script>
+        const API = "http://127.0.0.1:9000";
+        const token = localStorage.getItem("token");
+        const user = localStorage.getItem("user");
+
+        if (!token) {
+            window.location.href = "/login.html";
+        }
+        document.getElementById("userDisplay").textContent = user || "Staff";
+
+        async function authFetch(url, options = {}) {
+            const headers = {
+                ...options.headers,
+                "Authorization": `Bearer ${token}`
+            };
+
+            const response = await fetch(url, { ...options, headers });
+
+            if (response.status === 401) {
+                alert("Session expired. Please login again.");
+                logout();
+                return null;
+            }
+            if (response.status === 403) {
+                alert("Permission Denied.");
+                return null;
+            }
+            return response;
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "/login.html";
+        }
+
+        async function searchAccount() {
+            const accountId = document.getElementById("accountId").value.trim();
+            const errorMsg = document.getElementById("errorMessage");
+
+            errorMsg.textContent = "";
+
+            if (accountId.length !== 7 || !/^\d{7}$/.test(accountId)) {
+                errorMsg.textContent = "Please enter a valid 7-digit account ID";
+                return;
+            }
+
+            const res = await authFetch(`${API}/accounts/${accountId}`);
+
+            if (res && res.ok) {
+                window.location.href = `/accountDetails.html?account_id=${accountId}`;
+            } else if (res && res.status === 404) {
+                errorMsg.textContent = "Account not found.";
+            }
+        }
+
+        function goToCreateAccount() {
+            window.location.href = "/createAccount.html";
+        }
+
+        document.getElementById("accountId").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                searchAccount();
+            }
+        });
+    </script>
+</body>
+</html>

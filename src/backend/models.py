@@ -1,6 +1,24 @@
 from pydantic import BaseModel
 from typing import Optional
 
+# --- Authentication Models ---
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+    role: str
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
+    role: Optional[str] = None
+
+class User(BaseModel):
+    username: str
+    role: str
+
+class UserInDB(User):
+    hashed_password: str
+
+# --- Account Models ---
 class AccountCreate(BaseModel):
     # Personal Identity
     account_holder_name: str
@@ -19,7 +37,7 @@ class AccountCreate(BaseModel):
     status: str = "Active"
 
     # Preferences / Checkboxes
-    services: str  # Stores comma-separated values (e.g., "SMS,DebitCard")
+    services: str  # Stores comma-separated values
     marketing_opt_in: bool
     agreed_to_terms: bool
 
