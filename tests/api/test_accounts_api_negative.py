@@ -3,9 +3,6 @@ import pytest
 import allure
 from tests.api.utils.csv_reader import read_csv
 
-# We don't need 'requests' or 'allure_attach' anymore because the API client handles them
-# from tests.api.utils.allure_logger import assert_json_match
-
 DATA_FILE = os.path.join(os.path.dirname(__file__), "data", "accounts_negative.csv")
 test_data = read_csv(DATA_FILE)
 
@@ -83,11 +80,13 @@ def test_account_negative_scenarios(accounts_api_manager, row):
                 assert missing in error_locations, f"Field '{missing}' should be in error response"
 
             for error in errors:
-                # Check for Pydantic V1 error type
-                assert error["type"] == "value_error.missing"
+                # Support both Pydantic V1 ('value_error.missing') and V2 ('missing')
+                assert error["type"] in ["value_error.missing", "missing"], \
+                    f"Unexpected error type: {error['type']}"
 
-                # Check for Pydantic V1 error message (lowercase 'f')
-                assert error["msg"] == "field required"
+                # Support both Pydantic V1 ('field required') and V2 ('Field required')
+                assert error["msg"] in ["field required", "Field required"], \
+                    f"Unexpected error message: {error['msg']}"
 
                 assert error["loc"][0] == "body"
                 assert error["loc"][1] in missing_fields
