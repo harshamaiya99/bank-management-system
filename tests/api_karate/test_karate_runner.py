@@ -1,7 +1,9 @@
 import subprocess
 import os
-import pytest
+import allure
 
+@allure.epic("API Test - Karate")
+@allure.feature("End-to-End test flow")
 def test_execute_karate_tests():
     """
     Wrapper test that executes 'mvn test' for Karate.

@@ -7,7 +7,7 @@ DATA_FILE = os.path.join(os.path.dirname(__file__), "data", "accounts_negative.c
 test_data = read_csv(DATA_FILE)
 
 
-@allure.epic("Accounts API - Negative")
+@allure.epic("API Test - Pytest")
 @allure.feature("Negative Scenarios")
 @pytest.mark.parametrize("row", test_data, ids=lambda r: r["scenario"])
 def test_account_negative_scenarios(accounts_api_manager, row):

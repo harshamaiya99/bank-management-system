@@ -7,8 +7,8 @@ from tests.web_playwright.utils.assertion_logger import assert_ui_match, assert_
 
 TEST_DATA_FILE = os.path.join(os.path.dirname(__file__), "data", "test_data.csv")
 
-@allure.epic("Web UI (Playwright)")
-@allure.feature("End to End Banking Flow")
+@allure.epic("Web UI Test - Playwright")
+@allure.feature("End-to-End test flow")
 @pytest.mark.parametrize("row", read_csv_data(TEST_DATA_FILE), ids=lambda r: r["account_holder_name"])
 def test_end_to_end_crud(login_page, home_page, create_page, details_page, row):
     """

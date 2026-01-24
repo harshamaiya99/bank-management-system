@@ -6,7 +6,7 @@ from tests.web_playwright.utils.csv_reader import read_csv_data
 TEST_DATA_FILE = os.path.join(os.path.dirname(__file__), "data", "test_data_negative.csv")
 
 
-@allure.epic("Web UI")
+@allure.epic("Web UI Test - Playwright")
 @allure.feature("Negative Scenarios")
 @pytest.mark.parametrize("row", read_csv_data(TEST_DATA_FILE), ids=lambda r: r["tc_name"])
 def test_negative_scenarios(login_page, home_page, create_page, details_page, row):
