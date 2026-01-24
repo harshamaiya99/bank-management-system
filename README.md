@@ -46,8 +46,6 @@ This project allows you to compare different automation tools side-by-side:
 
 ## Project Structure
 
-## 📂 Detailed Project Structure
-
 ```text
 .
 ├── .github                                 # GitHub Actions CI/CD Configuration
