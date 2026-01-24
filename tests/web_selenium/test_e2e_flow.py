@@ -11,14 +11,15 @@ TEST_DATA_FILE = os.path.join(os.path.dirname(__file__), "data", "test_data.csv"
 @allure.epic("Web UI (Selenium)")
 @allure.feature("End to End Banking Flow")
 @pytest.mark.parametrize("row", read_csv_data(TEST_DATA_FILE), ids=lambda r: r["account_holder_name"])
-def test_end_to_end_crud(home_page, create_page, details_page, row):
+def test_end_to_end_crud(login_page, home_page, create_page, details_page, row):
     """
     Executes a full lifecycle test for each user in the CSV:
     Create -> Search -> Verify -> Update -> Search -> Verify -> Delete -> Search -> Confirm Not Found
     """
     # --- 1. Navigate & Create ---
-    with allure.step(f"Processing E2E Test for: {row['account_holder_name']}"):
-        home_page.navigate_to_home()
+    with allure.step(f"Login Page"):
+        login_page.navigate_to_login()
+        login_page.login("manager", "manager123")
 
     with allure.step(f"Create Account"):
         home_page.go_to_create_account()
@@ -60,7 +61,7 @@ def test_end_to_end_crud(home_page, create_page, details_page, row):
     with allure.step(f"Update Account"):
         alert_text = details_page.update_account_details(row)
         # Use the logger to assert and attach to report
-        assert_message_match(alert_text, "Updated!", context="Update Success Alert")
+        assert_message_match(alert_text, "Account details updated successfully!", context="Update Success Alert")
 
     # --- 4. Verify Update (Reload Data) ---
     with allure.step(f"Search & Verify Update (Reload Data) Account"):
@@ -95,13 +96,11 @@ def test_end_to_end_crud(home_page, create_page, details_page, row):
 
     # --- 6. Verify Deletion ---
     with allure.step(f"Verify Account Deletion"):
-        # Define the trigger: Searching for the deleted ID
-        trigger = lambda: home_page.search_account(account_id)
-
-        # Capture the "Not found" alert that appears
-        not_found_msg = home_page.alert.get_text_and_accept(trigger)
+        home_page.search_account(account_id)
+        home_page.wait_for_details_to_load()
+        # Capture the "Account not found." message that appears
+        not_found_msg = home_page.get_error_message()
 
         # Assert the message
-        assert_message_match(not_found_msg, "Not found", context="Deleted Account Search Alert")
-
+        assert_message_match(not_found_msg, "Account not found.", context="Deleted Account Search Message")
     pass

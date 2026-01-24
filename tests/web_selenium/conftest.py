@@ -6,6 +6,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from tests.web_selenium.pages.home_page import HomePage
 from tests.web_selenium.pages.create_page import CreatePage
 from tests.web_selenium.pages.details_page import DetailsPage
+from tests.web_selenium.pages.login_page import LoginPage
 
 
 @pytest.fixture(scope="function")
@@ -24,11 +25,14 @@ def driver():
 
 # --- Page Objects Fixtures ---
 @pytest.fixture
-def home_page(driver, base_url):
-    hp = HomePage(driver)
+def login_page(driver, base_url):
+    hp = LoginPage(driver)
     hp.URL = base_url
     return hp
 
+@pytest.fixture
+def home_page(driver):
+    return HomePage(driver)
 
 @pytest.fixture
 def create_page(driver):

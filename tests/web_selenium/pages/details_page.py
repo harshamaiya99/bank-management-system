@@ -2,6 +2,9 @@ import allure
 from tests.web_selenium.pages.base_page import BasePage
 
 
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 class DetailsPage(BasePage):
     # --- Locators ---
     ID_FIELD = "#accountId"
@@ -155,14 +158,13 @@ class DetailsPage(BasePage):
 
     @allure.step("Click on Update button")
     def update_account(self) -> str:
-        # Define the trigger (clicking the button)
-        trigger = lambda: self.click(self.UPDATE_BTN)
+        self.click(self.UPDATE_BTN)
 
-        # Capture the alert text, accept it, and return the text
-        alert_text = self.alert.get_text_and_accept(trigger)
+        alert = WebDriverWait(self.driver, 5).until(EC.alert_is_present())
+        alert_text = alert.text
+        alert.accept()
 
-        # Wait for the redirect to index page
-        self.wait_for_url("")
+        self.wait_for_url("/")
 
         return alert_text
 
@@ -171,12 +173,16 @@ class DetailsPage(BasePage):
         # Click delete
         self.click(self.DELETE_BTN)
 
-        # Handle the confirmation alert (Sync logic for Selenium)
-        # We use a lambda: None because the click already happened
-        self.alert.get_text_and_accept(lambda: None)
+        # Handle confirm()
+        confirm = WebDriverWait(self.driver, 5).until(EC.alert_is_present())
+        confirm.accept()
+
+        # Handle alert()
+        alert = WebDriverWait(self.driver, 5).until(EC.alert_is_present())
+        alert.accept()
 
         # Wait for redirect
-        self.wait_for_url("")
+        self.wait_for_url("/")
 
     # --- Aggregated Logic ---
 

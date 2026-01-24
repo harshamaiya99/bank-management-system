@@ -2,6 +2,9 @@ import allure
 import re
 from tests.web_selenium.pages.base_page import BasePage # Changed Import
 
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 class CreatePage(BasePage):
     NAME_INPUT = "#accountHolderName"
     DOB_INPUT = "#dob"
@@ -71,14 +74,21 @@ class CreatePage(BasePage):
 
     @allure.step("Submit create account form")
     def submit_form_and_capture_account_id(self) -> tuple[str, str]:
-        trigger = lambda: self.click(self.SUBMIT_BTN)
-        alert_text = self.alert.get_text_and_accept(trigger)
+
+
+        self.click(self.SUBMIT_BTN)
+
+        # alert()
+        alert = WebDriverWait(self.driver, 5).until(EC.alert_is_present())
+        alert_text = alert.text
+        alert.accept()
 
         account_id = None
         match = re.search(r"ID:\s*(\d+)", alert_text)
         if match:
             account_id = match.group(1)
-            self.wait_for_url("") # or just wait for url changes
+
+        self.wait_for_url("")
 
         return account_id, alert_text
 
