@@ -11,8 +11,8 @@ DATA_FILE = os.path.join(os.path.dirname(__file__), "data", "accounts.csv")
 test_data = read_csv(DATA_FILE)
 
 
-@allure.epic("Accounts API")
-@allure.feature("CRUD Operations")
+@allure.epic("API Test - Pytest")
+@allure.feature("End-to-End test flow")
 @pytest.mark.parametrize("row", test_data, ids=lambda r: r["account_holder_name"])
 def test_account_crud_flow(accounts_api_manager, row):
 
