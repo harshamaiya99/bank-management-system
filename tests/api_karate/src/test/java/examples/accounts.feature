@@ -2,15 +2,15 @@ Feature: End-to-End Account Lifecycle
 
   Background:
     * url baseUrl
+    # -----------------------------------------------------------
+    # APPLY AUTH HEADER GLOBALLY
+    # This automatically adds "Authorization: Bearer <token>"
+    # to every single request (POST, GET, PUT, DELETE) in this file.
+    # -----------------------------------------------------------
+    * configure headers = authHeader
 
   # -------------------------------------------------------------------------
   # Scenario: Full CRUD (Create, Read, Update, Delete)
-  # This flow mimics a real user life cycle:
-  # 1. Open an account
-  # 2. Check details
-  # 3. Update details (e.g. change name or status)
-  # 4. Close/Delete the account
-  # 5. Verify it is gone
   # -------------------------------------------------------------------------
   Scenario Outline: E2E Lifecycle for <name>
 
@@ -39,7 +39,6 @@ Feature: End-to-End Account Lifecycle
     When method post
     Then status 200
     And match response.message == "Account created successfully"
-    # Capture the ID for subsequent steps
     And def accountId = response.account_id
     And print 'Created Account ID:', accountId
 
@@ -51,13 +50,11 @@ Feature: End-to-End Account Lifecycle
     Then status 200
     And match response.account_holder_name == "<name>"
     And match response.balance == <balance>
-    # Save the full object to use as a base for the update
     And def currentDetails = response
 
     # =======================================================================
     # STEP 3: UPDATE ACCOUNT (PUT)
     # =======================================================================
-    # We modify the object we just fetched, rather than re-typing a generic JSON
     * set currentDetails.account_holder_name = currentDetails.account_holder_name + ' Updated'
     * set currentDetails.status = 'Inactive'
     * set currentDetails.balance = <balance> + 1000
@@ -74,7 +71,6 @@ Feature: End-to-End Account Lifecycle
     Given path 'accounts', accountId
     When method get
     Then status 200
-    # Assertions to prove the update happened
     And match response.account_holder_name contains 'Updated'
     And match response.status == 'Inactive'
     And match response.balance == <balance> + 1000
@@ -95,9 +91,6 @@ Feature: End-to-End Account Lifecycle
     Then status 404
     And match response.detail == "Account not found"
 
-    # =======================================================================
-    # TEST DATA
-    # =======================================================================
     Examples:
       | name           | dob        | gender | email                | phone      | type    | balance |
       | Karate Master  | 1980-01-01 | Male   | master@karate.io     | 1112223333 | Savings | 1000.00 |
