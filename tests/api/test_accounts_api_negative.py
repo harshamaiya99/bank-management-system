@@ -83,5 +83,11 @@ def test_account_negative_scenarios(accounts_api_manager, row):
                 assert missing in error_locations, f"Field '{missing}' should be in error response"
 
             for error in errors:
-                assert error["type"] == "missing"
-                assert error["msg"] == "Field required"
+                # Check for Pydantic V1 error type
+                assert error["type"] == "value_error.missing"
+
+                # Check for Pydantic V1 error message (lowercase 'f')
+                assert error["msg"] == "field required"
+
+                assert error["loc"][0] == "body"
+                assert error["loc"][1] in missing_fields
