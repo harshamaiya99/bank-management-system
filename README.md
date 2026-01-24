@@ -1,257 +1,176 @@
-# Bank Account Management Application
+# Bank Management System & Advanced QA Automation Framework
 
-![Python](https://img.shields.io/badge/Python-3.9+-blue?style=flat-square&logo=python)
+![Python](https://img.shields.io/badge/Python-3.10+-blue?style=flat-square&logo=python)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100.0-009688?style=flat-square&logo=fastapi)
 ![SQLite](https://img.shields.io/badge/Database-SQLite-003B57?style=flat-square&logo=sqlite)
 ![Pytest](https://img.shields.io/badge/Tests-Pytest-009688?style=flat-square&logo=pytest)
-![Allure Report](https://img.shields.io/badge/Reporting-Allure-FF7700?style=flat-square&logo=allure)
+![Karate](https://img.shields.io/badge/API_Testing-Karate-ED1C24?style=flat-square&logo=karate)
 ![Playwright](https://img.shields.io/badge/UI_Testing-Playwright-2F80ED?style=flat-square&logo=playwright)
 ![Selenium](https://img.shields.io/badge/UI_Testing-Selenium-43B02A?style=flat-square&logo=selenium)
-![Karate](https://img.shields.io/badge/API_Testing-Karate-ED1C24?style=flat-square&logo=karate)
-
-## Table of Contents
-
-*   [Overview](#overview)
-*   [Features](#features)
-*   [Technologies Used](#technologies-used)
-*   [Project Structure](#project-structure)
-*   [Getting Started](#getting-started)
-    *   [Prerequisites](#prerequisites)
-    *   [Installation](#installation)
-    *   [Database Initialization](#database-initialization)
-    *   [Running the Application](#running-the-application)
-*   [API Endpoints](#api-endpoints)
-    *   [Swagger UI / OpenAPI Documentation](#swagger-ui--openapi-documentation)
-*   [Frontend Interface](#frontend-interface)
-*   [Database Management](#database-management)
-*   [Testing](#testing)
-    *   [API Testing](#api-testing)
-    *   [Web UI Testing (Playwright)](#web-ui-testing-playwright)
-    *   [Generating Allure Report](#generating-allure-report)
-    *   [Viewing Allure Report](#viewing-allure-report)
-*   [Contributing](#contributing)
-*   [Acknowledgements](#acknowledgements)
-
----
+![Allure](https://img.shields.io/badge/Reporting-Allure_History-FF7700?style=flat-square&logo=allure)
+![GitHub Actions](https://img.shields.io/badge/CI%2FCD-Composite_Actions-2088FF?style=flat-square&logo=github-actions)
 
 ## Overview
 
-This project implements a comprehensive **Bank Account Management API** using **FastAPI** as the backend framework and **SQLite** for data persistence. It provides a robust set of RESTful endpoints for managing bank accounts, including creation, retrieval, updates, and deletion.
+This project is a full-stack **Bank Management System** designed to demonstrate a robust, production-ready **Test Automation Architecture**.
 
-Accompanying the API is a simple web-based user interface (frontend) built with pure HTML, CSS, and JavaScript, served directly by FastAPI using Jinja2 templates. The project also features extensive automated testing, covering both API integration tests with `requests` and `pytest`, and end-to-end web UI tests using `Playwright`. Test results are meticulously captured and presented through **Allure Reports**, offering detailed insights into test execution, failures, and historical trends.
+While the application itself provides a FastAPI backend and a distinct frontend for managing bank accounts, the core value of this repository lies in its **quad-layer testing strategy**. It implements parallel testing frameworks (Selenium vs. Playwright, Pytest vs. Karate) to showcase modern best practices in QA engineering, Design Patterns, and CI/CD pipelines.
 
-## Features
+---
 
-*   **Account CRUD Operations:** Full Create, Read, Update, and Delete functionality for bank accounts.
-*   **FastAPI Backend:** High-performance, easy-to-use API development with automatic OpenAPI documentation.
-*   **SQLite Database:** Lightweight and serverless database for local data storage.
-*   **Simple Web UI:** Basic HTML/CSS/JS interface for interacting with the API (creating, searching, viewing, updating, deleting accounts).
-*   **CORS Enabled:** Configured to allow cross-origin requests for flexible client-side integration.
-*   **Health Check Endpoint:** `/health` endpoint for monitoring API status.
-*   **Comprehensive Testing:**
-    *   **API Tests:** Pytest-based tests verifying core API logic using `requests` and data-driven testing from CSV files.
-    *   **Web UI (E2E) Tests:** Playwright-based tests simulating user interactions in a real browser, covering full lifecycle scenarios and negative cases.
-*   **Allure Reporting:** Automated generation of rich, interactive test reports with detailed steps, request/response payloads, and history.
+## Key Enhancements & Features
 
-## Technologies Used
+### 1. Role-Based Access Control (RBAC) & Security
+* **JWT Authentication:** Secure login using JWT with Password Flow.
+* **User Roles:**
+    * **Clerk:** Can View, Create, and Update accounts.
+    * **Manager:** Has all Clerk privileges plus **Delete** authority.
+* **Security:** Password hashing using `bcrypt`.
 
-*   **Python 3.9+**: The core programming language for both backend and testing.
-*   **FastAPI**: Modern, fast (high-performance) web framework for building APIs with Python 3.7+ based on standard Python type hints.
-*   **Uvicorn**: An ASGI server for running FastAPI applications.
-*   **SQLite**: A C-language library that implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine.
-*   **Pydantic**: Data validation and settings management using Python type hints, integral to FastAPI's request/response models.
-*   **Jinja2**: A modern and designer-friendly templating language for Python, used for rendering HTML pages.
-*   **Pytest**: A mature full-featured Python testing framework.
-*   **Requests**: An elegant and simple HTTP library for Python, used in API tests.
-*   **Playwright**: A Python library to automate Chromium, Firefox and WebKit with a single API, used for robust end-to-end web UI testing.
-*   **Allure Report**: A flexible lightweight multi-language test report tool that gives a clear overview of the test execution, including trends and detailed steps.
+### 2. Advanced Design Patterns
+* **Service Object Model (SOM):** API tests utilize a service layer (`tests/api_pytest/services/`) to abstract HTTP requests, making tests readable and maintainable.
+* **Page Object Model (POM):** Both Playwright and Selenium suites utilize strict POM (`tests/web_*/pages/`) to separate page mechanics from test logic.
+* **Singleton Configuration:** Centralized configuration management via `pytest.ini` and `conftest.py`.
+
+### 3. Hybrid Test Frameworks
+This project allows you to compare different automation tools side-by-side:
+* **API Layer:** Pure Python (`Requests` + `Pytest`) **VS** BDD Style Java/JS (`Karate`).
+* **UI Layer:** Modern Async (`Playwright`) **VS** Traditional Synchronous (`Selenium`).
+
+### 4. Intelligent Reporting & CI/CD
+* **Allure History:** The CI pipeline automatically preserves test history, generating trend graphs (Pass/Fail ratios over time) hosted on GitHub Pages.
+* **Screenshot on Failure:** Automatic capture of full-page screenshots attached to the Allure report whenever a UI test fails.
+* **Composite Actions:** GitHub Actions are modularized (Setup, Restore History, Run Tests, Generate Report) for reusability.
+
+---
 
 ## Project Structure
 
-```
+## 📂 Detailed Project Structure
+
+```text
 .
-web-FastAPI-SQLlite
-├── .github                                 # GitHub Actions CI/CD configuration folder
-│   ├── actions                             # Custom reusable composite actions
-│   │   ├── generate-report
-│   │   │   └── action.yml                  # Generates Allure report & history (CI step)
-│   │   ├── restore-history
-│   │   │   └── action.yml                  # Downloads previous report history for trend graphs
-│   │   ├── run-tests
-│   │   │   └── action.yml                  # Orchestrates running API, Playwright, and Selenium tests
-│   │   └── setup-env
-│   │       └── action.yml                  # Sets up Python, installs dependencies & browsers
+├── .github                                 # GitHub Actions CI/CD Configuration
+│   ├── actions                             # Custom Reusable Composite Actions
+│   │   ├── generate-report/action.yml      # Injects metadata & builds Allure HTML
+│   │   ├── restore-history/action.yml      # Fetches history for trend graphs
+│   │   ├── run-tests/action.yml            # Orchestrates API & UI test execution
+│   │   └── setup-env/action.yml            # Installs Python, Java, & Browsers
 │   └── workflows
-│       └── main.yml                        # The main pipeline definition (triggers on push/pull_request)
-├── .gitignore                              # Files and folders to exclude from Git (e.g., __pycache__, .db)
-├── README.md                               # Project documentation and setup instructions
-├── conftest.py                             # Global Pytest hooks (e.g., generating reports after session)
-├── project_structure.txt                   # Text file containing this file tree
-├── pytest.ini                              # Pytest configuration (markers, CLI defaults, log levels)
-├── requirements.txt                        # Python dependencies (FastAPI, Pytest, Selenium, Playwright, etc.)
-├── src                                     # Source code for the Application Under Test (AUT)
-│   ├── __init__.py
-│   ├── backend                             # FastAPI backend logic
-│   │   ├── __init__.py
-│   │   ├── crud.py                         # CRUD functions for database interaction
-│   │   ├── database.db                     # SQLite database file (binary)
-│   │   ├── database.py                     # Database connection and session setup
-│   │   ├── main.py                         # Application entry point (uvicorn start)
-│   │   ├── models.py                       # SQLAlchemy database models and Pydantic schemas
-│   │   └── routes.py                       # API endpoint definitions (GET, POST, PUT, DELETE)
-│   └── frontend                            # Static HTML frontend files
-│       ├── accountDetails.html             # Page for viewing/updating account details
-│       ├── createAccount.html              # Page for creating a new bank account
-│       └── index.html                      # Landing page / Search dashboard
-└── tests                                   # The Test Automation Framework
-    ├── api                                 # API Testing Suite (Requests + Pytest)
-    │   ├── conftest.py                     # API-specific fixtures (client setup)
-    │   ├── data                            # Test Data
-    │   │   ├── accounts.csv                # Positive test scenarios data
-    │   │   └── accounts_negative.csv       # Negative test scenarios data
-    │   ├── services                        # Service Object Model (API Wrappers)
-    │   │   ├── accounts_api.py             # Wrapper methods for /accounts endpoints
-    │   │   └── base_api.py                 # Base wrapper for HTTP requests
-    │   ├── test_accounts_api.py            # Positive API tests
-    │   ├── test_accounts_api_negative.py   # Negative API tests (error codes)
-    │   └── utils                           # API Utilities
-    │       ├── allure_logger.py            # Helpers for detailed Allure logging
-    │       ├── csv_reader.py               # Utility to read CSV data
-    │       ├── expected_response.py        # Expected JSON schemas/responses
-    │       └── validators.py               # JSON schema validation logic
-    ├── reports                             # Directory where local test reports are stored
-    ├── web_playwright                      # UI Testing Suite (Playwright + Pytest)
-    │   ├── __init__.py
-    │   ├── conftest.py                     # Playwright fixtures (page injection, screenshots)
-    │   ├── data
-    │   │   ├── test_data.csv               # UI Positive test data
-    │   │   └── test_data_negative.csv      # UI Negative test data
-    │   ├── pages                           # Page Object Model (Playwright)
-    │   │   ├── __init__.py
-    │   │   ├── base_page.py                # Base wrapper for Playwright actions
-    │   │   ├── create_page.py              # Logic for Create Account page
-    │   │   ├── details_page.py             # Logic for Details/Update page
-    │   │   └── home_page.py                # Logic for Home/Search page
-    │   ├── test_e2e_flow.py                # Full CRUD End-to-End test (Playwright)
-    │   ├── test_negative.py                # Negative UI scenarios (Playwright)
-    │   └── utils
-    │       ├── __init__.py
-    │       ├── alert_handler.py            # Async listener for browser alerts
-    │       ├── assertion_logger.py         # "Expected vs Actual" custom loggers
-    │       └── csv_reader.py               # Reused CSV reader
-    └── web_selenium                        # UI Testing Suite (Selenium + Pytest)
-        ├── __init__.py
-        ├── conftest.py                     # Selenium fixtures (Driver setup, Headless config)
-        ├── data
-        │   └── test_data.csv               # Data reused/copied from web_playwright
-        ├── pages                           # Page Object Model (Selenium)
-        │   ├── __init__.py
-        │   ├── base_page.py                # Base wrapper (Explicit Waits, Find, Click)
-        │   ├── create_page.py              # Selenium implementation of Create Page
-        │   ├── details_page.py             # Selenium implementation of Details Page (JS Date fix)
-        │   └── home_page.py                # Selenium implementation of Home Page
-        ├── test_e2e_flow.py                # Full CRUD End-to-End test (Selenium version)
-        └── utils
-            ├── __init__.py
-            ├── alert_handler.py            # Synchronous alert handling logic
-            ├── assertion_logger.py         # Reused assertion logic
-            └── csv_reader.py               # Reused CSV reader
+│       └── main.yml                        # Main Pipeline (Triggers on Push/PR)
+├── src                                     # Application Source Code
+│   ├── backend                             # FastAPI Backend
+│   │   ├── auth.py                         # JWT Authentication & Role Logic
+│   │   ├── crud.py                         # Database Operations (Create, Read, etc.)
+│   │   ├── database.db                     # SQLite Database File
+│   │   ├── main.py                         # App Entry Point (Uvicorn)
+│   │   ├── models.py                       # Pydantic Schemas & DB Models
+│   │   └── routes.py                       # API Endpoints
+│   └── frontend                            # Static Web Interface
+│       ├── accountDetails.html             # Update/Delete Account Page
+│       ├── createAccount.html              # New Account Form
+│       ├── home_page.html                  # Dashboard & Search
+│       ├── login.html                      # Staff Login Page
+│       └── styles.css                      # Global Styling
+├── tests                                   # Master Test Suite
+│   ├── api_karate                          # BDD API Framework (Karate)
+│   │   ├── src/test/java/examples
+│   │   │   ├── accounts.feature            # Gherkin Scenarios for API CRUD
+│   │   │   ├── auth.feature                # Reusable Auth Helper
+│   │   │   ├── karate-config.js            # Global Config (Base URL, Headers)
+│   │   │   └── AccountsTest.java           # JUnit Runner
+│   │   ├── pom.xml                         # Maven Dependencies
+│   │   └── test_karate_runner.py           # Python Wrapper to trigger Karate via Pytest
+│   ├── api_pytest                          # Python API Framework (Requests)
+│   │   ├── data                            # CSV Test Data
+│   │   │   ├── accounts.csv                # Positive Scenarios
+│   │   │   └── accounts_negative.csv       # Negative Scenarios (Edge Cases)
+│   │   ├── services                        # Service Object Model (SOM)
+│   │   │   ├── accounts_api.py             # Accounts Endpoint Wrapper
+│   │   │   └── base_api.py                 # Base HTTP Methods (GET, POST, etc.)
+│   │   ├── utils                           # API Utilities
+│   │   │   ├── allure_logger.py            # Custom Allure Attachments
+│   │   │   ├── csv_reader.py               # CSV Parser
+│   │   │   ├── expected_response.py        # Response Validation Logic
+│   │   │   └── validators.py               # Custom Assertions
+│   │   ├── test_accounts_api.py            # Positive Test Suite
+│   │   └── test_accounts_api_negative.py   # Negative Test Suite
+│   ├── web_playwright                      # Modern UI Framework (Playwright)
+│   │   ├── data                            # UI Test Data (CSV)
+│   │   ├── pages                           # Page Object Model (POM)
+│   │   │   ├── base_page.py                # Core Page Actions
+│   │   │   ├── create_page.py              # Create Account Page Objects
+│   │   │   ├── details_page.py             # Details Page Objects
+│   │   │   ├── home_page.py                # Home Page Objects
+│   │   │   └── login_page.py               # Login Page Objects
+│   │   ├── utils                           # UI Utilities
+│   │   │   ├── alert_handler.py            # Async Alert Listener
+│   │   │   ├── assertion_logger.py         # Soft Assertions & Logging
+│   │   │   └── csv_reader.py               # Data Provider
+│   │   ├── test_e2e_flow.py                # Full CRUD End-to-End Test
+│   │   └── test_negative.py                # UI Validation Tests
+│   └── web_selenium                        # Traditional UI Framework (Selenium)
+│       ├── data                            # Shared UI Test Data
+│       ├── pages                           # Selenium Page Objects (POM)
+│       ├── utils                           # Selenium Utilities
+│       └── test_e2e_flow.py                # Selenium End-to-End Test
+├── conftest.py                             # Root Config (Allure History & Hooks)
+├── pytest.ini                              # Pytest CLI Configuration
+└── requirements.txt                        # Project Dependencies
 ```
+
 
 ## Getting Started
 
-Follow these steps to set up and run the Bank Account Management API locally.
-
 ### Prerequisites
-
-*   **Python 3.9+**
-*   **pip** (Python package installer)
-*   **Node.js & npm** (required by Playwright to install browser binaries)
+* **Python 3.10+**
+* **Java (JDK 11+)** (Required for Allure Report generation and Karate)
+* **Node.js & npm** (Required for Playwright)
 
 ### Installation
 
-1.  **Clone the repository (if applicable):**
-
+1.  **Clone Repo:**
     ```bash
     git clone <repository-url>
-    cd web_playwright-FastAPI-SQLlite
+    cd bank-management-system
     ```
 
-2.  **Create and activate a virtual environment:**
-
-    ```bash
-    python -m venv venv
-    # On Windows:
-    .\venv\Scripts\activate
-    # On macOS/Linux:
-    source venv/bin/activate
-    ```
-
-3.  **Install project dependencies:**
-
-    Create a `requirements.txt` file in the root of your project with the following content:
-
-    ```
-    fastapi==0.100.0
-    uvicorn[standard]
-    pydantic
-    Jinja2
-    pytest
-    requests
-    allure-pytest
-    playwright
-    ```
-
-    Then install:
-
+2.  **Install Python Dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
 
-4.  **Install Playwright browser binaries:**
-
+3.  **Install Playwright Browsers:**
     ```bash
     playwright install
     ```
 
-### Database Initialization
+4.  **Install Allure Commandline:**
+    * Mac: `brew install allure`
+    * Windows: `scoop install allure` (or download binary)
+    * Linux: `sudo apt-get install allure`
 
-The project uses SQLite, and the database schema is automatically created if it doesn't exist when `database.py` is run.
+---
 
-```bash
-python src/backend/database.py
-```
-This will create a `database.db` file within the `src/backend/` directory if it doesn't already exist, and set up the necessary `accounts` table.
+## Running the Application
 
-### Running the Application
-
-To start the FastAPI application:
-
-```bash
-uvicorn src.backend.main:app --host 0.0.0.0 --port 9000 --reload
-```
-
-*   `--host 0.0.0.0`: Makes the server accessible from other machines on the network (useful for Docker or external testing).
+1.  **Start the Server & Initialize database:**
+    ```bash
+    uvicorn main:app --app-dir src/backend --reload --port 9000
+    ```
 *   `--port 9000`: Runs the application on port 9000.
 *   `--reload`: Enables auto-reloading of the server on code changes during development.
 
-The API will be accessible at `http://127.0.0.1:9000`.
+    *Server will start at `http://127.0.0.1:9000`*
 
-## API Endpoints
+2.  **Login Credentials (Seeded on Startup):**
 
-The API provides the following endpoints for managing bank accounts:
+    | Role    | Username  | Password     | Permissions |
+    | :---    | :---      | :---         | :--- |
+    | Clerk   | `clerk`   | `clerk123`   | Create, Read, Update |
+    | Manager | `manager` | `manager123` | Create, Read, Update, **Delete** |
 
-| Method | Endpoint                    | Description                                  | Request Body (Example)                                     | Response Body (Example)                                     |
-| :----- | :-------------------------- | :------------------------------------------- | :--------------------------------------------------------- | :---------------------------------------------------------- |
-| `GET`  | `/health`                   | Checks the health status of the API.         | `N/A`                                                      | `{"status": "healthy"}`                                     |
-| `GET`  | `/`                         | Serves the main HTML home page.              | `N/A`                                                      | HTML content                                                |
-| `GET`  | `/createAccount.html`       | Serves the HTML page for creating accounts.  | `N/A`                                                      | HTML content                                                |
-| `GET`  | `/accountDetails.html`      | Serves the HTML page for account details.    | `N/A`                                                      | HTML content                                                |
-| `GET`  | `/accounts`                 | Retrieves a list of all bank accounts.       | `N/A`                                                      | `[{"account_id": "...", "account_holder_name": "...", ...}]` |
-| `POST` | `/accounts`                 | Creates a new bank account.                  | `AccountCreate` model (see below)                          | `{"account_id": "...", "message": "Account created successfully"}` |
-| `GET`  | `/accounts/{account_id}`    | Retrieves details for a specific account.    | `N/A`                                                      | `AccountResponse` model (see below) or `404`                |
-| `PUT`  | `/accounts/{account_id}`    | Updates details for a specific account.      | `AccountUpdate` model (see below)                          | `{"message": "Account updated successfully"}`               |
-| `DELETE` | `/accounts/{account_id}`  | Deletes a specific account.                  | `N/A`                                                      | `{"message": "Account deleted successfully"}`               |
+---
 
 ### Swagger UI / OpenAPI Documentation
 
@@ -264,81 +183,63 @@ FastAPI automatically generates interactive API documentation. Once the applicat
 
 The application includes a minimalist web frontend to demonstrate interaction with the API:
 
+*   **Login Page (`/login.html`)**: Allows logging in using differnt roles and navigating to the "Home" page.
 *   **Home Page (`/`)**: Allows searching for accounts by ID and navigating to the "Create Account" page.
 *   **Create Account Page (`/createAccount.html`)**: A form to submit new account details. Upon successful creation, an alert displays the new account ID.
 *   **Account Details Page (`/accountDetails.html`)**: Displays comprehensive details of an account. It also allows updating existing account information or deleting the account.
 
-## Database Management
+## Generating Reports
 
-The SQLite database file `database.db` is located in `src/backend/`. You can use any SQLite browser (e.g., [DB Browser for SQLite](https://sqlitebrowser.org/)) to inspect the database schema and data directly.
+The project uses `pytest_sessionfinish` hooks to automatically manage report generation.
 
-## Testing
+### Generate & View Report
 
-The project is equipped with both API and Web UI tests, and uses Allure for comprehensive reporting.
+**Generate HTML report from Allure JSON results:**
 
-### API Testing
-
-API tests are located in `tests/api/`. They use `pytest` and the `requests` library to perform CRUD operations against the running API. Test data is driven by `tests/api/data/accounts.csv`.
-
-To run API tests:
-
-```bash
-pytest tests/api_pytest/ --alluredir=tests/reports/allure-results
+``` bash
+allure generate tests/reports/allure-results
+  -o tests/reports/allure-reports
+  --clean
 ```
 
-### Web UI Testing (Playwright)
+**Open the report in your default browser:**
 
-Web UI end-to-end tests are located in `tests/web/`. They use `pytest` and `Playwright` to simulate user interactions in a browser (Chromium by default). Test data for positive scenarios is in `tests/web/data/test_data.csv`, and for negative scenarios in `tests/web/data/test_data_negative.csv`.
-
-To run Web UI tests:
-
-```bash
-pytest tests/web_playwright/ --alluredir=tests/reports/allure-results
-```
-
-You can specify a browser (e.g., `firefox`, `webkit`) using `--browser`:
-
-```bash
-pytest tests/web_playwright/ --browser=firefox --alluredir=tests/reports/allure-results
-```
-
-### Generating Allure Report
-
-After running your tests (API or Web UI), raw Allure results will be generated in `tests/reports/allure-results`. To generate the human-readable HTML report:
-
-```bash
-allure generate tests/reports/allure-results -o tests/reports/allure-reports --clean
-```
-
-The `--clean` flag will clean the previous report data before generating a new one, ensuring fresh results. The `conftest.py` in the root also handles copying history and generating the report automatically upon `pytest_sessionfinish`.
-
-### Viewing Allure Report
-
-To open the generated Allure Report in your default web browser:
-
-```bash
+``` bash
 allure open tests/reports/allure-reports
 ```
 
-This will launch a local web server to host the report, allowing you to browse test results, statistics, and trends.
+------------------------------------------------------------------------
 
-## Contributing
+## CI/CD Pipeline (GitHub Actions)
 
-Contributions are welcome! Please follow these steps:
+The workflow is defined in:
 
-1.  Fork the repository.
-2.  Create a new branch (`git checkout -b feature/your-feature-name`).
-3.  Make your changes and ensure tests pass.
-4.  Commit your changes (`git commit -m 'Add new feature'`).
-5.  Push to the branch (`git push origin feature/your-feature-name`).
-6.  Open a Pull Request.
+    .github/workflows/main.yml
 
-## Acknowledgements
+It runs automatically on every **Push** and **Pull Request**.
 
-*   [FastAPI](https://fastapi.tiangolo.com/)
-*   [SQLite](https://www.sqlite.org/index.html)
-*   [Pytest](https://pytest.org/)
-*   [Playwright](https://playwright.dev/python/)
-*   [Allure Report](https://allurereport.org/)
-*   [Pydantic](https://pydantic-docs.helpmanual.io/)
-*   [Jinja2](https://jinja.palletsprojects.com/)
+### Pipeline Stages
+
+-   **Setup Environment**
+    Uses a composite action to install:
+    -   Python
+    -   JDK (required for Allure)
+    -   Playwright browsers
+-   **Restore Allure History**
+    Downloads previous Allure history from the `allure-history` orphan branch.
+    This enables trend analysis such as:
+    -   Pass rate changes
+    -   Test stability over time
+-   **Run Tests**
+    Executes:
+    -   Backend server
+    -   Pytest API tests
+    -   Karate BDD tests
+    -   Playwright UI tests
+    -   Selenium UI tests
+-   **Generate Report**
+    Injects GitHub metadata into the Allure report, including:
+    -   Run ID
+    -   Executor information
+-   **Publish Report**
+    -   Uploads the generated Allure HTML report as a GitHub Actions artifact, allowing it to be downloaded after the workflow completes.
