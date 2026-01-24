@@ -1,24 +1,23 @@
 import allure
 import re
-from tests.web_selenium.pages.base_page import BasePage # Changed Import
+from selenium.webdriver.common.by import By
+from tests.web_selenium.pages.base_page import BasePage
 
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 class CreatePage(BasePage):
-    NAME_INPUT = "#accountHolderName"
-    DOB_INPUT = "#dob"
-    GENDER_RADIO = "input[name='gender']"
-    EMAIL_INPUT = "#email"
-    PHONE_INPUT = "#phone"
-    ADDRESS_INPUT = "#address"
-    ZIP_INPUT = "#zipCode"
-    TYPE_SELECT = "#accountType"
-    BALANCE_INPUT = "#balance"
-    MARKETING_CHK = "#marketingOptIn"
-    SERVICE_SELECT = "input[name='services']"
-    TERMS_CHK = "#agreedToTerms"
-    SUBMIT_BTN = "button[type='submit']"
+    # --- Locators (Tuples) ---
+    HEADER = (By.TAG_NAME, "h1")
+    NAME_INPUT = (By.ID, "accountHolderName")
+    DOB_INPUT = (By.ID, "dob")
+    EMAIL_INPUT = (By.ID, "email")
+    PHONE_INPUT = (By.ID, "phone")
+    ADDRESS_INPUT = (By.ID, "address")
+    ZIP_INPUT = (By.ID, "zipCode")
+    TYPE_SELECT = (By.ID, "accountType")
+    BALANCE_INPUT = (By.ID, "balance")
+    MARKETING_CHK = (By.ID, "marketingOptIn")
+    TERMS_CHK = (By.ID, "agreedToTerms")
+    SUBMIT_BTN = (By.CSS_SELECTOR, "button[type='submit']")
 
     @allure.step("Enter account holder name")
     def enter_name(self, name):
@@ -26,12 +25,13 @@ class CreatePage(BasePage):
 
     @allure.step("Enter date of birth")
     def enter_dob(self, dob):
-        # Use JS to bypass date input mask
         self.set_value_js(self.DOB_INPUT, dob)
 
     @allure.step("Select gender")
     def select_gender(self, gender):
-        self.click(f"{self.GENDER_RADIO}[value='{gender}']")
+        # Dynamic Tuple construction
+        locator = (By.CSS_SELECTOR, f"input[name='gender'][value='{gender}']")
+        self.click(locator)
 
     @allure.step("Enter email")
     def enter_email(self, email):
@@ -61,7 +61,9 @@ class CreatePage(BasePage):
     def select_services(self, services):
         if services:
             for service in services.split(","):
-                self.check(f"{self.SERVICE_SELECT}[value='{service.strip()}']")
+                # Dynamic Tuple for checkboxes
+                locator = (By.CSS_SELECTOR, f"input[name='services'][value='{service.strip()}']")
+                self.check(locator)
 
     @allure.step("Set marketing opt-in")
     def set_marketing_opt_in(self, opt_in):
@@ -74,25 +76,25 @@ class CreatePage(BasePage):
 
     @allure.step("Submit create account form")
     def submit_form_and_capture_account_id(self) -> tuple[str, str]:
-
-
         self.click(self.SUBMIT_BTN)
 
-        # alert()
-        alert = WebDriverWait(self.driver, 5).until(EC.alert_is_present())
-        alert_text = alert.text
-        alert.accept()
+        alert_text = self.get_alert_text() or ""
 
         account_id = None
         match = re.search(r"ID:\s*(\d+)", alert_text)
         if match:
             account_id = match.group(1)
 
-        self.wait_for_url("")
+        # Wait for redirect to home (root path)
+        self.wait_for_url("/")
 
         return account_id, alert_text
 
     def create_new_account(self, data: dict) -> tuple[str, str]:
+        # --- SYNC FIX: Wait for page load ---
+        self.find(self.HEADER)
+        # ------------------------------------
+
         self.enter_name(data["account_holder_name"])
         self.enter_dob(data["dob"])
         self.select_gender(data["gender"])
@@ -107,17 +109,20 @@ class CreatePage(BasePage):
         self.accept_terms()
         return self.submit_form_and_capture_account_id()
 
-    def get_validation_message_for_field(self, field_name: str) -> str:
-        locator_map = {
-            "name": self.NAME_INPUT,
-            "dob": self.DOB_INPUT,
-            "gender": self.GENDER_RADIO,
-            "email": self.EMAIL_INPUT,
-            "phone": self.PHONE_INPUT,
-            "address": self.ADDRESS_INPUT,
-            "zip": self.ZIP_INPUT,
-            "account_type": self.TYPE_SELECT,
-            "balance": self.BALANCE_INPUT,
-            "terms": self.TERMS_CHK
-        }
-        return self.get_validation_message(locator_map[field_name])
+    # def get_validation_message_for_field(self, field_name: str) -> str:
+    #     # For radio buttons, we pick one to get the group validation message
+    #     gender_locator = (By.CSS_SELECTOR, "input[name='gender'][value='Male']")
+    #
+    #     locator_map = {
+    #         "name": self.NAME_INPUT,
+    #         "dob": self.DOB_INPUT,
+    #         "gender": gender_locator,
+    #         "email": self.EMAIL_INPUT,
+    #         "phone": self.PHONE_INPUT,
+    #         "address": self.ADDRESS_INPUT,
+    #         "zip": self.ZIP_INPUT,
+    #         "account_type": self.TYPE_SELECT,
+    #         "balance": self.BALANCE_INPUT,
+    #         "terms": self.TERMS_CHK
+    #     }
+    #     return self.get_validation_message(locator_map[field_name])
