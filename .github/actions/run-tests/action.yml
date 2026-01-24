@@ -3,12 +3,14 @@ description: "Starts FastAPI and runs Pytest"
 runs:
   using: "composite"
   steps:
-    - name: Start FastAPI Backend
+
+    - name: Start Backend Server
       shell: bash
       run: |
-        nohup uvicorn main:app --app-dir src/backend --host 127.0.0.1 --port 9000 > server.log 2>&1 &
+        # Start uvicorn in the background using '&'
+        uvicorn main:app --app-dir src/backend --host 127.0.0.1 --port 9000 &
         echo "Waiting for server to start..."
-        sleep 5
+        sleep 5  # Give it a moment to initialize the DB
 
     - name: Run Tests
       shell: bash
