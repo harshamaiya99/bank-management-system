@@ -48,73 +48,70 @@ This project allows you to compare different automation tools side-by-side:
 
 ```text
 .
-├── .github                                 # GitHub Actions CI/CD Configuration
-│   ├── actions                             # Custom Reusable Composite Actions
-│   │   ├── generate-report/action.yml      # Injects metadata & builds Allure HTML
+.
+├── .github                                 # GitHub Actions CI/CD configuration
+│   ├── actions                             # Custom reusable composite actions
+│   │   ├── generate-report/action.yml      # Injects metadata and builds Allure HTML report
 │   │   ├── restore-history/action.yml      # Fetches history for trend graphs
-│   │   ├── run-tests/action.yml            # Orchestrates API & UI test execution
-│   │   └── setup-env/action.yml            # Installs Python, Java, & Browsers
+│   │   ├── run-tests/action.yml            # Orchestrates backend startup and test execution
+│   │   └── setup-env/action.yml            # Installs Python, Java, and Playwright browsers
 │   └── workflows
-│       └── main.yml                        # Main Pipeline (Triggers on Push/PR)
-├── src                                     # Application Source Code
-│   ├── backend                             # FastAPI Backend
-│   │   ├── auth.py                         # JWT Authentication & Role Logic
-│   │   ├── crud.py                         # Database Operations (Create, Read, etc.)
-│   │   ├── database.db                     # SQLite Database File
-│   │   ├── main.py                         # App Entry Point (Uvicorn)
-│   │   ├── models.py                       # Pydantic Schemas & DB Models
-│   │   └── routes.py                       # API Endpoints
-│   └── frontend                            # Static Web Interface
-│       ├── accountDetails.html             # Update/Delete Account Page
-│       ├── createAccount.html              # New Account Form
-│       ├── home_page.html                  # Dashboard & Search
-│       ├── login.html                      # Staff Login Page
-│       └── styles.css                      # Global Styling
-├── tests                                   # Master Test Suite
-│   ├── api_karate                          # BDD API Framework (Karate)
+│       └── main.yml                        # Main CI/CD pipeline (runs on push/PR)
+├── src                                     # Application source code
+│   ├── backend                             # FastAPI backend
+│   │   ├── accounts                        # Accounts module (logic and routing)
+│   │   │   ├── crud.py                     # Database operations (Create, Read, Update, Delete)
+│   │   │   ├── router.py                   # API endpoints for accounts
+│   │   │   └── schemas.py                  # Pydantic models for data validation
+│   │   ├── auth                            # Authentication module
+│   │   │   ├── crud.py                     # User lookup logic
+│   │   │   ├── router.py                   # Token generation and login endpoints
+│   │   │   ├── schemas.py                  # Token and user Pydantic models
+│   │   │   └── utils.py                    # JWT creation and password hashing
+│   │   ├── database.db                     # SQLite database file
+│   │   ├── database.py                     # Database connection and initialization
+│   │   ├── main.py                         # FastAPI application entry point
+│   │   └── routes_html.py                  # Router for serving frontend HTML files
+│   └── frontend                            # Static web interface
+│       ├── accountDetails.html             # Page for managing existing accounts
+│       ├── createAccount.html              # Form for opening new accounts
+│       ├── home_page.html                  # Search dashboard
+│       ├── login.html                      # Staff login portal
+│       └── styles.css                      # Global styling for the interface
+├── tests                                   # Master test suite
+│   ├── api_karate                          # BDD API framework (Karate/Java)
 │   │   ├── src/test/java/examples
-│   │   │   ├── accounts.feature            # Gherkin Scenarios for API CRUD
-│   │   │   ├── auth.feature                # Reusable Auth Helper
-│   │   │   ├── karate-config.js            # Global Config (Base URL, Headers)
-│   │   │   └── AccountsTest.java           # JUnit Runner
-│   │   ├── pom.xml                         # Maven Dependencies
-│   │   └── test_karate_runner.py           # Python Wrapper to trigger Karate via Pytest
-│   ├── api_pytest                          # Python API Framework (Requests)
-│   │   ├── data                            # CSV Test Data
-│   │   │   ├── accounts.csv                # Positive Scenarios
-│   │   │   └── accounts_negative.csv       # Negative Scenarios (Edge Cases)
-│   │   ├── services                        # Service Object Model (SOM)
-│   │   │   ├── accounts_api.py             # Accounts Endpoint Wrapper
-│   │   │   └── base_api.py                 # Base HTTP Methods (GET, POST, etc.)
-│   │   ├── utils                           # API Utilities
-│   │   │   ├── allure_logger.py            # Custom Allure Attachments
-│   │   │   ├── csv_reader.py               # CSV Parser
-│   │   │   ├── expected_response.py        # Response Validation Logic
-│   │   │   └── validators.py               # Custom Assertions
-│   │   ├── test_accounts_api.py            # Positive Test Suite
-│   │   └── test_accounts_api_negative.py   # Negative Test Suite
-│   ├── web_playwright                      # Modern UI Framework (Playwright)
-│   │   ├── data                            # UI Test Data (CSV)
-│   │   ├── pages                           # Page Object Model (POM)
-│   │   │   ├── base_page.py                # Core Page Actions
-│   │   │   ├── create_page.py              # Create Account Page Objects
-│   │   │   ├── details_page.py             # Details Page Objects
-│   │   │   ├── home_page.py                # Home Page Objects
-│   │   │   └── login_page.py               # Login Page Objects
-│   │   ├── utils                           # UI Utilities
-│   │   │   ├── alert_handler.py            # Async Alert Listener
-│   │   │   ├── assertion_logger.py         # Soft Assertions & Logging
-│   │   │   └── csv_reader.py               # Data Provider
-│   │   ├── test_e2e_flow.py                # Full CRUD End-to-End Test
-│   │   └── test_negative.py                # UI Validation Tests
-│   └── web_selenium                        # Traditional UI Framework (Selenium)
-│       ├── data                            # Shared UI Test Data
-│       ├── pages                           # Selenium Page Objects (POM)
-│       ├── utils                           # Selenium Utilities
-│       └── test_e2e_flow.py                # Selenium End-to-End Test
-├── conftest.py                             # Root Config (Allure History & Hooks)
-├── pytest.ini                              # Pytest CLI Configuration
-└── requirements.txt                        # Project Dependencies
+│   │   │   ├── accounts.feature            # Gherkin scenarios for API lifecycle
+│   │   │   ├── auth.feature                # Reusable authentication helper
+│   │   │   └── AccountsTest.java           # JUnit runner
+│   │   ├── karate-config.js                # Global configuration (Base URL, headers)
+│   │   ├── pom.xml                         # Maven project configuration
+│   │   └── test_karate_runner.py           # Python wrapper to trigger Karate via Pytest
+│   ├── api_pytest                          # Python API framework (Requests)
+│   │   ├── data                            # CSV test data files
+│   │   ├── services                        # Service Object Model (SOM) wrappers
+│   │   │   ├── accounts_api.py             # Accounts endpoint logic
+│   │   │   └── base_api.py                 # Core HTTP method implementations
+│   │   ├── utils                           # API testing utilities
+│   │   ├── test_accounts_api.py            # Positive CRUD test scenarios
+│   │   └── test_accounts_api_negative.py   # Error handling and validation tests
+│   ├── web_playwright                      # Modern UI framework (Playwright)
+│   │   ├── data                            # UI test data (CSV)
+│   │   ├── pages                           # Page Object Model (POM) classes
+│   │   ├── utils                           # UI utilities (Alert handlers, loggers)
+│   │   ├── test_e2e_flow.py                # End-to-end user journey tests
+│   │   └── test_negative.py                # UI form validation tests
+│   └── web_selenium                        # Traditional UI framework (Selenium)
+│       ├── data                            # Selenium-specific test data
+│       ├── pages                           # Selenium Page Objects
+│       ├── utils                           # Standard Selenium utilities
+│       └── test_e2e_flow.py                # Selenium end-to-end tests
+├── .env.example                            # Template for environment variables
+├── .gitignore                              # Git exclusion rules
+├── conftest.py                             # Root Pytest config and Allure hooks
+├── pytest.ini                              # Pytest command-line configuration
+├── README.md                               # Project documentation
+└── requirements.txt                        # Project dependencies
 ```
 
 
