@@ -13,7 +13,7 @@ from routes_html import router as html_router
 app = FastAPI(
     title="Bank Management System",
     description="Application for Managing Bank accounts & Advanced QA Automation Framework",
-    version="1.0.0"
+    version="2.0.0"
 )
 
 # --- CORS Configuration ---
