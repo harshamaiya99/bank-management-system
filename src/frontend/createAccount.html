@@ -68,7 +68,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Initial Deposit *</label>
+                        <label>Initial Deposit</label>
                         <input type="number" id="balance" step="0.01" value="0.00" required>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
     </div>
 
     <script>
-        const API = "http://127.0.0.1:9000";
+        const BASE_URL = "{{ base_url }}";
         const token = localStorage.getItem("token");
 
         if (!token) {
@@ -159,7 +159,7 @@
             };
 
             try {
-                const response = await authFetch(`${API}/accounts`, {
+                const response = await authFetch(`${BASE_URL}/accounts`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify(accountData)

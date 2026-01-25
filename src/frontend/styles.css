@@ -113,9 +113,40 @@ button {
     transition: 0.2s;
 }
 
+.btn-login {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-login:hover {
+    background-color: #0069d9;
+}
+
+.btn-search {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-search:hover {
+    background-color: #0069d9;
+}
+
+.btn-create {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-create:hover {
+    background-color: #218838;
+}
+
 .btn-cancel {
     background-color: #6c757d;
     color: white;
+}
+
+.btn-cancel:hover {
+    background-color: #515151;
 }
 
 .btn-submit {
