@@ -13,7 +13,8 @@ class AccountsAPI(BaseAPI):
             "content-type": "application/json",
             "accept": "application/json",
             "Authorization": f"Bearer {self.token}",
-            "Idempotency-Id": str(uuid.uuid4())
+            "Idempotency-Id": str(uuid.uuid4()),
+            "X-Process-Id": str(uuid.uuid4())
         }
 
         create_payload = {
@@ -38,7 +39,8 @@ class AccountsAPI(BaseAPI):
         headers = {
             "content-type": "application/json",
             "accept": "application/json",
-            "Authorization": f"Bearer {self.token}"
+            "Authorization": f"Bearer {self.token}",
+            "X-Process-Id": str(uuid.uuid4())
         }
 
         return self.get(url, headers)
@@ -48,7 +50,8 @@ class AccountsAPI(BaseAPI):
         headers = {
             "content-type": "application/json",
             "accept": "application/json",
-            "Authorization": f"Bearer {self.token}"
+            "Authorization": f"Bearer {self.token}",
+            "X-Process-Id": str(uuid.uuid4())
         }
 
         update_payload = {
@@ -74,6 +77,7 @@ class AccountsAPI(BaseAPI):
         headers = {
             "content-type": "application/json",
             "accept": "application/json",
-            "Authorization": f"Bearer {self.token}"
+            "Authorization": f"Bearer {self.token}",
+            "X-Process-Id": str(uuid.uuid4())
         }
         return self.delete(url, headers)
