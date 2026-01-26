@@ -25,6 +25,9 @@ class DetailsPage(BasePage):
 
     UPDATE_BTN = (By.CSS_SELECTOR, ".btn-update")
     DELETE_BTN = (By.CSS_SELECTOR, ".btn-delete")
+
+    MODAL_CONFIRM_BTN = (By.CSS_SELECTOR, "#deleteModal .btn-delete")
+
     LOADING_MSG = (By.ID, "loadingMessage")
     ERROR_MSG = (By.ID, "errorMessage")
 
@@ -162,14 +165,18 @@ class DetailsPage(BasePage):
 
     @allure.step("Click on Delete account button")
     def delete_account(self):
+        # 1. Click "Delete Account" on the form (Opens Modal)
         self.click(self.DELETE_BTN)
 
-        # Confirm delete
+        # 2. Click "Yes, Delete" in the Modal
+        # Selenium's click method automatically waits for the element to be visible
+        self.click(self.MODAL_CONFIRM_BTN)
+
+        # 3. Handle the "Account Deleted" success alert
+        # The javascript performs `alert("Account Deleted.")` after the API call
         self.get_alert_text()
 
-        # Success message
-        self.get_alert_text()
-
+        # 4. Wait for redirection to Home Page
         self.wait_for_url("/home_page.html")
 
     # --- Aggregated Logic ---

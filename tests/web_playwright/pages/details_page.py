@@ -18,7 +18,10 @@ class DetailsPage(BasePage):
     SERVICE_CHECKBOX = "input[name='services']"
     MARKETING_CHK = "#marketingOptIn"
     UPDATE_BTN = ".btn-update"
-    DELETE_BTN = ".btn-delete"
+    DELETE_BTN = "#deleteBtn"
+
+    MODAL_CONFIRM_BTN = "#deleteModal .btn-delete"
+
     LOADING_MSG = "#loadingMessage"
     ERROR_MSG = "#errorMessage"
 
@@ -167,6 +170,22 @@ class DetailsPage(BasePage):
         # Prepare to accept the "Delete this account?" confirmation
         self.alert.accept_next()
         self.click(self.DELETE_BTN)
+        self.page.wait_for_url("**/home_page.html")
+
+    @allure.step("Click on Delete account button")
+    def delete_account(self):
+        # 1. Click the "Delete Account" button on the form (Opens the modal)
+        self.click(self.DELETE_BTN)
+
+        # 2. Define the trigger: Clicking "Yes, Delete" inside the modal
+        # This button triggers the API call and the subsequent "Account Deleted" alert
+        trigger = lambda: self.click(self.MODAL_CONFIRM_BTN)
+
+        # 3. Handle the Success Alert
+        # The AlertHandler waits for the dialog event caused by the trigger
+        self.alert.get_text_and_accept(trigger)
+
+        # 4. Wait for redirection to Home Page
         self.page.wait_for_url("**/home_page.html")
 
     def update_account_details(self, data: dict) -> str:
