@@ -62,7 +62,8 @@ def test_account_negative_scenarios(accounts_api_manager, row):
                 "Content-Type": "application/json",
                 "Accept": "application/json",
                 "Authorization": f"Bearer {api.token}",
-                "Idempotency-Id": str(uuid.uuid4())
+                "Idempotency-Id": str(uuid.uuid4()),
+                "X-Process-Id": str(uuid.uuid4())
             }
 
             # 3. Send Request using BaseAPI.post (Handles Allure logging automatically)

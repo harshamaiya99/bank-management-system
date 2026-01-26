@@ -19,6 +19,7 @@ Feature: End-to-End Account Lifecycle
     # =======================================================================
     Given path 'accounts'
     And header Idempotency-Id = java.util.UUID.randomUUID().toString()
+    And header X-Process-Id = java.util.UUID.randomUUID().toString()
 
     And request
     """
@@ -48,6 +49,7 @@ Feature: End-to-End Account Lifecycle
     # STEP 2: VERIFY CREATION (GET)
     # =======================================================================
     Given path 'accounts', accountId
+    And header X-Process-Id = java.util.UUID.randomUUID().toString()
     When method get
     Then status 200
     And match response.account_holder_name == "<name>"
@@ -62,6 +64,7 @@ Feature: End-to-End Account Lifecycle
     * set currentDetails.balance = <balance> + 1000
 
     Given path 'accounts', accountId
+    And header X-Process-Id = java.util.UUID.randomUUID().toString()
     And request currentDetails
     When method put
     Then status 200
@@ -71,6 +74,7 @@ Feature: End-to-End Account Lifecycle
     # STEP 4: VERIFY UPDATE (GET)
     # =======================================================================
     Given path 'accounts', accountId
+    And header X-Process-Id = java.util.UUID.randomUUID().toString()
     When method get
     Then status 200
     And match response.account_holder_name contains 'Updated'
@@ -81,6 +85,7 @@ Feature: End-to-End Account Lifecycle
     # STEP 5: DELETE ACCOUNT
     # =======================================================================
     Given path 'accounts', accountId
+    And header X-Process-Id = java.util.UUID.randomUUID().toString()
     When method delete
     Then status 200
     And match response.message == "Account deleted successfully"
@@ -89,6 +94,7 @@ Feature: End-to-End Account Lifecycle
     # STEP 6: VERIFY DELETION (Expect 404)
     # =======================================================================
     Given path 'accounts', accountId
+    And header X-Process-Id = java.util.UUID.randomUUID().toString()
     When method get
     Then status 404
     And match response.detail == "Account not found"
