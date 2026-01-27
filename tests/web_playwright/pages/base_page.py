@@ -1,10 +1,9 @@
 from playwright.sync_api import Page, expect
-from tests.web_playwright.utils.alert_handler import AlertHandler
+from typing import Callable
 
 class BasePage:
     def __init__(self, page: Page):
         self.page = page
-        self.alert = AlertHandler(page)  # Centralized Alert Handler
 
     def navigate(self, url: str):
         self.page.goto(url)
@@ -36,3 +35,16 @@ class BasePage:
         Using .first is useful for radio groups where multiple inputs have the same name.
         """
         return self.page.locator(selector).first.evaluate("element => element.validationMessage")
+
+    def get_alert_text(self, trigger_action: Callable) -> str:
+        """
+        Listens for a dialog event, executes the trigger action,
+        captures the message, accepts the dialog, and returns the text.
+        """
+        with self.page.expect_event("dialog") as event_info:
+            trigger_action()
+
+        dialog = event_info.value
+        message = dialog.message
+        dialog.accept()
+        return message

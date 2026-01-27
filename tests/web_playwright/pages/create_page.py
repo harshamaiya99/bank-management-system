@@ -71,11 +71,11 @@ class CreatePage(BasePage):
 
     @allure.step("Submit create account form")
     def submit_form_and_capture_account_id(self) -> tuple[str, str]:
-        # Define trigger action
+        # 1. Define the trigger action (clicking the submit button)
         trigger = lambda: self.click(self.SUBMIT_BTN)
 
-        # Use centralized handler to click and get alert text
-        alert_text = self.alert.get_text_and_accept(trigger)
+        # 2. Pass the trigger to the BasePage handler
+        alert_text = self.get_alert_text(trigger)
 
         account_id = None
         # Extract ID using Regex
@@ -85,7 +85,6 @@ class CreatePage(BasePage):
             # Only wait for network idle if we actually submitted successfully
             self.page.wait_for_url("**/home_page.html")
 
-        # Return BOTH the ID and the raw text
         return account_id, alert_text
 
     def create_new_account(self, data: dict) -> tuple[str, str]:

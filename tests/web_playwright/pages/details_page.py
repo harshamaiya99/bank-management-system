@@ -154,36 +154,25 @@ class DetailsPage(BasePage):
 
     @allure.step("Click on Update button")
     def update_account(self) -> str:
-        # Define the trigger (clicking the button)
+        # Define trigger
         trigger = lambda: self.click(self.UPDATE_BTN)
 
-        # Capture the alert text, accept it, and return the text
-        alert_text = self.alert.get_text_and_accept(trigger)
+        # Capture alert using BasePage method
+        alert_text = self.get_alert_text(trigger)
 
-        # Wait for the redirect/reload to complete (as discussed previously)
         self.page.wait_for_url("**/home_page.html")
-
         return alert_text
-
-    @allure.step("Click on Delete account button")
-    def delete_account(self):
-        # Prepare to accept the "Delete this account?" confirmation
-        self.alert.accept_next()
-        self.click(self.DELETE_BTN)
-        self.page.wait_for_url("**/home_page.html")
 
     @allure.step("Click on Delete account button")
     def delete_account(self):
         # 1. Click the "Delete Account" button on the form (Opens the modal)
         self.click(self.DELETE_BTN)
 
-        # 2. Define the trigger: Clicking "Yes, Delete" inside the modal
-        # This button triggers the API call and the subsequent "Account Deleted" alert
+        # 2. Define trigger: Clicking "Yes, Delete" inside the modal
         trigger = lambda: self.click(self.MODAL_CONFIRM_BTN)
 
         # 3. Handle the Success Alert
-        # The AlertHandler waits for the dialog event caused by the trigger
-        self.alert.get_text_and_accept(trigger)
+        self.get_alert_text(trigger)
 
         # 4. Wait for redirection to Home Page
         self.page.wait_for_url("**/home_page.html")
