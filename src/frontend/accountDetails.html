@@ -42,7 +42,7 @@
         /* Button Container */
         .modal-actions {
             display: flex;
-            justify-content: center;
+            justify-content: right;
             gap: 15px;
         }
     </style>
@@ -52,7 +52,13 @@
             <h1 class="app-title" onclick="window.location.href='/home_page.html'">Bank Management System</h1>
             <button class="btn-cancel" onclick="logout()" style="padding: 8px 15px; font-size: 14px;">Logout</button>
         </div>
-        <h2 style="color: var(--primary-color);">Manage Account</h2>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h2 style="color: var(--primary-color); margin: 0;">Manage Account</h2>
+          <p style="text-align: right; color: #666; margin: 0;">Logged in as: <strong id="userDisplay">...</strong></p>
+        </div>
+
+
         <div id="loading" style="text-align: center;">Loading...</div>
 
         <form id="accountForm" style="display: none;">
@@ -156,7 +162,7 @@
             <p class="modal-message">Are you sure you want to delete this account? This cannot be undone.</p>
             <div class="modal-actions">
                 <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-                <button class="btn-delete" onclick="confirmDelete()">Yes, Delete</button>
+                <button class="btn-delete" onclick="confirmDelete()">Delete</button>
             </div>
         </div>
     </div>
@@ -172,6 +178,8 @@
         const id = urlParams.get('account_id');
         const token = localStorage.getItem("token");
         const role = localStorage.getItem("role");
+
+        document.getElementById("userDisplay").textContent = role || "Staff";
 
         if (!token) {
             window.location.href = "/login.html";

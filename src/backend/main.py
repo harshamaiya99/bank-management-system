@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 from contextlib import asynccontextmanager
 import uvicorn
 import os
@@ -78,6 +79,12 @@ app.include_router(html_router)
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}
+
+# include_in_schema=False hides this from the Swagger UI (/docs)
+@app.get("/", include_in_schema=False)
+def root():
+    """Redirects root path to login page"""
+    return RedirectResponse(url="/login.html")
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=9000, reload=True)

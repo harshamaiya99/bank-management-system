@@ -10,24 +10,21 @@ logger = logging.getLogger(__name__)
 class ObservabilityMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         # 1. EXTRACT OR GENERATE IDs
-        # If frontend sent X-Request-Id, use it; otherwise generate new UUID
         req_id = request.headers.get("X-Request-Id") or str(uuid.uuid4())
-
-        # If frontend sent X-Process-Id, use it; otherwise mark as N/A
         proc_id = request.headers.get("X-Process-Id") or "N/A"
 
-        # 2. SET CONTEXT (So logs can see them)
+        # 2. SET CONTEXT
         req_token = request_id_ctx.set(req_id)
         proc_token = process_id_ctx.set(proc_id)
 
-        # 3. LOG THE START
-        logger.info(f"Incoming Request: {request.method} {request.url.path}")
-
         try:
-            # 4. PROCESS THE REQUEST
+            # 3. PROCESS THE REQUEST
             response = await call_next(request)
 
-            # 5. INJECT HEADERS INTO RESPONSE
+            # --- NEW LOG LINE HERE ---
+            logger.info(f"{request.method} {request.url.path} - HTTP/1.1 {response.status_code}")
+
+            # 4. INJECT HEADERS INTO RESPONSE
             response.headers["X-Request-Id"] = req_id
             if proc_id != "N/A":
                 response.headers["X-Process-Id"] = proc_id
@@ -35,6 +32,6 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
             return response
 
         finally:
-            # 6. CLEANUP (Reset context variables)
+            # 5. CLEANUP
             request_id_ctx.reset(req_token)
             process_id_ctx.reset(proc_token)
