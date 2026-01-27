@@ -1,41 +1,53 @@
 import subprocess
 import os
+import pytest
 import allure
-
 from dotenv import load_dotenv
 
-# Load the .env file into os.environ so Maven can see it
 load_dotenv()
 
-@allure.epic("API Test - Karate")
-@allure.feature("End-to-End test flow")
-def test_execute_karate_tests():
+
+def run_karate_with_tags(tags):
     """
-    Wrapper test that executes 'mvn test' for Karate.
-    This allows Pytest to trigger the Java-based Karate tests.
+    Helper function to run Maven with specific Karate tags.
     """
-    # 1. Determine the directory where this script (and pom.xml) is located
     test_dir = os.path.dirname(os.path.abspath(__file__))
 
-    # 2. Run the Maven command
-    #    cwd=test_dir ensures we run it from 'tests/api_karate/' folder
+    # Construct command with tags
+    # -Dkarate.options="--tags @yourtag" tells Karate what to run
+    command = f"mvn test -B --no-transfer-progress -Dkarate.options=\"--tags {tags}\""
+
     result = subprocess.run(
-        "mvn test -B --no-transfer-progress", # '-B' (Batch mode) and '--no-transfer-progress' to silence download logs
+        command,
         cwd=test_dir,
         capture_output=True,
         text=True,
         shell=True
     )
 
-    # 3. Print the output so you can see it in pytest (use -s to view)
-    print("\n" + "="*40)
-    print("KARATE MAVEN OUTPUT")
-    print("="*40)
-    print(result.stdout)
-    if result.stderr:
-        print("ERRORS:")
-        print(result.stderr)
-    print("="*40)
+    # Attach logs to Allure for debugging
+    allure.attach(result.stdout, name="Karate Maven Output", attachment_type=allure.attachment_type.TEXT)
 
-    # 4. Fail the Pytest if Maven failed (non-zero exit code)
-    assert result.returncode == 0, "Karate Tests Failed! See output above."
+    if result.returncode != 0:
+        allure.attach(result.stderr, name="Karate Errors", attachment_type=allure.attachment_type.TEXT)
+        pytest.fail(f"Karate tests failed for tags: {tags}")
+
+
+@allure.epic("API Test - Karate")
+@allure.feature("Smoke Tests")
+@pytest.mark.smoke
+def test_karate_smoke():
+    """
+    Triggers only @smoke scenarios in Karate
+    """
+    run_karate_with_tags("@smoke")
+
+
+@allure.epic("API Test - Karate")
+@allure.feature("Regression Tests")
+@pytest.mark.regression
+def test_karate_regression():
+    """
+    Triggers only @regression scenarios in Karate
+    """
+    run_karate_with_tags("@regression")

@@ -1,3 +1,4 @@
+@regression
 Feature: End-to-End Account Lifecycle
 
   Background:
@@ -12,6 +13,9 @@ Feature: End-to-End Account Lifecycle
   # -------------------------------------------------------------------------
   # Scenario: Full CRUD (Create, Read, Update, Delete)
   # -------------------------------------------------------------------------
+
+  # Tag the scenario as smoke AND regression
+  @smoke @regression
   Scenario Outline: E2E Lifecycle for <name>
 
     # =======================================================================
