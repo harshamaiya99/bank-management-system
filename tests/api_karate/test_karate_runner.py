@@ -51,3 +51,12 @@ def test_karate_regression():
     Triggers only @regression scenarios in Karate
     """
     run_karate_with_tags("@regression")
+
+@allure.epic("API Test - Karate")
+@allure.feature("SIT Tests")
+@pytest.mark.sit
+def test_karate_sit():
+    """
+    Triggers only @sit scenarios in Karate
+    """
+    run_karate_with_tags("@sit")

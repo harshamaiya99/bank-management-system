@@ -1,4 +1,3 @@
-@regression
 Feature: End-to-End Account Lifecycle
 
   Background:
@@ -15,7 +14,6 @@ Feature: End-to-End Account Lifecycle
   # -------------------------------------------------------------------------
 
   # Tag the scenario as smoke AND regression
-  @smoke @regression
   Scenario Outline: E2E Lifecycle for <name>
 
     # =======================================================================
@@ -103,7 +101,28 @@ Feature: End-to-End Account Lifecycle
     Then status 404
     And match response.detail == "Account not found"
 
+    # -----------------------------------------------------------------------
+    # GROUP 1: SMOKE TESTS (Runs in Smoke AND Regression)
+    # -----------------------------------------------------------------------
+    @smoke @regression
     Examples:
-      | name           | dob        | gender | email                | phone      | type    | balance |
-      | Karate Master  | 1980-01-01 | Male   | master@karate.io     | 1112223333 | Savings | 1000.00 |
-      | Karate Student | 2005-06-15 | Female | student@karate.io    | 4445556666 | Current | 50.00   |
+      | name           | dob        | gender | email           | phone      | type    | balance |
+      | Karate Smoke 1 | 1980-01-01 | Male   | smoke@karate.io | 1112223333 | Savings | 1000.00 |
+      | Karate Smoke 2 | 1980-01-01 | Male   | smoke@karate.io | 1112223333 | Savings | 1000.00 |
+
+    # -----------------------------------------------------------------------
+    # GROUP 2: REGRESSION ONLY (Skipped during Smoke)
+    # -----------------------------------------------------------------------
+    @regression
+    Examples:
+      | name           | dob        | gender | email             | phone      | type    | balance |
+      | Karate Regress | 2005-06-15 | Female | regress@karate.io | 4445556666 | Current | 50.00   |
+
+    # -----------------------------------------------------------------------
+    # GROUP 3: REGRESSION and SIT (Skipped during Smoke)
+    # -----------------------------------------------------------------------
+    @regression @sit
+    Examples:
+      | name           | dob        | gender | email           | phone      | type    | balance |
+      | Karate SIT 1 | 1980-01-01 | Male   | sit@karate.io | 1112223333 | Savings | 1000.00 |
+      | Karate SIT 2 | 1980-01-01 | Male   | sit@karate.io | 1112223333 | Savings | 1000.00 |
