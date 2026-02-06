@@ -20,7 +20,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 
 // Icons
-import { ArrowLeft, CheckCircle2, CalendarIcon } from "lucide-react";
+import { ArrowLeft, CalendarIcon } from "lucide-react";
 
 const servicesOptions = ["Internet Banking", "Debit Card", "Cheque Book", "SMS Alerts"];
 
@@ -280,19 +280,11 @@ export default function CreateAccountPage() {
                   </div>
                 </FormItem>
               )} />
-            </CardContent>
-          </Card>
 
-          {/* Terms & Privacy Card */}
-          <Card className="bg-muted/30">
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4" /> Terms & Privacy
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
+              <Separator />
+
               <FormField control={form.control} name="marketing_opt_in" render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 bg-background">
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 ">
                   <FormControl>
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
@@ -304,8 +296,14 @@ export default function CreateAccountPage() {
                   </div>
                 </FormItem>
               )} />
+            </CardContent>
+          </Card>
+
+          {/* Terms & Privacy Card */}
+
+            <CardContent className="space-y-6">
               <FormField control={form.control} name="agreed_to_terms" render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 bg-background">
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                   <FormControl>
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
@@ -319,7 +317,7 @@ export default function CreateAccountPage() {
                 </FormItem>
               )} />
             </CardContent>
-          </Card>
+
 
           {/* Submit Actions */}
           <div className="flex justify-end gap-4">
