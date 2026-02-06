@@ -55,12 +55,13 @@ export default function DashboardPage() {
             <form onSubmit={handleSearch} className="space-y-4">
               <div className="space-y-2">
                 <Input
+                  data-testid="account-search-input"
                   placeholder="Enter 7-digit Account ID"
                   value={searchId}
                   onChange={(e) => setSearchId(e.target.value)}
                   maxLength={7}
                 />
-                {error && <p className="text-sm text-destructive">{error}</p>}
+                {error && <p data-testid="search-error" className="text-sm text-destructive">{error}</p>}
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? "Searching..." : (

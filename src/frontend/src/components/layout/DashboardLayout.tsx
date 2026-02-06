@@ -25,7 +25,7 @@ export default function DashboardLayout() {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <User className="h-4 w-4" />
-              <span className="capitalize">{role || "Staff"}</span>
+              <span data-testid="user-role-display" className="capitalize">{role || "Staff"}</span>
             </div>
             <Button variant="ghost" size="sm" onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />
