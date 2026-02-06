@@ -4,6 +4,16 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  /* This forces the vertical scrollbar to ALWAYS show.
+     On pages that fit on the screen, the scrollbar will just be disabled (grayed out).
+     This keeps the layout width constant (no jumping) without the weird empty white space. */
+  overflow-y: scroll;
+
+  /* Apply the background color here to cover the entire browser window */
+  @apply bg-slate-50;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
