@@ -25,7 +25,7 @@ export default function DashboardPage() {
     try {
       // Quick check if account exists before navigating
       await api.get(`/accounts/${searchId}`);
-      navigate(`/accounts/${searchId}`);
+      navigate(`/account-details/${searchId}`);
     } catch (err: any) {
       if (err.response?.status === 404) {
         setError("Account not found.");

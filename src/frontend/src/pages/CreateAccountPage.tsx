@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import api from "@/api/client";
 import { accountSchema, type AccountFormValues } from "@/schemas/account";
+import { useToast } from "@/hooks/use-toast";
 
 // Components
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,7 @@ const servicesOptions = ["Internet Banking", "Debit Card", "Cheque Book", "SMS A
 
 export default function CreateAccountPage() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const form = useForm<AccountFormValues>({
@@ -47,15 +49,27 @@ export default function CreateAccountPage() {
       });
       return res.data;
     },
-    onSuccess: (data) => {
-      navigate(`/accounts/${data.account_id}`);
+    // FIX: Add 'variables' to access the form data we just sent
+    onSuccess: (data, variables) => {
+      toast({
+        title: "Account Opened",
+        // FIX: Use 'variables.account_holder_name' to guarantee the name shows up
+        description: `Successfully created account ${data.account_id} for ${variables.account_holder_name}`,
+        className: "bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-900",
+      });
+      navigate(`/account-details/${data.account_id}`);
     },
-    onError: () => alert("Failed to create account."),
+    onError: () => {
+      toast({
+        title: "Application Failed",
+        description: "Could not create the account. Please verify the input details.",
+        variant: "destructive",
+      });
+    },
   });
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-20">
-      {/* Header */}
       <div className="flex items-center gap-4">
         <Button variant="outline" size="icon" onClick={() => navigate("/dashboard")}>
           <ArrowLeft className="h-4 w-4" />
@@ -80,7 +94,7 @@ export default function CreateAccountPage() {
                 <FormField control={form.control} name="account_holder_name" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Full Name</FormLabel>
-                    <FormControl><Input placeholder="Enter full name" {...field} /></FormControl>
+                    <FormControl><Input placeholder="Jane Doe" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
@@ -182,7 +196,7 @@ export default function CreateAccountPage() {
                     <FormField control={form.control} name="phone" render={({ field }) => (
                     <FormItem>
                         <FormLabel>Phone</FormLabel>
-                        <FormControl><Input placeholder="Enter phone number" {...field} /></FormControl>
+                        <FormControl><Input placeholder="+1 234 567 890" {...field} /></FormControl>
                         <FormMessage />
                     </FormItem>
                     )} />
@@ -190,14 +204,14 @@ export default function CreateAccountPage() {
                 <FormField control={form.control} name="address" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Address</FormLabel>
-                    <FormControl><Input placeholder="Enter address" {...field} /></FormControl>
+                    <FormControl><Input placeholder="123 Street Name" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
                 <FormField control={form.control} name="zip_code" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Zip Code</FormLabel>
-                    <FormControl><Input placeholder="Enter ZIP" {...field} /></FormControl>
+                    <FormControl><Input placeholder="10001" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
@@ -269,11 +283,11 @@ export default function CreateAccountPage() {
             </CardContent>
           </Card>
 
-          {/* Terms & Privacy Card (Restored) */}
+          {/* Terms & Privacy Card */}
           <Card className="bg-muted/30">
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                 Terms & Privacy
+                <CheckCircle2 className="h-4 w-4" /> Terms & Privacy
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -290,7 +304,6 @@ export default function CreateAccountPage() {
                   </div>
                 </FormItem>
               )} />
-
               <FormField control={form.control} name="agreed_to_terms" render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 bg-background">
                   <FormControl>

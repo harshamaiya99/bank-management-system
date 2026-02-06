@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Toaster } from "@/components/ui/toaster"; // Import Toaster
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import LoginPage from "@/pages/LoginPage";
 import DashboardPage from "@/pages/DashboardPage";
@@ -24,13 +25,14 @@ function App() {
           <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/create-account" element={<CreateAccountPage />} />
-            <Route path="/accounts/:accountId" element={<AccountDetailsPage />} />
+            <Route path="/account-details/:accountId" element={<AccountDetailsPage />} />
 
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
+        <Toaster /> {/* Add Toaster here */}
       </BrowserRouter>
     </QueryClientProvider>
   );

@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import api from "@/api/client";
 import { accountSchema, type AccountFormValues } from "@/schemas/account";
 import { type Account } from "@/types";
+import { useToast } from "@/hooks/use-toast"; // Import Toast Hook
 
 // UI Components
 import { Button } from "@/components/ui/button";
@@ -56,7 +57,7 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 
 // Icons & Utils
-import { ArrowLeft, Trash2, Save, CalendarIcon } from "lucide-react";
+import { ArrowLeft, Trash2, Save, CalendarIcon, CheckCircle2, XCircle } from "lucide-react";
 
 // Options
 const GENDER_OPTIONS = ["Male", "Female", "Other"];
@@ -67,6 +68,7 @@ export default function AccountDetailsPage() {
   const { accountId } = useParams();
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
+  const { toast } = useToast(); // Initialize Toast
 
   // 1. Fetch Data
   const {
@@ -116,7 +118,7 @@ export default function AccountDetailsPage() {
     agreed_to_terms: true,
   };
 
-  return <AccountForm account={account} defaultValues={defaultValues} role={role} navigate={navigate} />;
+  return <AccountForm account={account} defaultValues={defaultValues} role={role} navigate={navigate} toast={toast} />;
 }
 
 // Separated Form Component
@@ -124,12 +126,14 @@ function AccountForm({
   account,
   defaultValues,
   role,
-  navigate
+  navigate,
+  toast
 }: {
   account: Account,
   defaultValues: AccountFormValues,
   role: string | null,
-  navigate: any
+  navigate: any,
+  toast: any
 }) {
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountSchema),
@@ -143,8 +147,23 @@ function AccountForm({
       const payload = { ...values, services: values.services?.join(",") || "" };
       await api.put(`/accounts/${account.account_id}`, payload);
     },
-    onSuccess: () => alert("Account Updated Successfully"),
-    onError: () => alert("Update Failed."),
+    onSuccess: () => {
+      // SUCCESS TOAST
+      toast({
+        title: "Changes Saved",
+        description: "Account details have been successfully updated.",
+        variant: "default", // or just omit for default style
+        className: "bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-900", // Optional custom styling
+      });
+    },
+    onError: () => {
+      // ERROR TOAST
+      toast({
+        title: "Update Failed",
+        description: "There was a problem saving your changes. Please try again.",
+        variant: "destructive",
+      });
+    },
   });
 
   const deleteMutation = useMutation({
@@ -152,11 +171,22 @@ function AccountForm({
       await api.delete(`/accounts/${account.account_id}`);
     },
     onSuccess: () => {
+      toast({
+        title: "Account Deleted",
+        description: `Account ${account.account_id} has been permanently removed.`,
+      });
       navigate("/dashboard");
     },
-    onError: () => alert("Failed to delete account."),
+    onError: () => {
+      toast({
+        title: "Deletion Failed",
+        description: "Could not delete this account. You may lack permissions.",
+        variant: "destructive",
+      });
+    },
   });
 
+  // ... (Rest of the JSX remains exactly the same as before)
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-20">
       {/* Header */}
