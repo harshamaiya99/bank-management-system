@@ -18,4 +18,4 @@ runs:
         BASE_URL: http://127.0.0.1:9000
       run: |
         # Added -s to ensure Karate/Maven logs from the Python wrapper are visible in the console
-        pytest tests/ --alluredir=allure-results -s
+        pytest tests/api_pytest --alluredir=allure-results -s
