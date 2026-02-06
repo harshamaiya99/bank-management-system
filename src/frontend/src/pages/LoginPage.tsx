@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import api from "@/api/client";
 import type { AuthResponse } from "@/types";
+import { useAuth } from "@/context/AuthContext"; // Import useAuth
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,6 +32,7 @@ const formSchema = z.object({
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useAuth(); // Destructure login function
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,7 +44,6 @@ export default function LoginPage() {
 
   const loginMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      // Backend expects form-data for OAuth2 flow
       const formData = new URLSearchParams();
       formData.append("username", values.username);
       formData.append("password", values.password);
@@ -53,9 +54,7 @@ export default function LoginPage() {
       return res.data;
     },
     onSuccess: (data) => {
-      localStorage.setItem("token", data.access_token);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("process_id", crypto.randomUUID());
+      login(data); // Use centralized login logic
       navigate("/dashboard");
     },
     onError: () => {

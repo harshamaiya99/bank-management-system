@@ -1,14 +1,16 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { LogOut, User } from "lucide-react";
+import { useAuth } from "@/context/AuthContext"; // Import the hook
 
 export default function DashboardLayout() {
-  const navigate = useNavigate();
-  const role = localStorage.getItem("role") || "Staff";
+  // Get role and logout function directly from the context
+  const { role, logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.clear();
-    navigate("/login");
+    logout();
+    // No need to navigate() manually;
+    // The AuthContext update will trigger App.tsx to redirect automatically.
   };
 
   return (
@@ -23,7 +25,7 @@ export default function DashboardLayout() {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <User className="h-4 w-4" />
-              <span className="capitalize">{role}</span>
+              <span className="capitalize">{role || "Staff"}</span>
             </div>
             <Button variant="ghost" size="sm" onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />

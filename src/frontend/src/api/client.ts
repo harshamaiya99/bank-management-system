@@ -15,7 +15,7 @@ api.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
-  // Observability headers (matching your backend middleware)
+  // Observability headers
   config.headers['X-Request-Id'] = crypto.randomUUID();
   config.headers['X-Process-Id'] = localStorage.getItem('process_id') || crypto.randomUUID();
 
@@ -27,8 +27,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.clear();
-      window.location.href = '/login';
+      // Dispatch a custom event instead of hard reloading
+      window.dispatchEvent(new Event("auth:unauthorized"));
     }
     return Promise.reject(error);
   }
