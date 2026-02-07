@@ -2,10 +2,6 @@ import pytest
 import allure
 import os
 from playwright.sync_api import Page
-from dotenv import load_dotenv
-
-# Load environment variables (so we can read BASE_URL from .env if it exists)
-load_dotenv()
 
 # ---------------- UI Page Object imports ----------------
 from tests.web_playwright.pages.home_page import HomePage

@@ -92,7 +92,7 @@ class CreatePage:
         # 1. Capture Toast Message
         # We wait for the toast title to appear.
 
-        self.page.wait_for_selector(self.TOAST_TITLE, state="visible")
+        self.page.locator(self.TOAST_TITLE).wait_for(state="visible")
         toast_text = self.page.locator(self.TOAST_TITLE).text_content()
         toast_desc = self.page.locator(self.TOAST_DESC).text_content()
 

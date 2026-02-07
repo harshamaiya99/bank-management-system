@@ -6,7 +6,6 @@ class DetailsPage:
     def __init__(self, page: Page):
         self.page = page
 
-    ID_TEXT_LOCATOR = "p.text-muted-foreground.font-mono"
     NAME_INPUT = "input[name='account_holder_name']"
     DOB_INPUT = "input[name='dob']"
     EMAIL_INPUT = "input[name='email']"
@@ -38,7 +37,8 @@ class DetailsPage:
 
     @allure.step("Get account_id")
     def get_account_id(self):
-        text = self.page.locator(self.ID_TEXT_LOCATOR).text_content()
+        # Robust: Find the paragraph that starts with "ID: "
+        text = self.page.get_by_text("ID: ").text_content()
         return text.replace("ID: ", "").strip()
 
     @allure.step("Get account holder name")
@@ -165,7 +165,7 @@ class DetailsPage:
     def update_account(self) -> tuple[str, str]:
         self.page.locator(self.UPDATE_BTN).click()
 
-        self.page.wait_for_selector(self.TOAST_TITLE, state="visible")
+        self.page.locator(self.TOAST_TITLE).wait_for(state="visible")
         toast_text = self.page.locator(self.TOAST_TITLE).text_content()
         toast_desc = self.page.locator(self.TOAST_DESC).text_content()
 
@@ -176,7 +176,7 @@ class DetailsPage:
         self.page.locator(self.DELETE_BTN).click()
         self.page.locator(self.CONFIRM_DELETE_BTN).click()
 
-        self.page.wait_for_selector(self.TOAST_TITLE, state="visible")
+        self.page.locator(self.TOAST_TITLE).wait_for(state="visible")
         toast_text = self.page.locator(self.TOAST_TITLE).text_content()
         toast_desc = self.page.locator(self.TOAST_DESC).text_content()
 
