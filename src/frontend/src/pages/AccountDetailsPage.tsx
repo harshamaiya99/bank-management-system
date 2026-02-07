@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast"; // Import Toast Hook
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"; // Import RadioGroup
 import {
   Select,
   SelectContent,
@@ -57,7 +58,7 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 
 // Icons & Utils
-import { ArrowLeft, Trash2, Save, CalendarIcon, CheckCircle2, XCircle } from "lucide-react";
+import { ArrowLeft, Trash2, Save, CalendarIcon } from "lucide-react";
 
 // Options
 const GENDER_OPTIONS = ["Male", "Female", "Other"];
@@ -186,7 +187,6 @@ function AccountForm({
     },
   });
 
-  // ... (Rest of the JSX remains exactly the same as before)
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-20">
       {/* Header */}
@@ -249,7 +249,7 @@ function AccountForm({
                   </FormItem>
                 )} />
 
-                <div className="grid grid-cols-2 gap-4 items-end">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* items-end ensures if labels differ in height, inputs still align bottom */}
 
                   {/* --- HYBRID DATE INPUT --- */}
@@ -306,26 +306,35 @@ function AccountForm({
                     )}
                   />
 
-                  {/* GENDER SELECT */}
-                  <FormField control={form.control} name="gender" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Gender</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  {/* --- GENDER RADIO BUTTONS --- */}
+                  <FormField
+                    control={form.control}
+                    name="gender"
+                    render={({ field }) => (
+                      <FormItem className="space-y-3">
+                        <FormLabel>Gender</FormLabel>
                         <FormControl>
-                            {/* Force Exact Same Height as Input */}
-                            <SelectTrigger className="h-10 w-full">
-                                <SelectValue placeholder="Select" />
-                            </SelectTrigger>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex flex-col space-y-1"
+                          >
+                            {GENDER_OPTIONS.map((opt) => (
+                              <FormItem key={opt} className="flex items-center space-x-3 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value={opt} />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {opt}
+                                </FormLabel>
+                              </FormItem>
+                            ))}
+                          </RadioGroup>
                         </FormControl>
-                        <SelectContent>
-                           {GENDER_OPTIONS.map(opt => (
-                               <SelectItem key={opt} value={opt}>{opt}</SelectItem>
-                           ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
               </CardContent>
             </Card>

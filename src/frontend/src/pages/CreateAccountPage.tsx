@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"; // Import RadioGroup
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -49,11 +50,9 @@ export default function CreateAccountPage() {
       });
       return res.data;
     },
-    // FIX: Add 'variables' to access the form data we just sent
     onSuccess: (data, variables) => {
       toast({
         title: "Account Opened",
-        // FIX: Use 'variables.account_holder_name' to guarantee the name shows up
         description: `Successfully created account ${data.account_id} for ${variables.account_holder_name}`,
         className: "bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-900",
       });
@@ -99,7 +98,7 @@ export default function CreateAccountPage() {
                   </FormItem>
                 )} />
 
-                <div className="grid grid-cols-2 gap-4 items-end">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                     {/* --- HYBRID DATE INPUT --- */}
                     <FormField
@@ -155,25 +154,49 @@ export default function CreateAccountPage() {
                     )}
                     />
 
-                    <FormField control={form.control} name="gender" render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Gender</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                                {/* Force exact height match */}
-                                <SelectTrigger className="h-10 w-full">
-                                    <SelectValue placeholder="Select" />
-                                </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                                <SelectItem value="Male">Male</SelectItem>
-                                <SelectItem value="Female">Female</SelectItem>
-                                <SelectItem value="Other">Other</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <FormMessage />
-                    </FormItem>
-                    )} />
+                    {/* --- GENDER RADIO BUTTONS --- */}
+                    <FormField
+                      control={form.control}
+                      name="gender"
+                      render={({ field }) => (
+                        <FormItem className="space-y-3">
+                          <FormLabel>Gender</FormLabel>
+                          <FormControl>
+                            <RadioGroup
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                              className="flex flex-col space-y-1"
+                            >
+                              <FormItem className="flex items-center space-x-3 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value="Male" />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  Male
+                                </FormLabel>
+                              </FormItem>
+                              <FormItem className="flex items-center space-x-3 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value="Female" />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  Female
+                                </FormLabel>
+                              </FormItem>
+                              <FormItem className="flex items-center space-x-3 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value="Other" />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  Other
+                                </FormLabel>
+                              </FormItem>
+                            </RadioGroup>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                 </div>
               </CardContent>
             </Card>

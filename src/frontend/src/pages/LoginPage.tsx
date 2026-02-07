@@ -104,7 +104,6 @@ export default function LoginPage() {
                 )}
               />
               {form.formState.errors.root && (
-                  data-testid="login-error"
                 <div className="text-sm font-medium text-destructive text-center">
                   {form.formState.errors.root.message}
                 </div>
