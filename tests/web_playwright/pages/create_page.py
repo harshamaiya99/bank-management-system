@@ -1,9 +1,12 @@
 import allure
 import re
-from tests.web_playwright.pages.base_page import BasePage
+from playwright.sync_api import Page, expect
 
 
-class CreatePage(BasePage):
+class CreatePage:
+    def __init__(self, page: Page):
+        self.page = page
+
     # Standard Inputs
     NAME_INPUT = "input[name='account_holder_name']"
     DOB_INPUT = "input[name='dob']"
@@ -15,59 +18,57 @@ class CreatePage(BasePage):
 
     SUBMIT_BTN = "button[type='submit']"
 
-    # Toast Locator - CSS path is: ol (Viewport) -> li (Toast) -> div (Grid) -> div (ToastTitle)
-    TOAST_TITLE = "ol li div.text-sm.font-semibold"
-    TOAST_DESC = "ol li div.text-sm.opacity-90"
-
-    # --- Helper Methods for Shadcn Components ---
-
-    def _select_option(self, label_text, option_text):
-        """
-        Handles Radix UI Select (Used for Account Type)
-        """
-        trigger = self.page.locator(f"div.space-y-2:has(label:has-text('{label_text}')) button[role='combobox']")
-        trigger.click()
-        self.page.get_by_role("option", name=option_text).click()
+    # Targets the first and second child divs inside the Toast Grid
+    # 'ol li' -> The Toast Item
+    # '.grid' -> The container defined in Toaster.tsx
+    # 'div:nth-child(1)' -> The Title
+    TOAST_TITLE = "ol li .grid > div:nth-child(1)"
+    # 'div:nth-child(2)' -> The Description
+    TOAST_DESC = "ol li .grid > div:nth-child(2)"
 
     # --- Actions ---
 
     @allure.step("Enter account holder name")
     def enter_name(self, name):
-        self.fill(self.NAME_INPUT, name)
+        self.page.locator(self.NAME_INPUT).fill(name)
 
     @allure.step("Enter date of birth")
     def enter_dob(self, dob):
-        self.fill(self.DOB_INPUT, dob)
+        self.page.locator(self.DOB_INPUT).fill(dob)
 
     @allure.step("Select gender")
     def select_gender(self, gender):
-        # CHANGED: Now targets RadioGroup Item (button with role='radio')
+        # targets RadioGroup Item (button with role='radio')
         # We target by the 'value' attribute which we set to "Male", "Female", etc.
-        self.click(f"button[role='radio'][value='{gender}']")
+        self.page.locator(f"button[role='radio'][value='{gender}']").click()
 
     @allure.step("Enter email")
     def enter_email(self, email):
-        self.fill(self.EMAIL_INPUT, email)
+        self.page.locator(self.EMAIL_INPUT).fill(email)
 
     @allure.step("Enter phone number")
     def enter_phone(self, phone):
-        self.fill(self.PHONE_INPUT, phone)
+        self.page.locator(self.PHONE_INPUT).fill(phone)
 
     @allure.step("Enter address")
     def enter_address(self, address):
-        self.fill(self.ADDRESS_INPUT, address)
+        self.page.locator(self.ADDRESS_INPUT).fill(address)
 
     @allure.step("Enter zip code")
     def enter_zip(self, zip_code):
-        self.fill(self.ZIP_INPUT, zip_code)
+        self.page.locator(self.ZIP_INPUT).fill(zip_code)
 
     @allure.step("Select account type")
     def select_account_type(self, account_type):
-        self._select_option("Account Type", account_type)
+        # 1. Click the trigger identified by its Label
+        self.page.get_by_role("combobox", name="Account Type").click()
+
+        # 2. Click the option
+        self.page.get_by_role("option", name=account_type).click()
 
     @allure.step("Enter initial balance")
     def enter_balance(self, balance):
-        self.fill(self.BALANCE_INPUT, balance)
+        self.page.locator(self.BALANCE_INPUT).fill(balance)
 
     @allure.step("Select services")
     def select_services(self, services):
@@ -86,15 +87,14 @@ class CreatePage(BasePage):
 
     @allure.step("Submit create account form")
     def submit_form_and_capture_account_id(self) -> tuple[str, str, str]:
-        self.click(self.SUBMIT_BTN)
+        self.page.locator(self.SUBMIT_BTN).click()
 
         # 1. Capture Toast Message
-        # We wait for the toast title to appear. Shadcn toasts usually persist
-        # across the immediate route change in a SPA.
+        # We wait for the toast title to appear.
 
         self.page.wait_for_selector(self.TOAST_TITLE, state="visible")
-        toast_text = self.get_text(self.TOAST_TITLE)
-        toast_desc = self.get_text(self.TOAST_DESC)
+        toast_text = self.page.locator(self.TOAST_TITLE).text_content()
+        toast_desc = self.page.locator(self.TOAST_DESC).text_content()
 
         # 2. Wait for URL Redirection to Account Details
         self.page.wait_for_url(re.compile(r".*/account-details/\d+"))
@@ -120,15 +120,3 @@ class CreatePage(BasePage):
         self.set_marketing_opt_in(data["marketing_opt_in"])
         self.accept_terms()
         return self.submit_form_and_capture_account_id()
-
-    def get_validation_message_for_field(self, field_name: str) -> str:
-        locator_map = {
-            "name": self.NAME_INPUT,
-            "dob": self.DOB_INPUT,
-            "email": self.EMAIL_INPUT,
-            "phone": self.PHONE_INPUT,
-            "balance": self.BALANCE_INPUT
-        }
-        if field_name not in locator_map:
-            raise ValueError(f"Field '{field_name}' validation check not supported")
-        return self.get_validation_message(locator_map[field_name])

@@ -1,8 +1,10 @@
 import allure
-from tests.web_playwright.pages.base_page import BasePage
+from playwright.sync_api import Page, expect
 
 
-class LoginPage(BasePage):
+class LoginPage:
+    def __init__(self, page: Page):
+        self.page = page
     URL = "/login"
 
     # Locators
@@ -10,20 +12,27 @@ class LoginPage(BasePage):
     USERNAME_INPUT = "input[name='username']"
     PASSWORD_INPUT = "input[name='password']"
     LOGIN_BTN = "button[type='submit']"
-    # Shadcn form error message usually has this class
-    ERROR_MSG = "p.text-destructive, div.text-destructive"
 
     @allure.step("Navigate to Login Page")
     def navigate_to_login(self):
-        self.navigate(self.URL)
+        self.page.goto(self.URL)
 
     @allure.step("Enter Username and Password and click Login button")
     def login(self, username, password):
-        self.fill(self.USERNAME_INPUT, username)
-        self.fill(self.PASSWORD_INPUT, password)
-        self.click(self.LOGIN_BTN)
+        self.page.locator(self.USERNAME_INPUT).fill(str(username))
+        self.page.locator(self.PASSWORD_INPUT).fill(str(password))
+        self.page.locator(self.LOGIN_BTN).click()
 
+    # Define the locator as a property
+    @property
+    def error_msg(self):
+        return self.page.get_by_test_id("login-error")
+
+    # Update the method to use the locator
     def get_error_message(self):
-        # Wait for the error message to appear in the DOM
-        self.page.wait_for_selector(self.ERROR_MSG)
-        return self.get_text(self.ERROR_MSG)
+        """
+        Waits for the error message to appear and returns its text.
+        """
+        # Locator.wait_for() defaults to state="visible"
+        self.error_msg.wait_for()
+        return self.error_msg.text_content()

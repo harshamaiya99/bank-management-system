@@ -1,8 +1,11 @@
 import allure
-from tests.web_playwright.pages.base_page import BasePage
+from playwright.sync_api import Page, expect
 
 
-class DetailsPage(BasePage):
+class DetailsPage:
+    def __init__(self, page: Page):
+        self.page = page
+
     ID_TEXT_LOCATOR = "p.text-muted-foreground.font-mono"
     NAME_INPUT = "input[name='account_holder_name']"
     DOB_INPUT = "input[name='dob']"
@@ -19,8 +22,13 @@ class DetailsPage(BasePage):
     # Define known options to iterate safely
     SERVICE_OPTIONS = ["Internet Banking", "Debit Card", "Cheque Book", "SMS Alerts"]
 
-    TOAST_TITLE = "ol li div.text-sm.font-semibold"
-    TOAST_DESC = "ol li div.text-sm.opacity-90"
+    # Targets the first and second child divs inside the Toast Grid
+    # 'ol li' -> The Toast Item
+    # '.grid' -> The container defined in Toaster.tsx
+    # 'div:nth-child(1)' -> The Title
+    TOAST_TITLE = "ol li .grid > div:nth-child(1)"
+    # 'div:nth-child(2)' -> The Description
+    TOAST_DESC = "ol li .grid > div:nth-child(2)"
 
     @allure.step("Wait for details to load")
     def wait_for_details_to_load(self):
@@ -30,16 +38,16 @@ class DetailsPage(BasePage):
 
     @allure.step("Get account_id")
     def get_account_id(self):
-        text = self.get_text(self.ID_TEXT_LOCATOR)
+        text = self.page.locator(self.ID_TEXT_LOCATOR).text_content()
         return text.replace("ID: ", "").strip()
 
     @allure.step("Get account holder name")
     def get_name(self):
-        return self.get_input_value(self.NAME_INPUT)
+        return self.page.locator(self.NAME_INPUT).input_value()
 
     @allure.step("Get dob")
     def get_dob(self):
-        return self.get_input_value(self.DOB_INPUT)
+        return self.page.locator(self.DOB_INPUT).input_value()
 
     @allure.step("Get gender")
     def get_gender(self):
@@ -47,32 +55,31 @@ class DetailsPage(BasePage):
 
     @allure.step("Get email")
     def get_email(self):
-        return self.get_input_value(self.EMAIL_INPUT)
+        return self.page.locator(self.EMAIL_INPUT).input_value()
 
     @allure.step("Get phone")
     def get_phone(self):
-        return self.get_input_value(self.PHONE_INPUT)
+        return self.page.locator(self.PHONE_INPUT).input_value()
 
     @allure.step("Get address")
     def get_address(self):
-        return self.get_input_value(self.ADDRESS_INPUT)
+        return self.page.locator(self.ADDRESS_INPUT).input_value()
 
     @allure.step("Get zip")
     def get_zip(self):
-        return self.get_input_value(self.ZIP_INPUT)
+        return self.page.locator(self.ZIP_INPUT).input_value()
 
     @allure.step("Get account type")
     def get_account_type(self):
-        return self.page.locator("div.space-y-2:has(label:has-text('Account Type')) input").input_value()
+        return self.page.get_by_role("textbox", name="Account Type").input_value()
 
     @allure.step("Get status")
     def get_status(self):
-        trigger = self.page.locator(f"div.space-y-2:has(label:has-text('Account Status')) button[role='combobox']")
-        return trigger.text_content()
+        return self.page.get_by_role("combobox", name="Account Status").text_content()
 
     @allure.step("Get balance")
     def get_balance(self):
-        return self.get_input_value(self.BALANCE_INPUT)
+        return self.page.locator(self.BALANCE_INPUT).input_value()
 
     @allure.step("Get services")
     def get_services(self):
@@ -85,7 +92,6 @@ class DetailsPage(BasePage):
 
     @allure.step("Get marketing_opt_in")
     def get_marketing_opt_in(self):
-        # FIX: Use specific accessible name to avoid strict mode violations
         is_checked = self.page.get_by_role("checkbox", name="Marketing Communications").get_attribute(
             "aria-checked") == "true"
         return "true" if is_checked else "false"
@@ -93,11 +99,11 @@ class DetailsPage(BasePage):
     # --- Updaters ---
     @allure.step("Update account holder name")
     def update_name(self, name):
-        self.fill(self.NAME_INPUT, name)
+        self.page.locator(self.NAME_INPUT).fill(name)
 
     @allure.step("Update dob")
     def update_dob(self, dob):
-        self.fill(self.DOB_INPUT, dob)
+        self.page.locator(self.DOB_INPUT).fill(dob)
 
     @allure.step("Update gender")
     def update_gender(self, gender):
@@ -105,28 +111,30 @@ class DetailsPage(BasePage):
 
     @allure.step("Update email")
     def update_email(self, email):
-        self.fill(self.EMAIL_INPUT, email)
+        self.page.locator(self.EMAIL_INPUT).fill(email)
 
     @allure.step("Update phone")
-    def update_phone(self, email):
-        self.fill(self.PHONE_INPUT, email)
+    def update_phone(self, phone):
+        self.page.locator(self.PHONE_INPUT).fill(phone)
 
     @allure.step("Update address")
     def update_address(self, address):
-        self.fill(self.ADDRESS_INPUT, address)
+        self.page.locator(self.ADDRESS_INPUT).fill(address)
 
     @allure.step("Update zip")
     def update_zip(self, zip_code):
-        self.fill(self.ZIP_INPUT, zip_code)
+        self.page.locator(self.ZIP_INPUT).fill(zip_code)
 
     @allure.step("Update balance")
     def update_balance(self, balance):
-        self.fill(self.BALANCE_INPUT, balance)
+        self.page.locator(self.BALANCE_INPUT).fill(balance)
 
     @allure.step("Update status")
     def update_status(self, status):
-        trigger = self.page.locator(f"div.space-y-2:has(label:has-text('Account Status')) button[role='combobox']")
-        trigger.click()
+        # 1. Click the trigger identified by its Label
+        self.page.get_by_role("combobox", name="Account Status").click()
+
+        # 2. Click the option
         self.page.get_by_role("option", name=status).click()
 
     @allure.step("Update services")
@@ -139,9 +147,9 @@ class DetailsPage(BasePage):
 
         # 2. Check the requested services
         if services_str:
-            for s in services_str.split(","):
+            for service in services_str.split(","):
                 # Click only if not already checked (though we just unchecked all, safe to just click)
-                self.page.get_by_role("checkbox", name=s.strip()).click()
+                self.page.get_by_role("checkbox", name=service.strip()).click()
 
     @allure.step("Update marketing")
     def update_marketing_opt_in(self, marketing_check):
@@ -155,22 +163,22 @@ class DetailsPage(BasePage):
 
     @allure.step("Click on Update button")
     def update_account(self) -> tuple[str, str]:
-        self.click(self.UPDATE_BTN)
+        self.page.locator(self.UPDATE_BTN).click()
 
         self.page.wait_for_selector(self.TOAST_TITLE, state="visible")
-        toast_text = self.get_text(self.TOAST_TITLE)
-        toast_desc = self.get_text(self.TOAST_DESC)
+        toast_text = self.page.locator(self.TOAST_TITLE).text_content()
+        toast_desc = self.page.locator(self.TOAST_DESC).text_content()
 
         return toast_text, toast_desc
 
     @allure.step("Click on Delete account button")
     def delete_account(self):
-        self.click(self.DELETE_BTN)
-        self.click(self.CONFIRM_DELETE_BTN)
+        self.page.locator(self.DELETE_BTN).click()
+        self.page.locator(self.CONFIRM_DELETE_BTN).click()
 
         self.page.wait_for_selector(self.TOAST_TITLE, state="visible")
-        toast_text = self.get_text(self.TOAST_TITLE)
-        toast_desc = self.get_text(self.TOAST_DESC)
+        toast_text = self.page.locator(self.TOAST_TITLE).text_content()
+        toast_desc = self.page.locator(self.TOAST_DESC).text_content()
 
         self.page.wait_for_url("**/dashboard")
         return toast_text, toast_desc

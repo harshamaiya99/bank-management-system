@@ -44,7 +44,7 @@ def test_end_to_end_crud(login_page, home_page, create_page, details_page, row):
     with allure.step(f"Search & Verify Created Account"):
         # Note: If the app redirects to details automatically (which it does),
         # we might already be there. But searching again validates the ID lookup flow.
-        home_page.navigate("/dashboard")  # Go back to dashboard to test search
+        home_page.navigate_to_dashboard()  # Go back to dashboard to test search
         home_page.search_account(account_id)
 
         actual_data = details_page.get_account_details_as_dict()
@@ -78,7 +78,7 @@ def test_end_to_end_crud(login_page, home_page, create_page, details_page, row):
 
     # --- 4. Verify Update ---
     with allure.step(f"Search & Verify Update"):
-        home_page.navigate("/dashboard")
+        home_page.navigate_to_dashboard()  # Go back to dashboard to test search
         home_page.search_account(account_id)
 
         actual_updated_data = details_page.get_account_details_as_dict()
