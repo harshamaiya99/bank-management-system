@@ -1,25 +1,24 @@
-# Backend
+# Backend Core
 fastapi==0.100.0
 uvicorn[standard]
 pydantic<2.0.0
-Jinja2
+jinja2
 aiofiles
 
-# Auth
+# Authentication & Security
 python-jose[cryptography]
 passlib[bcrypt]
 python-multipart
 bcrypt==3.2.0
 python-dotenv
 
-# Testing
+# Testing Frameworks
 pytest
 requests
 allure-pytest
 pytest-playwright
-
 selenium
 webdriver-manager
 
-# Reporting
+# Reporting & Utilities
 allure-combine

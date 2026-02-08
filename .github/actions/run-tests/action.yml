@@ -1,21 +1,42 @@
-name: "Run Backend and Tests"
-description: "Starts FastAPI and runs Pytest"
+name: "Run Backend, Frontend and Tests"
+description: "Starts FastAPI & Vite, then runs Pytest"
 runs:
   using: "composite"
   steps:
-
+    # --- Start Backend ---
     - name: Start Backend Server
       shell: bash
       run: |
-        # Start uvicorn in the background using '&'
+        echo "Starting Uvicorn..."
+        # Run in background
         uvicorn main:app --app-dir src/backend --host 127.0.0.1 --port 9000 &
-        echo "Waiting for server to start..."
-        sleep 5  # Give it a moment to initialize the DB
 
+    # --- Start Frontend ---
+    - name: Start Frontend Server
+      shell: bash
+      working-directory: src/frontend
+      run: |
+        echo "Starting Vite..."
+        # Run in background, force port 5173
+        npm run dev -- --port 5173 &
+
+    # --- Wait for Services ---
+    - name: Wait for Services to initialize
+      shell: bash
+      run: |
+        echo "Waiting for services to start..."
+        sleep 10 
+        # Optional: Add a curl check loop here for robustness in the future
+
+    # --- Run Tests ---
     - name: Run Tests
       shell: bash
       env:
+        # Backend URL for API tests
         BASE_URL: http://127.0.0.1:9000
+        # Frontend URL for Playwright tests (matches conftest.py)
+        VITE_BASE_URL: http://localhost:5173
       run: |
-        # Added -s to ensure Karate/Maven logs from the Python wrapper are visible in the console
-        pytest tests/api_pytest --alluredir=allure-results -s
+        echo "Running API and UI Tests..."
+        # Runs both API (Pytest) and Web (Playwright) tests
+        pytest tests --alluredir=allure-results -s
