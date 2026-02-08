@@ -2,15 +2,14 @@ import allure
 from selenium.webdriver.common.by import By
 from tests.web_selenium.pages.base_page import BasePage
 
-
 class LoginPage(BasePage):
-    URL = "/login.html"
+    URL = "/login"
 
-    # Locators (Tuples)
-    USERNAME_INPUT = (By.ID, "username")
-    PASSWORD_INPUT = (By.ID, "password")
-    LOGIN_BTN = (By.CSS_SELECTOR, "button.btn-login")
-    ERROR_MSG = (By.ID, "error")
+    # Locators
+    USERNAME_INPUT = (By.NAME, "username")
+    PASSWORD_INPUT = (By.NAME, "password")
+    LOGIN_BTN = (By.CSS_SELECTOR, "button[type='submit']")
+    ERROR_MSG = (By.CSS_SELECTOR, "[data-testid='login-error']")
 
     @allure.step("Navigate to Login Page")
     def navigate_to_login(self):
@@ -22,10 +21,6 @@ class LoginPage(BasePage):
         self.fill(self.PASSWORD_INPUT, password)
         self.click(self.LOGIN_BTN)
 
-        # Explicitly wait for the redirect to the root (Home Page)
-        # This prevents the test from trying to find Home Page elements
-        # while the browser is still on the Login Page.
-        self.wait_for_url("/home_page.html")
-
     def get_error_message(self):
+        """Waits for the error message to appear and returns its text."""
         return self.get_text(self.ERROR_MSG)

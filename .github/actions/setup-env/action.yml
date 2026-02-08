@@ -1,8 +1,9 @@
 name: "Setup Test Environment"
-description: "Installs Python, dependencies, and Playwright browsers"
+description: "Installs Python, Node.js, dependencies, and Playwright browsers"
 runs:
   using: "composite"
   steps:
+    # --- Java (for Allure) ---
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
@@ -10,19 +11,35 @@ runs:
         distribution: 'temurin'
         cache: 'maven'
 
+    # --- Python (Backend) ---
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: "3.10"
         cache: 'pip'
 
-    - name: Install Dependencies
+    - name: Install Python Dependencies
       shell: bash
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         npm install -g allure-commandline
 
+    # --- Node.js (Frontend) ---
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        # Point to the frontend folder for package-lock caching
+        cache-dependency-path: src/frontend/package-lock.json
+
+    - name: Install Frontend Dependencies
+      shell: bash
+      working-directory: src/frontend
+      run: npm ci
+
+    # --- Playwright Browsers ---
     - name: Install Playwright Browsers
       shell: bash
       run: |

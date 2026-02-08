@@ -2,11 +2,16 @@ import os
 import pytest
 import requests
 from tests.api_pytest.services.accounts_api import AccountsAPI
-
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
+
+BASE_URL = os.getenv("BASE_URL")
+
+
+@pytest.fixture(scope="session")
+def base_url():
+    return BASE_URL
 
 # =========================================================
 # Auth Helpers

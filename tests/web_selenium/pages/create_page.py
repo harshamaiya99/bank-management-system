@@ -1,22 +1,24 @@
 import allure
 import re
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from tests.web_selenium.pages.base_page import BasePage
 
 
 class CreatePage(BasePage):
-    # --- Locators ---
-    NAME_INPUT = (By.ID, "accountHolderName")
-    DOB_INPUT = (By.ID, "dob")
-    EMAIL_INPUT = (By.ID, "email")
-    PHONE_INPUT = (By.ID, "phone")
-    ADDRESS_INPUT = (By.ID, "address")
-    ZIP_INPUT = (By.ID, "zipCode")
-    TYPE_SELECT = (By.ID, "accountType")
-    BALANCE_INPUT = (By.ID, "balance")
-    MARKETING_CHK = (By.ID, "marketingOptIn")
-    TERMS_CHK = (By.ID, "agreedToTerms")
+    # Standard Inputs
+    NAME_INPUT = (By.NAME, "account_holder_name")
+    DOB_INPUT = (By.NAME, "dob")
+    EMAIL_INPUT = (By.NAME, "email")
+    PHONE_INPUT = (By.NAME, "phone")
+    ADDRESS_INPUT = (By.NAME, "address")
+    ZIP_INPUT = (By.NAME, "zip_code")
+    BALANCE_INPUT = (By.NAME, "balance")
     SUBMIT_BTN = (By.CSS_SELECTOR, "button[type='submit']")
+
+    TOAST_TITLE = (By.CSS_SELECTOR, "ol li .grid > div:nth-child(1)")
+    TOAST_DESC = (By.CSS_SELECTOR, "ol li .grid > div:nth-child(2)")
 
     @allure.step("Enter account holder name")
     def enter_name(self, name):
@@ -24,12 +26,11 @@ class CreatePage(BasePage):
 
     @allure.step("Enter date of birth")
     def enter_dob(self, dob):
-        self.set_value_js(self.DOB_INPUT, dob)
+        self.fill(self.DOB_INPUT, dob)
 
     @allure.step("Select gender")
     def select_gender(self, gender):
-        locator = (By.CSS_SELECTOR, f"input[name='gender'][value='{gender}']")
-        self.click(locator)
+        self.click((By.CSS_SELECTOR, f"button[role='radio'][value='{gender}']"))
 
     @allure.step("Enter email")
     def enter_email(self, email):
@@ -49,7 +50,14 @@ class CreatePage(BasePage):
 
     @allure.step("Select account type")
     def select_account_type(self, account_type):
-        self.select_option(self.TYPE_SELECT, account_type)
+        # Trigger
+        trigger = (By.XPATH, "//label[contains(., 'Account Type')]/following::button[@role='combobox'][1]")
+        self.click(trigger)
+        # Option
+        option = (By.XPATH, f"//div[@role='option']//span[contains(text(), '{account_type}')]")
+        # Explicit wait for animation
+        self.wait.until(EC.visibility_of_element_located(option))
+        self.click(option)
 
     @allure.step("Enter initial balance")
     def enter_balance(self, balance):
@@ -59,39 +67,73 @@ class CreatePage(BasePage):
     def select_services(self, services):
         if services:
             for service in services.split(","):
-                locator = (By.CSS_SELECTOR, f"input[name='services'][value='{service.strip()}']")
+                text = service.strip()
+                # 1. Find Label to get the ID (robust against nested divs)
+                label_el = self.find((By.XPATH, f"//label[contains(., '{text}')]"))
+                target_id = label_el.get_attribute("for")
+
+                # 2. Determine Locator
+                if target_id:
+                    locator = (By.ID, target_id)
+                else:
+                    # Fallback if no 'for' attribute
+                    locator = (By.XPATH, f"//label[contains(., '{text}')]//button[@role='checkbox']")
+
+                # 3. Check
                 self.check(locator)
 
     @allure.step("Set marketing opt-in")
     def set_marketing_opt_in(self, opt_in):
-        if opt_in == "true":
-            self.check(self.MARKETING_CHK)
+        text = "Marketing Communications"
+        # 1. Find Label
+        label_el = self.find((By.XPATH, f"//label[contains(., '{text}')]"))
+        target_id = label_el.get_attribute("for")
+
+        # 2. Determine Locator
+        if target_id:
+            locator = (By.ID, target_id)
+        else:
+            locator = (By.XPATH, f"//label[contains(., '{text}')]//button[@role='checkbox']")
+
+        # 3. Set State
+        if str(opt_in).lower() == "true":
+            self.check(locator)
+        else:
+            self.uncheck(locator)
 
     @allure.step("Accept terms and conditions")
     def accept_terms(self):
-        self.check(self.TERMS_CHK)
+        text = "Terms and Conditions"
+        # 1. Find Label
+        label_el = self.find((By.XPATH, f"//label[contains(., '{text}')]"))
+        target_id = label_el.get_attribute("for")
+
+        # 2. Determine Locator
+        if target_id:
+            locator = (By.ID, target_id)
+        else:
+            locator = (By.XPATH, f"//label[contains(., '{text}')]//button[@role='checkbox']")
+
+        # 3. Check
+        self.check(locator)
 
     @allure.step("Submit create account form")
-    def submit_form_and_capture_account_id(self) -> tuple[str, str]:
+    def submit_form_and_capture_account_id(self) -> tuple[str, str, str]:
         self.click(self.SUBMIT_BTN)
 
-        alert_text = self.get_alert_text() or ""
+        toast_text = self.get_text(self.TOAST_TITLE)
+        toast_desc = self.get_text(self.TOAST_DESC)
 
-        account_id = None
-        match = re.search(r"ID:\s*(\d+)", alert_text)
-        if match:
-            account_id = match.group(1)
+        # Longer wait for backend processing (15s) to avoid TimeoutException
+        WebDriverWait(self.driver, 15).until(EC.url_contains("/account-details/"))
 
-        # Wait for redirect to home (root path)
-        self.wait_for_url("/home_page.html")
+        current_url = self.driver.current_url
+        match = re.search(r"/account-details/(\d+)", current_url)
+        account_id = match.group(1) if match else None
 
-        return account_id, alert_text
+        return account_id, toast_text, toast_desc
 
-    def create_new_account(self, data: dict) -> tuple[str, str]:
-        # We must wait for the URL to change to ensure we are on the new page.
-        self.wait_for_url("createAccount.html")
-        # ---------------------------------------
-
+    def create_new_account(self, data: dict) -> tuple[str, str, str]:
         self.enter_name(data["account_holder_name"])
         self.enter_dob(data["dob"])
         self.select_gender(data["gender"])

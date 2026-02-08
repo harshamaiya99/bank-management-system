@@ -1,26 +1,6 @@
 import os
 import shutil
 import subprocess
-import pytest
-
-from dotenv import load_dotenv
-
-# Load environment variables
-load_dotenv()
-
-BASE_URL = os.getenv("BASE_URL")
-
-
-@pytest.fixture(scope="session")
-def base_url():
-    """
-    Exposes BASE_URL as a pytest fixture.
-    This allows:
-    - dependency injection
-    - easy override per environment
-    - reuse across UI and API layers
-    """
-    return BASE_URL
 
 
 def pytest_sessionfinish(session, exitstatus):

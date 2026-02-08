@@ -1,6 +1,7 @@
 import allure
 import json
 import pytest
+import re
 
 
 def normalize_services(services_str):
@@ -92,3 +93,36 @@ def assert_message_contains(actual: str, expected_substring: str, context: str =
     )
 
     assert expected_substring in actual, f"{context} Failed! Expected substring '{expected_substring}' not found in '{actual}'"
+
+
+def assert_toast_match(actual_title: str, actual_desc: str, expected_title: str, expected_desc_pattern: str,
+                       is_regex: bool = False):
+    """
+    Asserts that the Toast Title and Description match expectations.
+    Supports Regex for description if is_regex=True.
+    """
+    formatted_log = (
+        f"Expected ({'Regex' if is_regex else 'String'}):\n"
+        f"Toast title: {expected_title}\n"
+        f"Toast Description: {expected_desc_pattern}\n\n"
+        f"Actual:\n"
+        f"Toast title: {actual_title}\n"
+        f"Toast Description: {actual_desc}"
+    )
+
+    allure.attach(
+        formatted_log,
+        name="Toast Notification Assertion",
+        attachment_type=allure.attachment_type.TEXT
+    )
+
+    # Assert Title
+    assert actual_title == expected_title, f"Toast Title Mismatch! Expected '{expected_title}', got '{actual_title}'"
+
+    # Assert Description
+    if is_regex:
+        # Use re.search to find the pattern in the actual text
+        match = re.search(expected_desc_pattern, actual_desc)
+        assert match, f"Toast Description Regex Failure! Pattern '{expected_desc_pattern}' not found in '{actual_desc}'"
+    else:
+        assert expected_desc_pattern in actual_desc, f"Toast Description Mismatch! Expected to contain '{expected_desc_pattern}', got '{actual_desc}'"
