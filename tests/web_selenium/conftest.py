@@ -44,7 +44,7 @@ def driver():
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--window-size=1920,1080")
 
-    # options.add_argument("--headless") # Uncomment for headless
+    options.add_argument("--headless") # Uncomment for headless
 
     driver = webdriver.Chrome(service=service, options=options)
     driver.maximize_window()
