@@ -1,8 +1,14 @@
 import allure
 from selenium.webdriver.common.by import By
-from tests.web_selenium.pages.base_page import BasePage
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from tests.web_selenium.utils.actions import smart_fill, smart_click, get_text
 
-class LoginPage(BasePage):
+class LoginPage:
+    def __init__(self, driver):
+        self.driver = driver
+        self.wait = WebDriverWait(driver, 10)
+
     URL = "/login"
 
     # Locators
@@ -13,14 +19,13 @@ class LoginPage(BasePage):
 
     @allure.step("Navigate to Login Page")
     def navigate_to_login(self):
-        self.navigate(self.URL)
+        self.driver.get(self.URL)
 
     @allure.step("Enter Username and Password and click Login button")
     def login(self, username, password):
-        self.fill(self.USERNAME_INPUT, username)
-        self.fill(self.PASSWORD_INPUT, password)
-        self.click(self.LOGIN_BTN)
+        smart_fill(self.driver, self.USERNAME_INPUT, username)
+        smart_fill(self.driver, self.PASSWORD_INPUT, password)
+        smart_click(self.driver, self.LOGIN_BTN)
 
     def get_error_message(self):
-        """Waits for the error message to appear and returns its text."""
-        return self.get_text(self.ERROR_MSG)
+        return get_text(self.driver, self.ERROR_MSG)

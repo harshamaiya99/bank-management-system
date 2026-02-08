@@ -3,10 +3,14 @@ import re
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from tests.web_selenium.pages.base_page import BasePage
+from tests.web_selenium.utils.actions import smart_fill, smart_click, smart_check, smart_uncheck, get_text
 
 
-class CreatePage(BasePage):
+class CreatePage:
+    def __init__(self, driver):
+        self.driver = driver
+        self.wait = WebDriverWait(driver, 10)
+
     # Standard Inputs
     NAME_INPUT = (By.NAME, "account_holder_name")
     DOB_INPUT = (By.NAME, "dob")
@@ -22,109 +26,101 @@ class CreatePage(BasePage):
 
     @allure.step("Enter account holder name")
     def enter_name(self, name):
-        self.fill(self.NAME_INPUT, name)
+        smart_fill(self.driver, self.NAME_INPUT, name)
 
     @allure.step("Enter date of birth")
     def enter_dob(self, dob):
-        self.fill(self.DOB_INPUT, dob)
+        smart_fill(self.driver, self.DOB_INPUT, dob)
 
     @allure.step("Select gender")
     def select_gender(self, gender):
-        self.click((By.CSS_SELECTOR, f"button[role='radio'][value='{gender}']"))
+        locator = (By.CSS_SELECTOR, f"button[role='radio'][value='{gender}']")
+        smart_click(self.driver, locator)
 
     @allure.step("Enter email")
     def enter_email(self, email):
-        self.fill(self.EMAIL_INPUT, email)
+        smart_fill(self.driver, self.EMAIL_INPUT, email)
 
     @allure.step("Enter phone number")
     def enter_phone(self, phone):
-        self.fill(self.PHONE_INPUT, phone)
+        smart_fill(self.driver, self.PHONE_INPUT, phone)
 
     @allure.step("Enter address")
     def enter_address(self, address):
-        self.fill(self.ADDRESS_INPUT, address)
+        smart_fill(self.driver, self.ADDRESS_INPUT, address)
 
     @allure.step("Enter zip code")
     def enter_zip(self, zip_code):
-        self.fill(self.ZIP_INPUT, zip_code)
+        smart_fill(self.driver, self.ZIP_INPUT, zip_code)
 
     @allure.step("Select account type")
     def select_account_type(self, account_type):
         # Trigger
         trigger = (By.XPATH, "//label[contains(., 'Account Type')]/following::button[@role='combobox'][1]")
-        self.click(trigger)
+        smart_click(self.driver, trigger)
+
         # Option
         option = (By.XPATH, f"//div[@role='option']//span[contains(text(), '{account_type}')]")
-        # Explicit wait for animation
-        self.wait.until(EC.visibility_of_element_located(option))
-        self.click(option)
+        smart_click(self.driver, option)
 
     @allure.step("Enter initial balance")
     def enter_balance(self, balance):
-        self.fill(self.BALANCE_INPUT, balance)
+        smart_fill(self.driver, self.BALANCE_INPUT, balance)
 
     @allure.step("Select services")
     def select_services(self, services):
         if services:
             for service in services.split(","):
                 text = service.strip()
-                # 1. Find Label to get the ID (robust against nested divs)
-                label_el = self.find((By.XPATH, f"//label[contains(., '{text}')]"))
+                # Find Label
+                label_el = self.wait.until(
+                    EC.visibility_of_element_located((By.XPATH, f"//label[contains(., '{text}')]")))
                 target_id = label_el.get_attribute("for")
 
-                # 2. Determine Locator
                 if target_id:
                     locator = (By.ID, target_id)
                 else:
-                    # Fallback if no 'for' attribute
                     locator = (By.XPATH, f"//label[contains(., '{text}')]//button[@role='checkbox']")
 
-                # 3. Check
-                self.check(locator)
+                smart_check(self.driver, locator)
 
     @allure.step("Set marketing opt-in")
     def set_marketing_opt_in(self, opt_in):
         text = "Marketing Communications"
-        # 1. Find Label
-        label_el = self.find((By.XPATH, f"//label[contains(., '{text}')]"))
+        label_el = self.wait.until(EC.visibility_of_element_located((By.XPATH, f"//label[contains(., '{text}')]")))
         target_id = label_el.get_attribute("for")
 
-        # 2. Determine Locator
         if target_id:
             locator = (By.ID, target_id)
         else:
             locator = (By.XPATH, f"//label[contains(., '{text}')]//button[@role='checkbox']")
 
-        # 3. Set State
         if str(opt_in).lower() == "true":
-            self.check(locator)
+            smart_check(self.driver, locator)
         else:
-            self.uncheck(locator)
+            smart_uncheck(self.driver, locator)
 
     @allure.step("Accept terms and conditions")
     def accept_terms(self):
         text = "Terms and Conditions"
-        # 1. Find Label
-        label_el = self.find((By.XPATH, f"//label[contains(., '{text}')]"))
+        label_el = self.wait.until(EC.visibility_of_element_located((By.XPATH, f"//label[contains(., '{text}')]")))
         target_id = label_el.get_attribute("for")
 
-        # 2. Determine Locator
         if target_id:
             locator = (By.ID, target_id)
         else:
             locator = (By.XPATH, f"//label[contains(., '{text}')]//button[@role='checkbox']")
 
-        # 3. Check
-        self.check(locator)
+        smart_check(self.driver, locator)
 
     @allure.step("Submit create account form")
     def submit_form_and_capture_account_id(self) -> tuple[str, str, str]:
-        self.click(self.SUBMIT_BTN)
+        smart_click(self.driver, self.SUBMIT_BTN)
 
-        toast_text = self.get_text(self.TOAST_TITLE)
-        toast_desc = self.get_text(self.TOAST_DESC)
+        toast_text = get_text(self.driver, self.TOAST_TITLE)
+        toast_desc = get_text(self.driver, self.TOAST_DESC)
 
-        # Longer wait for backend processing (15s) to avoid TimeoutException
+        # Longer wait for backend processing
         WebDriverWait(self.driver, 15).until(EC.url_contains("/account-details/"))
 
         current_url = self.driver.current_url
