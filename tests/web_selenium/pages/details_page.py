@@ -1,10 +1,15 @@
 import allure
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from tests.web_selenium.pages.base_page import BasePage
+from tests.web_selenium.utils.actions import smart_fill, smart_click, smart_check, smart_uncheck, get_text, get_value
 
 
-class DetailsPage(BasePage):
+class DetailsPage:
+    def __init__(self, driver):
+        self.driver = driver
+        self.wait = WebDriverWait(driver, 10)
+
     NAME_INPUT = (By.NAME, "account_holder_name")
     DOB_INPUT = (By.NAME, "dob")
     EMAIL_INPUT = (By.NAME, "email")
@@ -24,65 +29,65 @@ class DetailsPage(BasePage):
 
     @allure.step("Wait for details to load")
     def wait_for_details_to_load(self):
-        self.find(self.NAME_INPUT)
+        self.wait.until(EC.visibility_of_element_located(self.NAME_INPUT))
 
     # --- Getters ---
     @allure.step("Get account_id")
     def get_account_id(self):
-        element = self.find((By.XPATH, "//*[contains(text(), 'ID: ')]"))
+        element = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[contains(text(), 'ID: ')]")))
         return element.text.replace("ID: ", "").strip()
 
     @allure.step("Get account holder name")
     def get_name(self):
-        return self.get_input_value(self.NAME_INPUT)
+        return get_value(self.driver, self.NAME_INPUT)
 
     @allure.step("Get dob")
     def get_dob(self):
-        return self.get_input_value(self.DOB_INPUT)
+        return get_value(self.driver, self.DOB_INPUT)
 
     @allure.step("Get gender")
     def get_gender(self):
-        return self.find((By.CSS_SELECTOR, "button[role='radio'][aria-checked='true']")).get_attribute("value")
+        # Find the button that is aria-checked=true
+        el = self.wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "button[role='radio'][aria-checked='true']")))
+        return el.get_attribute("value")
 
     @allure.step("Get email")
     def get_email(self):
-        return self.get_input_value(self.EMAIL_INPUT)
+        return get_value(self.driver, self.EMAIL_INPUT)
 
     @allure.step("Get phone")
     def get_phone(self):
-        return self.get_input_value(self.PHONE_INPUT)
+        return get_value(self.driver, self.PHONE_INPUT)
 
     @allure.step("Get address")
     def get_address(self):
-        return self.get_input_value(self.ADDRESS_INPUT)
+        return get_value(self.driver, self.ADDRESS_INPUT)
 
     @allure.step("Get zip")
     def get_zip(self):
-        return self.get_input_value(self.ZIP_INPUT)
+        return get_value(self.driver, self.ZIP_INPUT)
 
     @allure.step("Get account type")
     def get_account_type(self):
-        # FIX: Account Type is a read-only input, NOT a button
         locator = (By.XPATH, "//label[contains(., 'Account Type')]/following::input[1]")
-        return self.find(locator).get_attribute("value")
+        return self.wait.until(EC.presence_of_element_located(locator)).get_attribute("value")
 
     @allure.step("Get status")
     def get_status(self):
-        # Status IS a combobox button
         trigger = (By.XPATH, "//label[contains(., 'Account Status')]/following::button[@role='combobox'][1]")
-        return self.find(trigger).text
+        return get_text(self.driver, trigger)
 
     @allure.step("Get balance")
     def get_balance(self):
-        return self.get_input_value(self.BALANCE_INPUT)
+        return get_value(self.driver, self.BALANCE_INPUT)
 
     @allure.step("Get services")
     def get_services(self):
         active_services = []
         for service in self.SERVICE_OPTIONS:
             text = service.strip()
-            # Robust label finding
-            label_el = self.find((By.XPATH, f"//label[contains(., '{text}')]"))
+            label_el = self.wait.until(EC.presence_of_element_located((By.XPATH, f"//label[contains(., '{text}')]")))
             target_id = label_el.get_attribute("for")
 
             if target_id:
@@ -90,14 +95,15 @@ class DetailsPage(BasePage):
             else:
                 locator = (By.XPATH, f"//label[contains(., '{text}')]//button[@role='checkbox']")
 
-            if self.find(locator).get_attribute("aria-checked") == "true":
+            element = self.driver.find_element(*locator)
+            if element.get_attribute("aria-checked") == "true":
                 active_services.append(service)
         return ",".join(active_services)
 
     @allure.step("Get marketing_opt_in")
     def get_marketing_opt_in(self):
         text = "Marketing Communications"
-        label_el = self.find((By.XPATH, f"//label[contains(., '{text}')]"))
+        label_el = self.wait.until(EC.presence_of_element_located((By.XPATH, f"//label[contains(., '{text}')]")))
         target_id = label_el.get_attribute("for")
 
         if target_id:
@@ -105,57 +111,56 @@ class DetailsPage(BasePage):
         else:
             locator = (By.XPATH, f"//label[contains(., '{text}')]//button[@role='checkbox']")
 
-        is_checked = self.find(locator).get_attribute("aria-checked") == "true"
+        is_checked = self.driver.find_element(*locator).get_attribute("aria-checked") == "true"
         return "true" if is_checked else "false"
 
     # --- Updaters ---
     @allure.step("Update account holder name")
     def update_name(self, name):
-        self.fill(self.NAME_INPUT, name)
+        smart_fill(self.driver, self.NAME_INPUT, name)
 
     @allure.step("Update dob")
     def update_dob(self, dob):
-        self.fill(self.DOB_INPUT, dob)
+        smart_fill(self.driver, self.DOB_INPUT, dob)
 
     @allure.step("Update gender")
     def update_gender(self, gender):
-        self.click((By.CSS_SELECTOR, f"button[role='radio'][value='{gender}']"))
+        smart_click(self.driver, (By.CSS_SELECTOR, f"button[role='radio'][value='{gender}']"))
 
     @allure.step("Update email")
     def update_email(self, email):
-        self.fill(self.EMAIL_INPUT, email)
+        smart_fill(self.driver, self.EMAIL_INPUT, email)
 
     @allure.step("Update phone")
     def update_phone(self, phone):
-        self.fill(self.PHONE_INPUT, phone)
+        smart_fill(self.driver, self.PHONE_INPUT, phone)
 
     @allure.step("Update address")
     def update_address(self, address):
-        self.fill(self.ADDRESS_INPUT, address)
+        smart_fill(self.driver, self.ADDRESS_INPUT, address)
 
     @allure.step("Update zip")
     def update_zip(self, zip_code):
-        self.fill(self.ZIP_INPUT, zip_code)
+        smart_fill(self.driver, self.ZIP_INPUT, zip_code)
 
     @allure.step("Update balance")
     def update_balance(self, balance):
-        self.fill(self.BALANCE_INPUT, balance)
+        smart_fill(self.driver, self.BALANCE_INPUT, balance)
 
     @allure.step("Update status")
     def update_status(self, status):
         trigger = (By.XPATH, "//label[contains(., 'Account Status')]/following::button[@role='combobox'][1]")
-        self.click(trigger)
+        smart_click(self.driver, trigger)
 
         option = (By.XPATH, f"//div[@role='option']//span[contains(text(), '{status}')]")
-        self.wait.until(EC.visibility_of_element_located(option))
-        self.click(option)
+        smart_click(self.driver, option)
 
     @allure.step("Update services")
     def update_services(self, services_str):
         # 1. Uncheck all first
         for service in self.SERVICE_OPTIONS:
             text = service.strip()
-            label_el = self.find((By.XPATH, f"//label[contains(., '{text}')]"))
+            label_el = self.wait.until(EC.presence_of_element_located((By.XPATH, f"//label[contains(., '{text}')]")))
             target_id = label_el.get_attribute("for")
 
             if target_id:
@@ -163,13 +168,14 @@ class DetailsPage(BasePage):
             else:
                 locator = (By.XPATH, f"//label[contains(., '{text}')]//button[@role='checkbox']")
 
-            self.uncheck(locator)
+            smart_uncheck(self.driver, locator)
 
         # 2. Check requested
         if services_str:
             for service in services_str.split(","):
                 text = service.strip()
-                label_el = self.find((By.XPATH, f"//label[contains(., '{text}')]"))
+                label_el = self.wait.until(
+                    EC.presence_of_element_located((By.XPATH, f"//label[contains(., '{text}')]")))
                 target_id = label_el.get_attribute("for")
 
                 if target_id:
@@ -177,12 +183,12 @@ class DetailsPage(BasePage):
                 else:
                     locator = (By.XPATH, f"//label[contains(., '{text}')]//button[@role='checkbox']")
 
-                self.check(locator)
+                smart_check(self.driver, locator)
 
     @allure.step("Update marketing")
     def update_marketing_opt_in(self, marketing_check):
         text = "Marketing Communications"
-        label_el = self.find((By.XPATH, f"//label[contains(., '{text}')]"))
+        label_el = self.wait.until(EC.presence_of_element_located((By.XPATH, f"//label[contains(., '{text}')]")))
         target_id = label_el.get_attribute("for")
 
         if target_id:
@@ -192,26 +198,26 @@ class DetailsPage(BasePage):
 
         should_check = str(marketing_check).lower() == "true"
         if should_check:
-            self.check(locator)
+            smart_check(self.driver, locator)
         else:
-            self.uncheck(locator)
+            smart_uncheck(self.driver, locator)
 
     @allure.step("Click on Update button")
     def update_account(self) -> tuple[str, str]:
-        self.click(self.UPDATE_BTN)
-        toast_text = self.get_text(self.TOAST_TITLE)
-        toast_desc = self.get_text(self.TOAST_DESC)
+        smart_click(self.driver, self.UPDATE_BTN)
+        toast_text = get_text(self.driver, self.TOAST_TITLE)
+        toast_desc = get_text(self.driver, self.TOAST_DESC)
         return toast_text, toast_desc
 
     @allure.step("Click on Delete account button")
     def delete_account(self):
-        self.click(self.DELETE_BTN)
-        self.click(self.CONFIRM_DELETE_BTN)
+        smart_click(self.driver, self.DELETE_BTN)
+        smart_click(self.driver, self.CONFIRM_DELETE_BTN)
 
-        toast_text = self.get_text(self.TOAST_TITLE)
-        toast_desc = self.get_text(self.TOAST_DESC)
+        toast_text = get_text(self.driver, self.TOAST_TITLE)
+        toast_desc = get_text(self.driver, self.TOAST_DESC)
 
-        self.wait_for_url("/dashboard")
+        self.wait.until(EC.url_contains("/dashboard"))
         return toast_text, toast_desc
 
     def update_account_details(self, data: dict) -> tuple[str, str]:
