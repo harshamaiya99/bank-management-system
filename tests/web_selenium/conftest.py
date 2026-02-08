@@ -1,3 +1,4 @@
+import os
 import pytest
 import allure
 from selenium import webdriver
@@ -8,6 +9,11 @@ from tests.web_selenium.pages.create_page import CreatePage
 from tests.web_selenium.pages.details_page import DetailsPage
 from tests.web_selenium.pages.login_page import LoginPage
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
+BASE_URL = os.getenv("VITE_BASE_URL")
 
 @pytest.fixture(scope="function")
 def driver():
@@ -38,19 +44,22 @@ def driver():
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--window-size=1920,1080")
 
-    options.add_argument("--headless") # Uncomment for headless
+    # options.add_argument("--headless") # Uncomment for headless
 
     driver = webdriver.Chrome(service=service, options=options)
     driver.maximize_window()
     yield driver
     driver.quit()
 
+@pytest.fixture(scope="session")
+def base_url():
+    return BASE_URL
 
 # --- Page Objects Fixtures ---
 @pytest.fixture
 def login_page(driver, base_url):
     hp = LoginPage(driver)
-    hp.URL = f"{base_url}/login.html"
+    hp.URL = f"{base_url}/login"
     return hp
 
 
