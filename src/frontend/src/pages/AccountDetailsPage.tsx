@@ -202,7 +202,9 @@ function AccountForm({
                 {account.status}
               </Badge>
             </h1>
-            <p className="text-muted-foreground font-mono">ID: {account.account_id}</p>
+            <p className="text-muted-foreground font-mono">
+              ID: <span aria-label="Account ID">{account.account_id}</span>
+            </p>
           </div>
         </div>
 

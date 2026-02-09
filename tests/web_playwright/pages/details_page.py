@@ -37,9 +37,8 @@ class DetailsPage:
 
     @allure.step("Get account_id")
     def get_account_id(self):
-        # Robust: Find the paragraph that starts with "ID: "
-        text = self.page.get_by_text("ID: ").text_content()
-        return text.replace("ID: ", "").strip()
+        account_id = self.page.get_by_label("Account ID").text_content()
+        return account_id
 
     @allure.step("Get account holder name")
     def get_name(self):
