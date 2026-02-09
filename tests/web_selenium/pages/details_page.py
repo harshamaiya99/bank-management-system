@@ -22,8 +22,8 @@ class DetailsPage:
     DELETE_BTN = (By.XPATH, "//button[contains(., 'Delete Account')]")
     CONFIRM_DELETE_BTN = (By.XPATH, "//div[@role='alertdialog']//button[contains(., 'Delete Account')]")
 
-    TOAST_TITLE = (By.CSS_SELECTOR, "ol li .grid > div:nth-child(1)")
-    TOAST_DESC = (By.CSS_SELECTOR, "ol li .grid > div:nth-child(2)")
+    # Radix UI Toasts are rendered as list items (li) in an ordered list (ol)
+    TOAST_ROOT = (By.CSS_SELECTOR, "ol li[data-state='open']")
 
     SERVICE_OPTIONS = ["Internet Banking", "Debit Card", "Cheque Book", "SMS Alerts"]
 
@@ -205,20 +205,37 @@ class DetailsPage:
     @allure.step("Click on Update button")
     def update_account(self) -> tuple[str, str]:
         smart_click(self.driver, self.UPDATE_BTN)
-        toast_text = get_text(self.driver, self.TOAST_TITLE)
-        toast_desc = get_text(self.driver, self.TOAST_DESC)
-        return toast_text, toast_desc
+        # Wait for toast
+        toast_el = self.wait.until(EC.visibility_of_element_located(self.TOAST_ROOT))
+        # Get all text in toast (Title + Desc usually concatenate in .text)
+        toast_content = toast_el.text
+
+        # We can split by newline if we want title vs desc, or just return the blob
+        # Assuming format "Title\nDescription"
+        parts = toast_content.split('\n')
+        toast_title = parts[0] if len(parts) > 0 else ""
+        toast_desc = parts[1] if len(parts) > 1 else ""
+
+        return toast_title, toast_desc
 
     @allure.step("Click on Delete account button")
     def delete_account(self):
         smart_click(self.driver, self.DELETE_BTN)
         smart_click(self.driver, self.CONFIRM_DELETE_BTN)
 
-        toast_text = get_text(self.driver, self.TOAST_TITLE)
-        toast_desc = get_text(self.driver, self.TOAST_DESC)
+        # Wait for toast
+        toast_el = self.wait.until(EC.visibility_of_element_located(self.TOAST_ROOT))
+        # Get all text in toast (Title + Desc usually concatenate in .text)
+        toast_content = toast_el.text
+
+        # We can split by newline if we want title vs desc, or just return the blob
+        # Assuming format "Title\nDescription"
+        parts = toast_content.split('\n')
+        toast_title = parts[0] if len(parts) > 0 else ""
+        toast_desc = parts[1] if len(parts) > 1 else ""
 
         self.wait.until(EC.url_contains("/dashboard"))
-        return toast_text, toast_desc
+        return toast_title, toast_desc
 
     def update_account_details(self, data: dict) -> tuple[str, str]:
         self.update_name(data["updated_account_holder_name"])

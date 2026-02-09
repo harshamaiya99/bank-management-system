@@ -21,8 +21,8 @@ class CreatePage:
     BALANCE_INPUT = (By.NAME, "balance")
     SUBMIT_BTN = (By.CSS_SELECTOR, "button[type='submit']")
 
-    TOAST_TITLE = (By.CSS_SELECTOR, "ol li .grid > div:nth-child(1)")
-    TOAST_DESC = (By.CSS_SELECTOR, "ol li .grid > div:nth-child(2)")
+    # Radix UI Toasts are rendered as list items (li) in an ordered list (ol)
+    TOAST_ROOT = (By.CSS_SELECTOR, "ol li[data-state='open']")
 
     @allure.step("Enter account holder name")
     def enter_name(self, name):
@@ -117,17 +117,25 @@ class CreatePage:
     def submit_form_and_capture_account_id(self) -> tuple[str, str, str]:
         smart_click(self.driver, self.SUBMIT_BTN)
 
-        toast_text = get_text(self.driver, self.TOAST_TITLE)
-        toast_desc = get_text(self.driver, self.TOAST_DESC)
+        # Wait for toast
+        toast_el = self.wait.until(EC.visibility_of_element_located(self.TOAST_ROOT))
+        # Get all text in toast (Title + Desc usually concatenate in .text)
+        toast_content = toast_el.text
 
-        # Longer wait for backend processing
+        # We can split by newline if we want title vs desc, or just return the blob
+        # Assuming format "Title\nDescription"
+        parts = toast_content.split('\n')
+        title = parts[0] if len(parts) > 0 else ""
+        desc = parts[1] if len(parts) > 1 else ""
+
+        # Wait for redirection
         WebDriverWait(self.driver, 15).until(EC.url_contains("/account-details/"))
 
         current_url = self.driver.current_url
         match = re.search(r"/account-details/(\d+)", current_url)
         account_id = match.group(1) if match else None
 
-        return account_id, toast_text, toast_desc
+        return account_id, title, desc
 
     def create_new_account(self, data: dict) -> tuple[str, str, str]:
         self.enter_name(data["account_holder_name"])

@@ -7,11 +7,6 @@ class LoginPage:
         self.page = page
     URL = "/login"
 
-    # Locators
-    # Using 'name' attribute is standard for React Hook Form + Shadcn
-    USERNAME_INPUT = "input[name='username']"
-    PASSWORD_INPUT = "input[name='password']"
-    LOGIN_BTN = "button[type='submit']"
 
     @allure.step("Navigate to Login Page")
     def navigate_to_login(self):
@@ -19,9 +14,11 @@ class LoginPage:
 
     @allure.step("Enter Username and Password and click Login button")
     def login(self, username, password):
-        self.page.locator(self.USERNAME_INPUT).fill(str(username))
-        self.page.locator(self.PASSWORD_INPUT).fill(str(password))
-        self.page.locator(self.LOGIN_BTN).click()
+        # Targets the input labeled "Username" & "Password"
+        self.page.get_by_label("Username").fill(str(username)) 
+        self.page.get_by_label("Password").fill(str(password))
+        # Targets the button that explicitly says "Sign In"
+        self.page.get_by_role("button", name="Sign In").click()
 
     # Define the locator as a property
     @property
