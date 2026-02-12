@@ -5,8 +5,11 @@ export interface User {
 
 export interface AuthResponse {
   access_token: string;
+  refresh_token: string;        // New field
   token_type: string;
   role: string;
+  access_token_expires_in: number;  // New field
+  refresh_token_expires_in: number; // New field
 }
 
 export interface Account {

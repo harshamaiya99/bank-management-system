@@ -12,7 +12,6 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  // Initialize state from localStorage to persist auth on reload
   const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [role, setRole] = useState<string | null>(localStorage.getItem("role"));
 
@@ -20,8 +19,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = (data: AuthResponse) => {
     localStorage.setItem("token", data.access_token);
+    localStorage.setItem("refresh_token", data.refresh_token); // Store refresh token
     localStorage.setItem("role", data.role);
-    // Process ID can be managed here or in the interceptor
     localStorage.setItem("process_id", crypto.randomUUID());
 
     setToken(data.access_token);
@@ -30,13 +29,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("refresh_token"); // Remove refresh token
     localStorage.removeItem("role");
     localStorage.removeItem("process_id");
     setToken(null);
     setRole(null);
   };
 
-  // Listen for 401 Unauthorized events from the Axios interceptor
   useEffect(() => {
     const handleUnauthorized = () => logout();
     window.addEventListener("auth:unauthorized", handleUnauthorized);
