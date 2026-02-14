@@ -14,21 +14,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Create Allure Config
-      if: always()
-      shell: bash
-      run: |
-        cat > allurerc.json << 'EOF'
-        {
-          "name": "Bank Management Test Report",
-          "output": "./tests/reports/allure-report",
-          "historyPath": "./tests/reports/history.jsonl",
-          "historyLimit": 20
-        }
-        EOF
-        echo "Config created:"
-        cat allurerc.json
-
     - name: Add Metadata
       if: always()
       shell: bash
@@ -42,21 +27,10 @@ runs:
         Branch=${GITHUB_REF##*/}
         Commit=${GITHUB_SHA:0:7}
         EOF
-        
-        cat > tests/reports/allure-results/executor.json << EOF
-        {
-          "name": "GitHub Actions",
-          "type": "github",
-          "buildOrder": ${{ inputs.github_run_number }},
-          "buildName": "Run #${{ inputs.github_run_number }}",
-          "buildUrl": "https://github.com/${{ inputs.github_repository }}/actions/runs/${{ inputs.github_run_id }}"
-        }
-        EOF
 
-    - name: Generate Report
+    - name: Generate Allure Report
       if: always()
       shell: bash
       run: |
-        rm -rf tests/reports/allure-report
-        allure generate tests/reports/allure-results
-        echo "Report generated successfully"
+        allure generate tests/reports/allure-results -o tests/reports/allure-report --clean
+        echo "Report generated"

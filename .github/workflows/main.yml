@@ -62,12 +62,12 @@ jobs:
         include: history.jsonl
         keep_files: false
 
-    - name: Upload Single File Report
+    - name: Upload Allure Report
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: allure-report-html
-        path: tests/reports/allure-report/index.html
+        name: allure-report
+        path: tests/reports/allure-report/
         retention-days: 15
 
     - name: Upload Karate Reports
