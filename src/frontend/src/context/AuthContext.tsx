@@ -1,10 +1,11 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import api, { setMemoryToken } from "@/api/client"; // Import the setter
 import { type AuthResponse } from "@/types";
 
 interface AuthContextType {
-  token: string | null;
   role: string | null;
   isAuthenticated: boolean;
+  isLoading: boolean; // New state to prevent flickering
   login: (data: AuthResponse) => void;
   logout: () => void;
 }
@@ -12,28 +13,56 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
+  // We only persist non-sensitive data like 'role' for UI logic
   const [role, setRole] = useState<string | null>(localStorage.getItem("role"));
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const isAuthenticated = !!token;
+  // 1. On App Load: Try to get a token using the HttpOnly Cookie
+  useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        // Try to refresh immediately
+        const { data } = await api.post("/refresh");
+        setMemoryToken(data.access_token);
+        setRole(data.role);
+        setIsAuthenticated(true);
+      } catch (error) {
+        // If refresh fails, user is truly logged out
+        setRole(null);
+        setIsAuthenticated(false);
+        localStorage.removeItem("role");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
+    initializeAuth();
+  }, []);
+
+  // 2. Login Action
   const login = (data: AuthResponse) => {
-    localStorage.setItem("token", data.access_token);
-    localStorage.setItem("refresh_token", data.refresh_token); // Store refresh token
+    setMemoryToken(data.access_token);
+    setRole(data.role);
+    setIsAuthenticated(true);
+
+    // Only persist non-sensitive role
     localStorage.setItem("role", data.role);
     localStorage.setItem("process_id", crypto.randomUUID());
-
-    setToken(data.access_token);
-    setRole(data.role);
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refresh_token"); // Remove refresh token
+  // 3. Logout Action
+  const logout = async () => {
+    try {
+      await api.post("/logout"); // Tell backend to delete cookie
+    } catch (e) {
+      console.error("Logout failed", e);
+    }
+    setMemoryToken(null);
+    setRole(null);
+    setIsAuthenticated(false);
     localStorage.removeItem("role");
     localStorage.removeItem("process_id");
-    setToken(null);
-    setRole(null);
   };
 
   useEffect(() => {
@@ -43,8 +72,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ token, role, isAuthenticated, login, logout }}>
-      {children}
+    <AuthContext.Provider value={{ role, isAuthenticated, isLoading, login, logout }}>
+      {!isLoading && children}
     </AuthContext.Provider>
   );
 }

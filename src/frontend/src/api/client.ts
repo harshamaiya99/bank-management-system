@@ -1,13 +1,23 @@
 import axios from 'axios';
 
+// --- IN-MEMORY TOKEN STORAGE ---
+// This variable holds the token. It is wiped when the page refreshes.
+let memoryToken: string | null = null;
+
+// Helper to set the token from other files (like AuthContext)
+export const setMemoryToken = (token: string | null) => {
+  memoryToken = token;
+};
+// -------------------------------
+
 const api = axios.create({
   baseURL: '/',
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // IMPORTANT: Allows sending Cookies to backend
 });
 
-// Flag to prevent multiple refresh calls simultaneously
 let isRefreshing = false;
 let failedQueue: any[] = [];
 
@@ -22,27 +32,28 @@ const processQueue = (error: any, token: string | null = null) => {
   failedQueue = [];
 };
 
-// 1. Request Interceptor
+// 1. Request Interceptor: Use Memory Token
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  if (memoryToken) {
+    config.headers.Authorization = `Bearer ${memoryToken}`;
   }
+
+  // Observability
   config.headers['X-Request-Id'] = crypto.randomUUID();
+  // Process ID is still safe in localStorage as it's not a security key
   config.headers['X-Process-Id'] = localStorage.getItem('process_id') || crypto.randomUUID();
+
   return config;
 });
 
-// 2. Response Interceptor
+// 2. Response Interceptor: Cookie-based Refresh
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // Check if error is 401 and we haven't already tried to refresh
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
-        // If already refreshing, queue this request
         return new Promise(function(resolve, reject) {
           failedQueue.push({ resolve, reject });
         })
@@ -58,26 +69,16 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
 
-      const refreshToken = localStorage.getItem('refresh_token');
-
-      // If no refresh token, logout immediately
-      if (!refreshToken) {
-        window.dispatchEvent(new Event("auth:unauthorized"));
-        return Promise.reject(error);
-      }
-
       try {
-        // Call the new refresh endpoint
-        // Note: Using axios directly here to avoid interceptor loops
-        const response = await axios.post('/refresh', { refresh_token: refreshToken });
+        // Call /refresh. Browser automatically sends the HttpOnly cookie.
+        // We don't send any data in the body.
+        const response = await axios.post('/refresh', {}, { withCredentials: true });
 
-        const { access_token, refresh_token } = response.data;
+        const { access_token } = response.data;
 
-        // Update storage
-        localStorage.setItem('token', access_token);
-        localStorage.setItem('refresh_token', refresh_token);
+        // Update In-Memory Store
+        setMemoryToken(access_token);
 
-        // Update the header for the failed request
         api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
         originalRequest.headers['Authorization'] = `Bearer ${access_token}`;
 
@@ -88,7 +89,7 @@ api.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null);
         isRefreshing = false;
-        // If refresh fails, redirect to login
+        // If refresh fails, it means the Cookie is invalid/expired. Logout.
         window.dispatchEvent(new Event("auth:unauthorized"));
         return Promise.reject(refreshError);
       }

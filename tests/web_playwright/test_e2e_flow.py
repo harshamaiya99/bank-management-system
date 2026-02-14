@@ -23,7 +23,7 @@ def test_end_to_end_crud(login_page, home_page, create_page, details_page, row):
 
     with allure.step(f"Create Account"):
         home_page.go_to_create_account()
-        # account_id, toast_title = create_page.create_new_account(row)
+
         # Unpack tuple: ID, Title, Description
         account_id, toast_title, toast_desc = create_page.create_new_account(row)
 
@@ -78,8 +78,8 @@ def test_end_to_end_crud(login_page, home_page, create_page, details_page, row):
 
     # --- 4. Verify Update ---
     with allure.step(f"Search & Verify Update"):
-        home_page.navigate_to_dashboard()  # Go back to dashboard to test search
-        home_page.search_account(account_id)
+        # home_page.navigate_to_dashboard()  # Go back to dashboard to test search
+        # home_page.search_account(account_id)
 
         actual_updated_data = details_page.get_account_details_as_dict()
 

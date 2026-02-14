@@ -29,6 +29,9 @@ class DetailsPage:
     # 'div:nth-child(2)' -> The Description
     TOAST_DESC = "ol li .grid > div:nth-child(2)"
 
+    # Close button has the 'toast-close' attribute
+    TOAST_CLOSE_BTN = "ol li [toast-close]"
+
     @allure.step("Wait for details to load")
     def wait_for_details_to_load(self):
         self.page.wait_for_selector(self.NAME_INPUT, state="visible")
@@ -168,6 +171,10 @@ class DetailsPage:
         toast_text = self.page.locator(self.TOAST_TITLE).text_content()
         toast_desc = self.page.locator(self.TOAST_DESC).text_content()
 
+        # Hover over the toast to ensure the close button (which might be opacity-0) is interactable
+        self.page.locator("ol li").first.hover()
+        self.page.locator(self.TOAST_CLOSE_BTN).click()
+
         return toast_text, toast_desc
 
     @allure.step("Click on Delete account button")
@@ -178,6 +185,10 @@ class DetailsPage:
         self.page.locator(self.TOAST_TITLE).wait_for(state="visible")
         toast_text = self.page.locator(self.TOAST_TITLE).text_content()
         toast_desc = self.page.locator(self.TOAST_DESC).text_content()
+
+        # Hover over the toast to ensure the close button (which might be opacity-0) is interactable
+        self.page.locator("ol li").first.hover()
+        self.page.locator(self.TOAST_CLOSE_BTN).click()
 
         self.page.wait_for_url("**/dashboard")
         return toast_text, toast_desc
