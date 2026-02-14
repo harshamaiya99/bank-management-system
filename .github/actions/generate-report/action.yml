@@ -43,30 +43,36 @@ runs:
         }
         EOF
 
-    - name: Generate Allure Report (Allure 3 with single file)
+    - name: Create Allure 3 Config with Single File
+      if: always()
+      shell: bash
+      run: |
+        # Create Allure 3 config with Awesome plugin and single-file
+        cat > allurerc.json << EOF
+        {
+          "name": "Bank Management Test Report",
+          "output": "./tests/reports/allure-report",
+          "historyPath": "./tests/reports/history.jsonl",
+          "historyLimit": 20,
+          "plugins": {
+            "awesome": {
+              "options": {
+                "singleFile": true,
+                "reportLanguage": "en"
+              }
+            }
+          }
+        }
+        EOF
+
+    - name: Generate Allure 3 Report
       if: always()
       shell: bash
       run: |
         # Remove old report if exists
         rm -rf tests/reports/allure-report
         
-        # Check if history file exists
-        if [ -f "tests/reports/history.jsonl" ]; then
-          echo "Found history file with $(wc -l < tests/reports/history.jsonl) run(s)"
-          # Generate with history and single-file option
-          allure generate tests/reports/allure-results \
-            --output tests/reports/allure-report \
-            --report-name "Bank Management Test Report" \
-            --history-path tests/reports/history.jsonl \
-            --history-limit 20 \
-            --single-file
-        else
-          echo "No history file found, generating first report"
-          # Generate without history (first run) with single-file option
-          allure generate tests/reports/allure-results \
-            --output tests/reports/allure-report \
-            --report-name "Bank Management Test Report" \
-            --single-file
-        fi
+        # Generate report using Allure 3 with config
+        allure generate tests/reports/allure-results --config allurerc.json
         
-        echo "Allure 3 report generated successfully with native single-file support"
+        echo "Allure 3 report generated with Awesome plugin (single-file mode)"
