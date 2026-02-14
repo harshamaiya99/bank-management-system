@@ -14,11 +14,26 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Create Allure Config File
+      if: always()
+      shell: bash
+      run: |
+        # Create config file in project root
+        cat > allure.config.json << 'EOF'
+        {
+          "name": "Bank Management Test Report",
+          "output": "./tests/reports/allure-report",
+          "historyPath": "./tests/reports/history.jsonl",
+          "historyLimit": 20
+        }
+        EOF
+        echo "Config file created"
+        cat allure.config.json
+
     - name: Add Allure Metadata
       if: always()
       shell: bash
       run: |
-        # Create environment.properties for Allure
         cat > tests/reports/allure-results/environment.properties << EOF
         Project=Bank Management System
         Environment=GitHub Actions (CI)
@@ -30,7 +45,6 @@ runs:
         Commit=${GITHUB_SHA:0:7}
         EOF
         
-        # Create executor.json for Allure
         cat > tests/reports/allure-results/executor.json << EOF
         {
           "name": "GitHub Actions",
@@ -43,36 +57,18 @@ runs:
         }
         EOF
 
-    - name: Create Allure 3 Config with Single File
-      if: always()
-      shell: bash
-      run: |
-        # Create Allure 3 config with Awesome plugin and single-file
-        cat > allurerc.json << EOF
-        {
-          "name": "Bank Management Test Report",
-          "output": "./tests/reports/allure-report",
-          "historyPath": "./tests/reports/history.jsonl",
-          "historyLimit": 20,
-          "plugins": {
-            "awesome": {
-              "options": {
-                "singleFile": true,
-                "reportLanguage": "en"
-              }
-            }
-          }
-        }
-        EOF
-
     - name: Generate Allure 3 Report
       if: always()
       shell: bash
       run: |
-        # Remove old report if exists
         rm -rf tests/reports/allure-report
         
-        # Generate report using Allure 3 with config
-        allure generate tests/reports/allure-results --config allurerc.json
+        if [ -f "tests/reports/history.jsonl" ]; then
+          echo "History file found with $(wc -l < tests/reports/history.jsonl) run(s)"
+        else
+          echo "No history file found (first run)"
+        fi
         
-        echo "Allure 3 report generated with Awesome plugin (single-file mode)"
+        allure generate tests/reports/allure-results --config allure.config.json
+        
+        echo "Allure 3 report generated successfully"
