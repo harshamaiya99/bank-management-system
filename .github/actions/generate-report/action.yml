@@ -14,12 +14,11 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Create Allure Config File
+    - name: Create Allure Config
       if: always()
       shell: bash
       run: |
-        # Create config file in project root
-        cat > allure.config.json << 'EOF'
+        cat > allurerc.json << 'EOF'
         {
           "name": "Bank Management Test Report",
           "output": "./tests/reports/allure-report",
@@ -27,17 +26,16 @@ runs:
           "historyLimit": 20
         }
         EOF
-        echo "Config file created"
-        cat allure.config.json
+        echo "Config created:"
+        cat allurerc.json
 
-    - name: Add Allure Metadata
+    - name: Add Metadata
       if: always()
       shell: bash
       run: |
         cat > tests/reports/allure-results/environment.properties << EOF
         Project=Bank Management System
         Environment=GitHub Actions (CI)
-        Executor=GitHub Actions
         Build.Number=${{ inputs.github_run_number }}
         Build.URL=https://github.com/${{ inputs.github_repository }}/actions/runs/${{ inputs.github_run_id }}
         Repository=${{ inputs.github_repository }}
@@ -49,26 +47,16 @@ runs:
         {
           "name": "GitHub Actions",
           "type": "github",
-          "url": "https://github.com/${{ inputs.github_repository }}",
           "buildOrder": ${{ inputs.github_run_number }},
           "buildName": "Run #${{ inputs.github_run_number }}",
-          "buildUrl": "https://github.com/${{ inputs.github_repository }}/actions/runs/${{ inputs.github_run_id }}",
-          "reportName": "Allure Report"
+          "buildUrl": "https://github.com/${{ inputs.github_repository }}/actions/runs/${{ inputs.github_run_id }}"
         }
         EOF
 
-    - name: Generate Allure 3 Report
+    - name: Generate Report
       if: always()
       shell: bash
       run: |
         rm -rf tests/reports/allure-report
-        
-        if [ -f "tests/reports/history.jsonl" ]; then
-          echo "History file found with $(wc -l < tests/reports/history.jsonl) run(s)"
-        else
-          echo "No history file found (first run)"
-        fi
-        
-        allure generate tests/reports/allure-results --config allure.config.json
-        
-        echo "Allure 3 report generated successfully"
+        allure generate tests/reports/allure-results
+        echo "Report generated successfully"
