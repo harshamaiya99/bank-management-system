@@ -1,5 +1,5 @@
 name: "Generate Allure Report"
-description: "Injects metadata and builds HTML report"
+description: "Generates Allure 3 report with history"
 inputs:
   github_run_number:
     required: true
@@ -18,11 +18,21 @@ runs:
       if: always()
       shell: bash
       run: |
-        echo "Project=Bank Management System" >> allure-results/environment.properties
-        echo "Environment=Staging (localhost)" >> allure-results/environment.properties
-        echo "Executor=GitHub Actions" >> allure-results/environment.properties
+        # Create environment.properties for Allure
+        cat > tests/reports/allure-results/environment.properties << EOF
+        Project=Bank Management System
+        Environment=GitHub Actions (CI)
+        Executor=GitHub Actions
+        Build.Number=${{ inputs.github_run_number }}
+        Build.URL=https://github.com/${{ inputs.github_repository }}/actions/runs/${{ inputs.github_run_id }}
+        Repository=${{ inputs.github_repository }}
+        Branch=${GITHUB_REF##*/}
+        Commit=${GITHUB_SHA:0:7}
+        EOF
         
-        echo '{
+        # Create executor.json for Allure
+        cat > tests/reports/allure-results/executor.json << EOF
+        {
           "name": "GitHub Actions",
           "type": "github",
           "url": "https://github.com/${{ inputs.github_repository }}",
@@ -30,16 +40,20 @@ runs:
           "buildName": "Run #${{ inputs.github_run_number }}",
           "buildUrl": "https://github.com/${{ inputs.github_repository }}/actions/runs/${{ inputs.github_run_id }}",
           "reportName": "Allure Report"
-        }' > allure-results/executor.json
+        }
+        EOF
 
-    - name: Generate Allure Report
+    - name: Generate Allure Report (Allure 3)
       if: always()
       shell: bash
       run: |
-        allure generate allure-results --clean -o allure-report
+        # Generate report using config file (with historyPath)
+        allure generate tests/reports/allure-results --config allure.config.json
+        
+        echo "Allure report generated successfully"
 
     - name: Combine into Single HTML
       if: always()
       shell: bash
       run: |
-        allure-combine allure-report
+        allure-combine tests/reports/allure-report

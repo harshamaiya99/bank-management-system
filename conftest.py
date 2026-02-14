@@ -1,53 +1,109 @@
 import os
 import shutil
 import subprocess
+import platform
+import socket
+from datetime import datetime
+import pytest
+
+
+@pytest.fixture(scope="session", autouse=True)
+def setup_allure_environment():
+    """Create environment information for Allure report"""
+
+    project_root = os.getcwd()
+    results_dir = os.path.join(project_root, "tests", "reports", "allure-results")
+
+    # Ensure results directory exists
+    os.makedirs(results_dir, exist_ok=True)
+
+    # ------------------------------------------------
+    # Collect Environment Information
+    # ------------------------------------------------
+    environment_data = {
+        "OS": platform.system(),
+        "OS.Version": platform.version(),
+        "Python.Version": platform.python_version(),
+        "Hostname": socket.gethostname(),
+        "Execution.Date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "Processor": platform.processor(),
+        "Architecture": platform.machine(),
+
+        # Configurable from environment variables
+        "Test.Environment": os.getenv("TEST_ENV", "DEV"),
+        "Base.URL": os.getenv("BASE_URL", "http://localhost:8000"),
+        "Browser": os.getenv("BROWSER", "Chrome"),
+        "Database": os.getenv("DATABASE", "SQLite3"),
+        "App.Version": os.getenv("APP_VERSION", "3.0.0"),
+
+        # Project Info
+        "Project.Name": "Bank Management System",
+        "Test.Suite": "API & UI - E2E Tests",
+        "CI.Build": os.getenv("BUILD_NUMBER", "Local"),
+        "Git.Branch": os.getenv("GIT_BRANCH", "main"),
+        "Tester": os.getenv("TESTER_NAME", os.getenv("USERNAME", "Unknown"))
+    }
+
+    # ------------------------------------------------
+    # Write environment.properties file
+    # ------------------------------------------------
+    env_file = os.path.join(results_dir, "environment.properties")
+    with open(env_file, 'w') as f:
+        for key, value in environment_data.items():
+            f.write(f"{key}={value}\n")
+
+    print(f"[Allure] Environment information created")
+
+    yield
+
+def pytest_sessionstart(session):
+    """Clean results directory BEFORE tests run"""
+    project_root = os.getcwd()
+    results_dir = os.path.join(project_root, "tests", "reports", "allure-results")
+
+    if os.path.exists(results_dir):
+        shutil.rmtree(results_dir)
+    os.makedirs(results_dir, exist_ok=True)
+    print("[Allure] Results directory cleaned")
 
 
 def pytest_sessionfinish(session, exitstatus):
-    """
-    Runs once after all tests finish.
-    1. Preserves Allure history (trend charts).
-    2. Generates the new Allure HTML report automatically.
-    """
-
-    # 1. Define Paths (Matches your project structure)
     project_root = os.getcwd()
     results_dir = os.path.join(project_root, "tests", "reports", "allure-results")
     report_dir = os.path.join(project_root, "tests", "reports", "allure-report")
+    config_file = os.path.join(project_root, "allure.config.json")
 
-    history_src = os.path.join(report_dir, "history")
-    history_dst = os.path.join(results_dir, "history")
-
-    # 2. Check for Allure CLI
     allure_cmd = shutil.which("allure")
     if not allure_cmd:
-        print("\n[Report] Allure CLI not found in PATH. Skipping report generation.")
+        print("\n[Allure] CLI not found in PATH.")
         return
 
-    # 3. Preserve History
-    # Copy 'history' folder from the previous report to the current results
-    if os.path.exists(history_src):
-        print(f"\n[History] Preserving trends from: {history_src}")
-        # dirs_exist_ok=True allows overwriting if destination exists (Python 3.8+)
-        shutil.copytree(history_src, history_dst, dirs_exist_ok=True)
-    else:
-        print("\n[History] No previous history found. Starting fresh trends.")
+    # ------------------------------------------------
+    # Clean old report
+    # ------------------------------------------------
+    if os.path.exists(report_dir):
+        shutil.rmtree(report_dir)
 
-    # 4. Generate Report
-    print(f"[Report] Generating HTML report to: {report_dir}...")
+    # ------------------------------------------------
+    # Generate report
+    # ------------------------------------------------
     try:
         subprocess.run(
             [
                 allure_cmd,
                 "generate",
                 results_dir,
-                "--clean",  # Overwrite the old report folder
-                "-o",
-                report_dir
+                "--config",
+                config_file,
+                "--history-limit",
+                "10"
             ],
-            check=True,  # Raise error if generation fails
-            shell=True if os.name == 'nt' else False  # Handle Windows path parsing
+            check=True
         )
-        print(f"[Report] Success! View it with: allure open {os.path.relpath(report_dir)}")
+
+        print("\n\n[Allure] Report generated successfully.")
+        report_index = os.path.join(report_dir, "index.html")
+        print(f"[Allure] Open: {report_index}")
+
     except subprocess.CalledProcessError as e:
-        print(f"[Report] Failed to generate report. Error: {e}")
+        print(f"[Allure] Report generation failed: {e}")

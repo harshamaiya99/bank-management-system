@@ -8,7 +8,6 @@ runs:
       shell: bash
       run: |
         echo "Starting Uvicorn..."
-        # Run in background
         uvicorn main:app --app-dir src/backend --host 127.0.0.1 --port 9000 &
 
     # --- Start Frontend ---
@@ -17,7 +16,6 @@ runs:
       working-directory: src/frontend
       run: |
         echo "Starting Vite..."
-        # Run in background, force port 5173
         npm run dev -- --port 5173 &
 
     # --- Wait for Services ---
@@ -25,18 +23,20 @@ runs:
       shell: bash
       run: |
         echo "Waiting for services to start..."
-        sleep 10 
-        # Optional: Add a curl check loop here for robustness in the future
+        sleep 10
 
     # --- Run Tests ---
     - name: Run Tests
       shell: bash
       env:
-        # Backend URL for API tests
         BASE_URL: http://127.0.0.1:9000
-        # Frontend URL for Playwright tests (matches conftest.py)
         VITE_BASE_URL: http://localhost:5173
+        # CI-specific environment variables for Allure
+        TEST_ENV: CI
+        CI_BUILD: "true"
+        BUILD_NUMBER: ${{ github.run_number }}
+        GIT_BRANCH: ${{ github.ref_name }}
+        TESTER_NAME: "GitHub Actions"
       run: |
         echo "Running API and UI Tests..."
-        # Runs both API (Pytest) and Web (Playwright) tests
-        pytest tests --alluredir=allure-results -s
+        pytest tests -s

@@ -31,7 +31,7 @@ jobs:
     - name: Setup Environment
       uses: ./.github/actions/setup-env
 
-    # --- 2. HISTORY ---
+    # --- 2. HISTORY (Restore history.jsonl) ---
     - name: Restore History
       uses: ./.github/actions/restore-history
 
@@ -44,30 +44,30 @@ jobs:
       if: always()
       uses: ./.github/actions/generate-report
       with:
-        # Pass GitHub context variables as inputs
         github_run_number: ${{ github.run_number }}
         github_run_id: ${{ github.run_id }}
         github_repository: ${{ github.repository }}
         github_repository_owner: ${{ github.repository_owner }}
         github_repo_name: ${{ github.event.repository.name }}
 
-    # --- 5. PUBLISH (Keep in main to handle secrets easily) ---
+    # --- 5. PUBLISH (Save history.jsonl to branch) ---
     - name: Save History to Branch
       if: always()
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: allure-history
-        publish_dir: allure-report/history
-        destination_dir: history
-        keep_files: true
+        publish_dir: tests/reports
+        # Only include history.jsonl file
+        include: history.jsonl
+        keep_files: false
 
     - name: Upload Single File Report
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: allure-report
-        path: allure-report/complete.html
+        path: tests/reports/allure-report/complete.html
         retention-days: 15
 
     - name: Upload Karate Reports
@@ -75,6 +75,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: karate-reports
-        # The specific folder where Karate generates HTML reports
         path: tests/api_karate/target/karate-reports/
         retention-days: 15
