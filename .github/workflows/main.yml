@@ -64,7 +64,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: allure-report-single-file
+        name: allure-report
         path: tests/reports/allure-report/index.html
         retention-days: 15
 
