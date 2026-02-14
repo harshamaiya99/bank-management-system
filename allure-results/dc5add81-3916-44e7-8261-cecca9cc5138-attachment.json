@@ -1,0 +1,28 @@
+{
+  "status_code": 200,
+  "headers": {
+    "date": "Sat, 14 Feb 2026 12:07:22 GMT",
+    "server": "uvicorn",
+    "content-length": "405",
+    "content-type": "application/json",
+    "x-request-id": "2b9e8287-b5c3-4eff-bea6-3a757a4af72e",
+    "x-process-id": "0619a99d-7ba1-4bab-bf7b-2943efff665b"
+  },
+  "body": {
+    "account_id": "2703807",
+    "account_holder_name": "Sara Khan",
+    "dob": "1996-05-28",
+    "gender": "Female",
+    "email": "sara.khan@example.com",
+    "phone": "+91-9988776655",
+    "address": "101 Jubilee Hills, Hyderabad, TS",
+    "zip_code": "500033",
+    "account_type": "Savings",
+    "balance": 50000.0,
+    "date_opened": "2026-02-14",
+    "status": "Active",
+    "services": "Cheque Book,Debit Card,Internet Banking",
+    "marketing_opt_in": true,
+    "agreed_to_terms": true
+  }
+}
