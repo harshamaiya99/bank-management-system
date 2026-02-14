@@ -28,7 +28,7 @@ runs:
     - name: Install Allure CLI (Latest version 3.x)
       shell: bash
       run: |
-        npm install -g allure-commandline@latest
+        npm install -g allure
         allure --version
         echo "Allure CLI installed"
 
