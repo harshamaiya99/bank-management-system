@@ -43,7 +43,7 @@ runs:
         }
         EOF
 
-    - name: Generate Allure Report (Allure 3 with History)
+    - name: Generate Allure Report (Allure 3 with single file)
       if: always()
       shell: bash
       run: |
@@ -53,30 +53,20 @@ runs:
         # Check if history file exists
         if [ -f "tests/reports/history.jsonl" ]; then
           echo "Found history file with $(wc -l < tests/reports/history.jsonl) run(s)"
-          # Generate with history
+          # Generate with history and single-file option
           allure generate tests/reports/allure-results \
             --output tests/reports/allure-report \
             --report-name "Bank Management Test Report" \
             --history-path tests/reports/history.jsonl \
-            --history-limit 20
+            --history-limit 20 \
+            --single-file
         else
           echo "No history file found, generating first report"
-          # Generate without history (first run)
+          # Generate without history (first run) with single-file option
           allure generate tests/reports/allure-results \
             --output tests/reports/allure-report \
-            --report-name "Bank Management Test Report"
+            --report-name "Bank Management Test Report" \
+            --single-file
         fi
         
-        echo "Allure report generated successfully"
-
-    - name: Combine into Single HTML
-      if: always()
-      shell: bash
-      run: |
-        if [ -d "tests/reports/allure-report" ]; then
-          allure-combine tests/reports/allure-report
-          echo "Report combined into single HTML file"
-        else
-          echo "Report directory not found, skipping combine step"
-          exit 1
-        fi
+        echo "Allure 3 report generated successfully with native single-file support"
