@@ -1,0 +1,8 @@
+"BROKEN","EPIC","FAILED","FEATURE","PASSED","SKIPPED","STORY","UNKNOWN"
+"0","Web UI Test - Selenium","0","End-to-End test flow","5","0","","0"
+"0","API Test - Karate","0","Smoke Tests","1","0","","0"
+"0","API Test - Pytest","0","Negative Scenarios","9","0","","0"
+"0","Web UI Test - Playwright","0","End-to-End test flow","5","0","","0"
+"0","API Test - Pytest","0","End-to-End test flow","6","0","","0"
+"0","API Test - Karate","0","Regression Tests","1","0","","0"
+"0","API Test - Karate","0","SIT Tests","1","0","","0"
