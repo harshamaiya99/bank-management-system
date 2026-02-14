@@ -1,7 +1,0 @@
-Expected (String):
-Toast title: Account Deleted
-Toast Description: Account 7626622 has been permanently removed.
-
-Actual:
-Toast title: Account Deleted
-Toast Description: Account 7626622 has been permanently removed.
