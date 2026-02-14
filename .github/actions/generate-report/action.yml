@@ -46,5 +46,5 @@ runs:
       shell: bash
       run: |
         rm -rf tests/reports/allure-report
-        npx allure generate tests/reports/allure-results --config allurerc.json
+        allure generate tests/reports/allure-results --config allurerc.json
         echo "Report generated"
