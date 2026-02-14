@@ -1,0 +1,17 @@
+{
+  "account_holder_name": "David Brown Jr",
+  "account_id": "7042892",
+  "account_type": "Current",
+  "address": "700 Oak St, Dallas, TX",
+  "agreed_to_terms": true,
+  "balance": 118000.0,
+  "date_opened": "2026-02-14",
+  "dob": "1979-12-05",
+  "email": "david.brownjr@example.com",
+  "gender": "Male",
+  "marketing_opt_in": false,
+  "phone": "+1-555-0303",
+  "services": "Internet Banking,Cheque Book",
+  "status": "Active",
+  "zip_code": "75202"
+}
