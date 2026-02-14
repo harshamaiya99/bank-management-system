@@ -1,0 +1,11 @@
+{
+  "method": "DELETE",
+  "url": "http://127.0.0.1:9000/accounts/6672174",
+  "headers": {
+    "content-type": "application/json",
+    "accept": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW5hZ2VyIiwicm9sZSI6Im1hbmFnZXIiLCJleHAiOjE3NzEwODE4MTF9.dhjhGIVd-NOPR3emT7isZsFaNBjbrpFT8nbCooTD1rk",
+    "X-Process-Id": "03f634d8-2ce8-4dde-839f-f33d976cbaf6"
+  },
+  "payload": null
+}
