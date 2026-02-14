@@ -1,0 +1,15 @@
+{
+  "account_holder_name": "Ravi K.",
+  "account_id": "1834428",
+  "account_type": "Savings",
+  "address": "22 Brigade Rd, Bengaluru, KA",
+  "balance": "175000.00",
+  "dob": "1992-11-02",
+  "email": "ravi.k@example.com",
+  "gender": "Male",
+  "marketing_opt_in": "false",
+  "phone": "+91-9876543210",
+  "services": "Cheque Book,Internet Banking",
+  "status": "Inactive",
+  "zip_code": "560025"
+}
