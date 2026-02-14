@@ -43,13 +43,34 @@ runs:
         }
         EOF
 
+    - name: Create Allure Config
+      if: always()
+      shell: bash
+      run: |
+        # Create config file for Allure 3
+        cat > allure.config.json << EOF
+        {
+          "name": "Bank Management Test Report",
+          "output": "./tests/reports/allure-report",
+          "historyPath": "./tests/reports/history.jsonl",
+          "historyLimit": 20
+        }
+        EOF
+
+    - name: Clean Old Report
+      if: always()
+      shell: bash
+      run: |
+        # Remove old report directory if it exists
+        rm -rf tests/reports/allure-report
+        echo "Old report cleaned"
+
     - name: Generate Allure Report (Allure 3)
       if: always()
       shell: bash
       run: |
-        # Generate report using config file (with historyPath)
+        # Generate report using config file
         allure generate tests/reports/allure-results --config allure.config.json
-        
         echo "Allure report generated successfully"
 
     - name: Combine into Single HTML
