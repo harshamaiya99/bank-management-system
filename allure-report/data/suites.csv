@@ -1,0 +1,71 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"
+    Test negative scenarios like Missing Fields.
+    Uses 'accounts_api_manager' to authenticate, proving that even valid users
+    cannot send invalid data (422 Unprocessable Entity).
+    ","3","test_account_negative_scenarios[Sara Khan3]","tests.api_pytest","2026-02-14","passed","2026-02-14","","test_accounts_api_negative","",""
+"","23","test_account_crud_flow[John Doe]","tests.api_pytest","2026-02-14","passed","2026-02-14","","test_accounts_api","",""
+"
+    Triggers only @sit scenarios in Karate
+    ","6451","test_karate_sit","tests.api_karate","2026-02-14","passed","2026-02-14","","test_karate_runner","",""
+"
+    Test negative scenarios like Missing Fields.
+    Uses 'accounts_api_manager' to authenticate, proving that even valid users
+    cannot send invalid data (422 Unprocessable Entity).
+    ","4","test_account_negative_scenarios[Sara Khan0]","tests.api_pytest","2026-02-14","passed","2026-02-14","","test_accounts_api_negative","",""
+"","21","test_account_crud_flow[Sara Khan]","tests.api_pytest","2026-02-14","passed","2026-02-14","","test_accounts_api","",""
+"","22","test_account_crud_flow[David Brown]","tests.api_pytest","2026-02-14","passed","2026-02-14","","test_accounts_api","",""
+"
+    Test negative scenarios like Missing Fields.
+    Uses 'accounts_api_manager' to authenticate, proving that even valid users
+    cannot send invalid data (422 Unprocessable Entity).
+    ","3","test_account_negative_scenarios[David Brown]","tests.api_pytest","2026-02-14","passed","2026-02-14","","test_accounts_api_negative","",""
+"","14128","test_end_to_end_crud[David Brown]","tests.web_selenium","2026-02-14","passed","2026-02-14","","test_e2e_flow","",""
+"
+    Test negative scenarios like Missing Fields.
+    Uses 'accounts_api_manager' to authenticate, proving that even valid users
+    cannot send invalid data (422 Unprocessable Entity).
+    ","3","test_account_negative_scenarios[Meera Iyer]","tests.api_pytest","2026-02-14","passed","2026-02-14","","test_accounts_api_negative","",""
+"
+    Triggers only @regression scenarios in Karate
+    ","6890","test_karate_regression","tests.api_karate","2026-02-14","passed","2026-02-14","","test_karate_runner","",""
+"","22","test_account_crud_flow[Alice Smith]","tests.api_pytest","2026-02-14","passed","2026-02-14","","test_accounts_api","",""
+"","14116","test_end_to_end_crud[Ravi Kumar]","tests.web_selenium","2026-02-14","passed","2026-02-14","","test_e2e_flow","",""
+"
+    Test negative scenarios like Missing Fields.
+    Uses 'accounts_api_manager' to authenticate, proving that even valid users
+    cannot send invalid data (422 Unprocessable Entity).
+    ","3","test_account_negative_scenarios[Sara Khan1]","tests.api_pytest","2026-02-14","passed","2026-02-14","","test_accounts_api_negative","",""
+"","4976","test_end_to_end_crud[chromium-Alice Smith]","tests.web_playwright","2026-02-14","passed","2026-02-14","","test_e2e_flow","",""
+"","24","test_account_crud_flow[Ravi Kumar]","tests.api_pytest","2026-02-14","passed","2026-02-14","","test_accounts_api","",""
+"","14916","test_end_to_end_crud[Meera Iyer]","tests.web_selenium","2026-02-14","passed","2026-02-14","","test_e2e_flow","",""
+"
+    Test negative scenarios like Missing Fields.
+    Uses 'accounts_api_manager' to authenticate, proving that even valid users
+    cannot send invalid data (422 Unprocessable Entity).
+    ","3","test_account_negative_scenarios[Sara Khan2]","tests.api_pytest","2026-02-14","passed","2026-02-14","","test_accounts_api_negative","",""
+"
+    Test negative scenarios like Missing Fields.
+    Uses 'accounts_api_manager' to authenticate, proving that even valid users
+    cannot send invalid data (422 Unprocessable Entity).
+    ","3","test_account_negative_scenarios[]","tests.api_pytest","2026-02-14","passed","2026-02-14","","test_accounts_api_negative","",""
+"","15656","test_end_to_end_crud[John Doe]","tests.web_selenium","2026-02-14","passed","2026-02-14","","test_e2e_flow","",""
+"
+    Test negative scenarios like Missing Fields.
+    Uses 'accounts_api_manager' to authenticate, proving that even valid users
+    cannot send invalid data (422 Unprocessable Entity).
+    ","3","test_account_negative_scenarios[Ravi Kumar]","tests.api_pytest","2026-02-14","passed","2026-02-14","","test_accounts_api_negative","",""
+"","4949","test_end_to_end_crud[chromium-Ravi Kumar]","tests.web_playwright","2026-02-14","passed","2026-02-14","","test_e2e_flow","",""
+"
+    Triggers only @smoke scenarios in Karate
+    ","8645","test_karate_smoke","tests.api_karate","2026-02-14","passed","2026-02-14","","test_karate_runner","",""
+"","6164","test_end_to_end_crud[chromium-John Doe]","tests.web_playwright","2026-02-14","passed","2026-02-14","","test_e2e_flow","",""
+"
+    Test negative scenarios like Missing Fields.
+    Uses 'accounts_api_manager' to authenticate, proving that even valid users
+    cannot send invalid data (422 Unprocessable Entity).
+    ","3","test_account_negative_scenarios[Alice Smith]","tests.api_pytest","2026-02-14","passed","2026-02-14","","test_accounts_api_negative","",""
+"","14225","test_end_to_end_crud[Alice Smith]","tests.web_selenium","2026-02-14","passed","2026-02-14","","test_e2e_flow","",""
+"","23","test_account_crud_flow[Meera Iyer]","tests.api_pytest","2026-02-14","passed","2026-02-14","","test_accounts_api","",""
+"","4537","test_end_to_end_crud[chromium-Meera Iyer]","tests.web_playwright","2026-02-14","passed","2026-02-14","","test_e2e_flow","",""
+"","4754","test_end_to_end_crud[chromium-David Brown]","tests.web_playwright","2026-02-14","passed","2026-02-14","","test_e2e_flow","",""
