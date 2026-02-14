@@ -22,7 +22,8 @@ class HomePage:
 
     @allure.step("Navigate to Dashboard Page")
     def navigate_to_dashboard(self):
-        self.page.goto(self.URL)
+        self.page.get_by_test_id("back-button").click()
+        # self.page.goto(self.URL)
 
     @allure.step("Provide Search Input and Click on Search Button")
     def search_account(self, account_id):

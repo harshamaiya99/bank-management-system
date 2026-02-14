@@ -70,7 +70,7 @@ export default function CreateAccountPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-20">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" onClick={() => navigate("/dashboard")}>
+        <Button data-testid="back-button" variant="outline" size="icon" onClick={() => navigate("/dashboard")}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>

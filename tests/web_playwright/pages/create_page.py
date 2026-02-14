@@ -26,6 +26,9 @@ class CreatePage:
     # 'div:nth-child(2)' -> The Description
     TOAST_DESC = "ol li .grid > div:nth-child(2)"
 
+    # Close button has the 'toast-close' attribute
+    TOAST_CLOSE_BTN = "ol li [toast-close]"
+
     # --- Actions ---
 
     @allure.step("Enter account holder name")
@@ -95,6 +98,10 @@ class CreatePage:
         self.page.locator(self.TOAST_TITLE).wait_for(state="visible")
         toast_text = self.page.locator(self.TOAST_TITLE).text_content()
         toast_desc = self.page.locator(self.TOAST_DESC).text_content()
+
+        # Hover over the toast to ensure the close button (which might be opacity-0) is interactable
+        self.page.locator("ol li").first.hover()
+        self.page.locator(self.TOAST_CLOSE_BTN).click()
 
         # 2. Wait for URL Redirection to Account Details
         self.page.wait_for_url(re.compile(r".*/account-details/\d+"))
