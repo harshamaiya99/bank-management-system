@@ -58,8 +58,6 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: allure-history
         publish_dir: tests/reports
-        # Only include history.jsonl file
-        include: history.jsonl
         keep_files: false
 
     - name: Upload Allure Report
