@@ -60,12 +60,12 @@ jobs:
         publish_dir: tests/reports
         keep_files: false
 
-    - name: Upload Allure Report
+    - name: Upload Single File Report
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: allure-report
-        path: tests/reports/allure-report/
+        name: allure-report-single-file
+        path: tests/reports/allure-report/index.html
         retention-days: 15
 
     - name: Upload Karate Reports

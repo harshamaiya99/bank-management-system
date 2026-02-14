@@ -14,7 +14,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Create Config
+    - name: Create Config with Single File Option
       if: always()
       shell: bash
       run: |
@@ -23,7 +23,15 @@ runs:
           "name": "Bank Management Test Report",
           "output": "./tests/reports/allure-report",
           "historyPath": "./tests/reports/history.jsonl",
-          "historyLimit": 20
+          "historyLimit": 20,
+          "plugins": {
+            "awesome": {
+              "options": {
+                "singleFile": true,
+                "reportLanguage": "en"
+              }
+            }
+          }
         }
         EOF
 
@@ -47,4 +55,4 @@ runs:
       run: |
         rm -rf tests/reports/allure-report
         allure generate tests/reports/allure-results --config allurerc.json
-        echo "Report generated"
+        echo "Single-file Allure 3 report generated"
