@@ -1,5 +1,5 @@
 name: "Restore Allure History"
-description: "Fetches history from the orphan branch"
+description: "Fetches history.jsonl from the orphan branch"
 runs:
   using: "composite"
   steps:
@@ -10,13 +10,16 @@ runs:
         ref: allure-history
         path: allure-history-branch
 
-    - name: Restore History
+    - name: Restore History JSONL
       shell: bash
       run: |
-        mkdir -p allure-results/history
-        if [ -d "allure-history-branch/history" ]; then
-          cp -R allure-history-branch/history/* allure-results/history/
+        mkdir -p tests/reports
+        if [ -f "allure-history-branch/history.jsonl" ]; then
+          cp allure-history-branch/history.jsonl tests/reports/history.jsonl
           echo "History restored successfully."
+          # Count lines to show how many runs are in history
+          lines=$(wc -l < tests/reports/history.jsonl)
+          echo "History contains $lines run(s)"
         else
           echo "No history found (first run?), skipping restoration."
         fi
