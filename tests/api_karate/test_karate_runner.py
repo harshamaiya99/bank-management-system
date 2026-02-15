@@ -34,12 +34,12 @@ def run_karate_with_tags(tags):
 
 # Behavior-based Hierarchy
 @allure.epic("Bank Management System")
-@allure.feature("Accounts API - Karate")
+@allure.feature("API Testing - Karate")
 @allure.story("End-to-End CRUD - smoke tests")
 
 # Suite-based Hierarchy
 @allure.parent_suite("Bank Management System")
-@allure.suite("Accounts API - Karate")
+@allure.suite("API Testing - Karate")
 @allure.sub_suite("End-to-End CRUD - smoke tests")
 @pytest.mark.smoke
 def test_karate_smoke():
@@ -52,12 +52,12 @@ def test_karate_smoke():
 
 # Behavior-based Hierarchy
 @allure.epic("Bank Management System")
-@allure.feature("Accounts API - Karate")
+@allure.feature("API Testing - Karate")
 @allure.story("End-to-End CRUD - regression tests")
 
 # Suite-based Hierarchy
 @allure.parent_suite("Bank Management System")
-@allure.suite("Accounts API - Karate")
+@allure.suite("API Testing - Karate")
 @allure.sub_suite("End-to-End CRUD - regression tests")
 @pytest.mark.regression
 def test_karate_regression():
@@ -69,12 +69,12 @@ def test_karate_regression():
 
 # Behavior-based Hierarchy
 @allure.epic("Bank Management System")
-@allure.feature("Accounts API - Karate")
+@allure.feature("API Testing - Karate")
 @allure.story("End-to-End CRUD - sit tests")
 
 # Suite-based Hierarchy
 @allure.parent_suite("Bank Management System")
-@allure.suite("Accounts API - Karate")
+@allure.suite("API Testing - Karate")
 @allure.sub_suite("End-to-End CRUD - sit tests")
 @pytest.mark.sit
 def test_karate_sit():

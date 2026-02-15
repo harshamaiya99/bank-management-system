@@ -28,7 +28,8 @@ runs:
             "awesome": {
               "options": {
                 "singleFile": true,
-                "reportLanguage": "en"
+                "reportLanguage": "en",
+                "groupBy": ["parentSuite", "suite", "subSuite"]
               }
             }
           }

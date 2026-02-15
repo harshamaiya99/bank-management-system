@@ -11,12 +11,12 @@ test_data = get_data_with_markers(TEST_DATA_FILE)
 
 # Behavior-based Hierarchy
 @allure.epic("Bank Management System")
-@allure.feature("UI Testing - Playwright")
+@allure.feature("UI Testing - Selenium")
 @allure.story("End-to-End CRUD")
 
 # Suite-based Hierarchy
 @allure.parent_suite("Bank Management System")
-@allure.suite("UI Testing - Playwright")
+@allure.suite("UI Testing - Selenium")
 @allure.sub_suite("End-to-End CRUD")
 @pytest.mark.parametrize("row", test_data)
 def test_end_to_end_crud(driver, login_page, home_page, create_page, details_page, row):

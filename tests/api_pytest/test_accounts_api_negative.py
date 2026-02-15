@@ -12,12 +12,12 @@ test_data = get_data_with_markers(TEST_DATA_FILE)
 
 # Behavior-based Hierarchy
 @allure.epic("Bank Management System")
-@allure.feature("Accounts API")
+@allure.feature("API Testing - Pytest")
 @allure.story("Negative Scenarios")
 
 # Suite-based Hierarchy
 @allure.parent_suite("Bank Management System")
-@allure.suite("Accounts API")
+@allure.suite("API Testing - Pytest")
 @allure.sub_suite("Negative Scenarios")
 
 @pytest.mark.parametrize("row", test_data)
