@@ -23,7 +23,7 @@ test_data = get_data_with_markers(TEST_DATA_FILE)
 
 @pytest.mark.parametrize("row", test_data)
 def test_account_crud_flow(accounts_api_manager, row):
-    allure.dynamic.title(f"{row["tc_no"]} {row["tc_name"]}")
+    allure.dynamic.title(f"{row['tc_no']} {row['tc_name']}")
 
     with allure.step("Create account (POST)"):
         create_response = accounts_api_manager.create_account(row)

@@ -22,7 +22,7 @@ test_data = get_data_with_markers(TEST_DATA_FILE)
 
 @pytest.mark.parametrize("row", test_data)
 def test_account_negative_scenarios(accounts_api_manager, row):
-    allure.dynamic.title(f"{row["tc_no"]} {row["tc_name"]}")
+    allure.dynamic.title(f"{row['tc_no']} {row['tc_name']}")
     """
     Test negative scenarios like Missing Fields.
     Uses 'accounts_api_manager' to authenticate, proving that even valid users
