@@ -11,9 +11,9 @@ test_data = get_data_with_markers(TEST_DATA_FILE)
 
 
 # Behavior-based Hierarchy
-# @allure.epic("Bank Management System")
-# @allure.feature("Accounts API")
-# @allure.story("Negative Scenarios")
+@allure.epic("Bank Management System")
+@allure.feature("Accounts API")
+@allure.story("Negative Scenarios")
 
 # Suite-based Hierarchy
 @allure.parent_suite("Bank Management System")

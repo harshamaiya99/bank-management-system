@@ -12,9 +12,9 @@ TEST_DATA_FILE = os.path.join(os.path.dirname(__file__), "data", "accounts.csv")
 test_data = get_data_with_markers(TEST_DATA_FILE)
 
 # Behavior-based Hierarchy
-# @allure.epic("Bank Management System")
-# @allure.feature("Accounts API")
-# @allure.story("End-to-End CRUD")
+@allure.epic("Bank Management System")
+@allure.feature("Accounts API")
+@allure.story("End-to-End CRUD")
 
 # Suite-based Hierarchy
 @allure.parent_suite("Bank Management System")
