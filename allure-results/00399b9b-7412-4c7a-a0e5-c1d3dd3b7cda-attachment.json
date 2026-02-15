@@ -1,0 +1,25 @@
+{
+  "method": "PUT",
+  "url": "http://127.0.0.1:9000/accounts/8118636",
+  "headers": {
+    "content-type": "application/json",
+    "accept": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW5hZ2VyIiwicm9sZSI6Im1hbmFnZXIiLCJleHAiOjE3NzExNTc5MTh9.MXft-w8EwamYbGz0kUM64ldT3_bcHtpZtMxQCxuIL0g",
+    "X-Process-Id": "b9e1efb5-371f-42d0-a2af-89952059192c"
+  },
+  "payload": {
+    "account_holder_name": "Ravi K.",
+    "dob": "1992-11-02",
+    "gender": "Male",
+    "email": "ravi.k@example.com",
+    "phone": "+91-9876543210",
+    "address": "22 Brigade Rd, Bengaluru, KA",
+    "zip_code": "560025",
+    "account_type": "Savings",
+    "balance": 175000.0,
+    "status": "Active",
+    "services": "Cheque Book,Internet Banking",
+    "marketing_opt_in": false,
+    "agreed_to_terms": true
+  }
+}

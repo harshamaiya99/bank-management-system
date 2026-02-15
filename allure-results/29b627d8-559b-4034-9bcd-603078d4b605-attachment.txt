@@ -1,0 +1,60 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.learning:bank-api-tests >---------------------
+[INFO] Building bank-api-tests 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ bank-api-tests ---
+[INFO] skip non existing resourceDirectory /home/runner/work/bank-management-system/bank-management-system/tests/api_karate/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ bank-api-tests ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ bank-api-tests ---
+[INFO] Copying 4 resources from src/test/java to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ bank-api-tests ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 1 source file with javac [debug target 1.8] to target/test-classes
+[WARNING] bootstrap class path not set in conjunction with -source 8
+[INFO] 
+[INFO] --- surefire:2.22.2:test (default-test) @ bank-api-tests ---
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running examples.AccountsTest
+11:48:22.478 [main] INFO  com.intuit.karate.Runner - using system property 'karate.options': --tags @smoke
+11:48:23.484 [main] INFO  com.intuit.karate - >> lock acquired, begin callSingle: classpath:examples/auth.feature
+11:48:24.519 [main] INFO  com.intuit.karate - << lock released, cached callSingle: classpath:examples/auth.feature
+11:48:24.562 [main] INFO  com.intuit.karate - [print] Created Account ID: 9106261 
+11:48:24.651 [main] INFO  com.intuit.karate - [print] Created Account ID: 1662742 
+---------------------------------------------------------
+feature: classpath:examples/accounts.feature
+scenarios:  2 | passed:  2 | failed:  0 | time: 0.1408
+---------------------------------------------------------
+
+Karate version: 1.4.1
+======================================================
+elapsed:   3.11 | threads:    1 | thread time: 0.14 
+features:     1 | skipped:    0 | efficiency: 0.05
+scenarios:    2 | passed:     2 | failed: 0
+======================================================
+
+HTML report: (paste into browser to view) | Karate version: 1.4.1
+file:///home/runner/work/bank-management-system/bank-management-system/tests/api_karate/target/karate-reports/karate-summary.html
+===================================================================
+
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.12 s - in examples.AccountsTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  7.378 s
+[INFO] Finished at: 2026-02-15T11:48:26Z
+[INFO] ------------------------------------------------------------------------

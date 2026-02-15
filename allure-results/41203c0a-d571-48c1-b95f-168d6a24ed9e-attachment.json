@@ -1,0 +1,28 @@
+{
+  "status_code": 200,
+  "headers": {
+    "date": "Sun, 15 Feb 2026 11:48:38 GMT",
+    "server": "uvicorn",
+    "content-length": "378",
+    "content-type": "application/json",
+    "x-request-id": "2bde35d9-9878-4470-8ada-c5a0355cceb5",
+    "x-process-id": "b1905896-50f9-42f0-9b94-5947a80f27e3"
+  },
+  "body": {
+    "account_id": "5117368",
+    "account_holder_name": "John Doe",
+    "dob": "1999-08-10",
+    "gender": "Male",
+    "email": "john.doe@example.com",
+    "phone": "+1-555-0199",
+    "address": "123 Main St, New York, NY",
+    "zip_code": "576225",
+    "account_type": "Savings",
+    "balance": 1000.5,
+    "date_opened": "2026-02-15",
+    "status": "Active",
+    "services": "Internet Banking,Debit Card",
+    "marketing_opt_in": true,
+    "agreed_to_terms": true
+  }
+}

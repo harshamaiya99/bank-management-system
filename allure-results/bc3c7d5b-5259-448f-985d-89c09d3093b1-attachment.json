@@ -1,0 +1,15 @@
+{
+  "account_holder_name": "Alice Johnson",
+  "account_id": "1224243",
+  "account_type": "Current",
+  "address": "90 Lake View Rd, Chicago, IL",
+  "balance": "27000.00",
+  "dob": "1988-03-15",
+  "email": "alice.johnson@example.com",
+  "gender": "Female",
+  "marketing_opt_in": "true",
+  "phone": "+1-555-0201",
+  "services": "Internet Banking,Cheque Book",
+  "status": "Closed",
+  "zip_code": "60618"
+}
