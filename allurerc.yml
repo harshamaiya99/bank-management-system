@@ -2,7 +2,7 @@
 name: Bank Management System - Test Report
 output: tests/reports/allure-report
 
-# History Configuration (matches your allure.config.json)
+# History Configuration
 historyPath: tests/reports/history.jsonl
 historyLimit: 20
 
@@ -12,7 +12,6 @@ plugins:
     options:
       reportName: "Bank Management System Automation Report"
       reportLanguage: "en"
-#      singleFile: true   # Creates one index.html (easy to share)
 
 #     Grouping: Matches the decorators used in test_accounts_api.py
 #     use @allure.parentSuite, @allure.suite, @allure.subSuite
