@@ -1,0 +1,17 @@
+{
+  "account_holder_name": "Alice Smith",
+  "account_id": "5168534",
+  "account_type": "Current",
+  "address": "78 Park Lane, Chicago, IL",
+  "agreed_to_terms": true,
+  "balance": 25000.75,
+  "date_opened": "2026-02-15",
+  "dob": "1988-03-15",
+  "email": "alice.smith@example.com",
+  "gender": "Female",
+  "marketing_opt_in": false,
+  "phone": "+1-555-0201",
+  "services": "Internet Banking,SMS Alerts",
+  "status": "Active",
+  "zip_code": "60616"
+}
