@@ -14,28 +14,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Create Config with Single File Option
-      if: always()
-      shell: bash
-      run: |
-        cat > allurerc.json << 'EOF'
-        {
-          "name": "Bank Management System - Test Report",
-          "output": "./tests/reports/allure-report",
-          "historyPath": "./tests/reports/history.jsonl",
-          "historyLimit": 20,
-          "plugins": {
-            "awesome": {
-              "options": {
-                "singleFile": true,
-                "reportLanguage": "en",
-                "groupBy": ["parentSuite", "suite", "subSuite"]
-              }
-            }
-          }
-        }
-        EOF
-
     - name: Add Metadata
       if: always()
       shell: bash
@@ -50,10 +28,21 @@ runs:
         Commit=${GITHUB_SHA:0:7}
         EOF
 
+    # 2. Generate Report (Modified)
     - name: Generate Report
       if: always()
       shell: bash
       run: |
         rm -rf tests/reports/allure-report
-        allure generate tests/reports/allure-results --config allurerc.json
-        echo "Single-file Allure 3 report generated"
+        
+        # --- TRICK: Inject 'singleFile: true' just for this CI run ---
+        # This finds "options:" and adds "singleFile: true" on the next line
+        sed -i 's/options:/options:\n      singleFile: true/' allurerc.yml
+        
+        # Verify the injection (for debugging)
+        # grep -A 2 "options:" allurerc.yml
+
+        # Generate using the now-modified config
+        allure generate tests/reports/allure-results --config allurerc.yml
+        
+        echo "Single-file Allure 3 report generated using modified allurerc.yml"
