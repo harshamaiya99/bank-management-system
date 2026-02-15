@@ -71,7 +71,6 @@ def pytest_sessionfinish(session, exitstatus):
     project_root = os.getcwd()
     results_dir = os.path.join(project_root, "tests", "reports", "allure-results")
     report_dir = os.path.join(project_root, "tests", "reports", "allure-report")
-    config_file = os.path.join(project_root, "allurerc.yml")
 
     allure_cmd = shutil.which("allure")
     if not allure_cmd:
@@ -88,18 +87,8 @@ def pytest_sessionfinish(session, exitstatus):
     # Generate report
     # ------------------------------------------------
     try:
-        subprocess.run(
-            [
-                allure_cmd,
-                "generate",
-                results_dir,
-                "--config",
-                config_file,
-                "--history-limit",
-                "20"
-            ],
-            check=True
-        )
+        command = f"allure generate {results_dir} --config allurerc.yml"
+        subprocess.run(command, shell=True, check=True)
 
         print("\n\n[Allure] Report generated successfully.")
         report_index = os.path.join(report_dir, "index.html")
