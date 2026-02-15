@@ -1,5 +1,5 @@
 {
-  "name": "Bank Management Test Report",
+  "name": "Bank Management System - Test Report",
   "output": "./tests/reports/allure-report",
   "historyPath": "./tests/reports/history.jsonl",
   "historyLimit": 10

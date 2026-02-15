@@ -11,10 +11,19 @@ TEST_DATA_FILE = os.path.join(os.path.dirname(__file__), "data", "accounts.csv")
 # Load the processed data
 test_data = get_data_with_markers(TEST_DATA_FILE)
 
-@allure.epic("API Test - Pytest")
-@allure.feature("End-to-End test flow")
-@pytest.mark.parametrize("row", test_data, ids=lambda r: r["account_holder_name"])
+# Behavior-based Hierarchy
+# @allure.epic("Bank Management System")
+# @allure.feature("Accounts API")
+# @allure.story("End-to-End CRUD")
+
+# Suite-based Hierarchy
+@allure.parent_suite("Bank Management System")
+@allure.suite("Accounts API")
+@allure.sub_suite("End-to-End CRUD")
+
+@pytest.mark.parametrize("row", test_data)
 def test_account_crud_flow(accounts_api_manager, row):
+    allure.dynamic.title(f"{row['tc_no']} {row['tc_name']}")
 
     with allure.step("Create account (POST)"):
         create_response = accounts_api_manager.create_account(row)

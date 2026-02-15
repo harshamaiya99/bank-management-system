@@ -31,7 +31,7 @@ def setup_allure_environment():
 
         # Configurable from environment variables
         "Test.Environment": os.getenv("TEST_ENV", "DEV"),
-        "Base.URL": os.getenv("BASE_URL", "http://localhost:8000"),
+        "Base.URL": os.getenv("BASE_URL", "http://localhost:9000"),
         "Browser": os.getenv("BROWSER", "Chrome"),
         "Database": os.getenv("DATABASE", "SQLite3"),
         "App.Version": os.getenv("APP_VERSION", "3.0.0"),

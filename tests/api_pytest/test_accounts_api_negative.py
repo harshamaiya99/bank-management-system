@@ -10,10 +10,19 @@ TEST_DATA_FILE = os.path.join(os.path.dirname(__file__), "data", "accounts_negat
 test_data = get_data_with_markers(TEST_DATA_FILE)
 
 
-@allure.epic("API Test - Pytest")
-@allure.feature("Negative Scenarios")
-@pytest.mark.parametrize("row", test_data, ids=lambda r: r["scenario"])
+# Behavior-based Hierarchy
+# @allure.epic("Bank Management System")
+# @allure.feature("Accounts API")
+# @allure.story("Negative Scenarios")
+
+# Suite-based Hierarchy
+@allure.parent_suite("Bank Management System")
+@allure.suite("Accounts API")
+@allure.sub_suite("Negative Scenarios")
+
+@pytest.mark.parametrize("row", test_data)
 def test_account_negative_scenarios(accounts_api_manager, row):
+    allure.dynamic.title(f"{row['tc_no']} {row['tc_name']}")
     """
     Test negative scenarios like Missing Fields.
     Uses 'accounts_api_manager' to authenticate, proving that even valid users
