@@ -1,0 +1,25 @@
+{
+  "method": "POST",
+  "url": "http://127.0.0.1:9000/accounts",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW5hZ2VyIiwicm9sZSI6Im1hbmFnZXIiLCJleHAiOjE3NzExNjQ0ODd9.nl3KQ1y5QY--9-p1ivX4w77M1ATshrwEPBtXzsZDK74",
+    "Idempotency-Id": "34c90448-13f9-4cae-9a7e-cd9429f5f2dd",
+    "X-Process-Id": "a95d99cf-8c21-4cdc-88fe-98b6acb27912"
+  },
+  "payload": {
+    "balance": 42000.0,
+    "status": "Active",
+    "agreed_to_terms": true,
+    "account_holder_name": "Sara Khan",
+    "dob": "28-05-1996",
+    "gender": "Female",
+    "email": "sara.khan@example.com",
+    "phone": "-9988776564",
+    "address": "101 Jubilee Hills, Hyderabad, TS",
+    "zip_code": "500033",
+    "services": "Cheque Book,Debit Card",
+    "marketing_opt_in": true
+  }
+}
