@@ -1,0 +1,28 @@
+{
+  "status_code": 200,
+  "headers": {
+    "date": "Sun, 15 Feb 2026 06:11:46 GMT",
+    "server": "uvicorn",
+    "content-length": "388",
+    "content-type": "application/json",
+    "x-request-id": "9cd76af5-57c5-4aef-b294-912f29edc8b5",
+    "x-process-id": "38aaea92-f529-4f2a-94c5-6e00f242f62b"
+  },
+  "body": {
+    "account_id": "7065120",
+    "account_holder_name": "Alice Smith",
+    "dob": "1988-03-15",
+    "gender": "Female",
+    "email": "alice.smith@example.com",
+    "phone": "+1-555-0201",
+    "address": "78 Park Lane, Chicago, IL",
+    "zip_code": "60616",
+    "account_type": "Current",
+    "balance": 25000.75,
+    "date_opened": "2026-02-15",
+    "status": "Active",
+    "services": "Internet Banking,SMS Alerts",
+    "marketing_opt_in": false,
+    "agreed_to_terms": true
+  }
+}
