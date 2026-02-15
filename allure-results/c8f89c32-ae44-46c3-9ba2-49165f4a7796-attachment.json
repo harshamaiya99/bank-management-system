@@ -1,0 +1,14 @@
+{
+  "status_code": 200,
+  "headers": {
+    "date": "Sun, 15 Feb 2026 10:14:50 GMT",
+    "server": "uvicorn",
+    "content-length": "42",
+    "content-type": "application/json",
+    "x-request-id": "57606183-90a7-49fd-9f28-8d443bd96a5a",
+    "x-process-id": "05dec6b3-329b-40fe-a9e8-de815ff62645"
+  },
+  "body": {
+    "message": "Account updated successfully"
+  }
+}
