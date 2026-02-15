@@ -32,30 +32,53 @@ def run_karate_with_tags(tags):
         allure.attach(result.stderr, name="Karate Errors", attachment_type=allure.attachment_type.TEXT)
         pytest.fail(f"Karate tests failed for tags: {tags}")
 
+# Behavior-based Hierarchy
+@allure.epic("Bank Management System")
+@allure.feature("Accounts API - Karate")
+@allure.story("End-to-End CRUD - smoke tests")
 
-@allure.epic("API Test - Karate")
-@allure.feature("Smoke Tests")
+# Suite-based Hierarchy
+@allure.parent_suite("Bank Management System")
+@allure.suite("Accounts API - Karate")
+@allure.sub_suite("End-to-End CRUD - smoke tests")
 @pytest.mark.smoke
 def test_karate_smoke():
+    allure.title("e2e API testing using Karate BDD for accounts/ API - CRUD")
     """
     Triggers only @smoke scenarios in Karate
     """
     run_karate_with_tags("@smoke")
 
 
-@allure.epic("API Test - Karate")
-@allure.feature("Regression Tests")
+# Behavior-based Hierarchy
+@allure.epic("Bank Management System")
+@allure.feature("Accounts API - Karate")
+@allure.story("End-to-End CRUD - regression tests")
+
+# Suite-based Hierarchy
+@allure.parent_suite("Bank Management System")
+@allure.suite("Accounts API - Karate")
+@allure.sub_suite("End-to-End CRUD - regression tests")
 @pytest.mark.regression
 def test_karate_regression():
+    allure.title("e2e API testing using Karate BDD for accounts/ API - CRUD")
     """
     Triggers only @regression scenarios in Karate
     """
     run_karate_with_tags("@regression")
 
-@allure.epic("API Test - Karate")
-@allure.feature("SIT Tests")
+# Behavior-based Hierarchy
+@allure.epic("Bank Management System")
+@allure.feature("Accounts API - Karate")
+@allure.story("End-to-End CRUD - sit tests")
+
+# Suite-based Hierarchy
+@allure.parent_suite("Bank Management System")
+@allure.suite("Accounts API - Karate")
+@allure.sub_suite("End-to-End CRUD - sit tests")
 @pytest.mark.sit
 def test_karate_sit():
+    allure.title("e2e API testing using Karate BDD for accounts/ API - CRUD")
     """
     Triggers only @sit scenarios in Karate
     """

@@ -9,10 +9,18 @@ load_dotenv()
 TEST_DATA_FILE = os.path.join(os.path.dirname(__file__), "data", "test_data.csv")
 test_data = get_data_with_markers(TEST_DATA_FILE)
 
-@allure.epic("Web UI Test - Selenium")
-@allure.feature("End-to-End test flow")
-@pytest.mark.parametrize("row", test_data, ids=lambda r: r["account_holder_name"])
+# Behavior-based Hierarchy
+@allure.epic("Bank Management System")
+@allure.feature("UI Testing - Playwright")
+@allure.story("End-to-End CRUD")
+
+# Suite-based Hierarchy
+@allure.parent_suite("Bank Management System")
+@allure.suite("UI Testing - Playwright")
+@allure.sub_suite("End-to-End CRUD")
+@pytest.mark.parametrize("row", test_data)
 def test_end_to_end_crud(driver, login_page, home_page, create_page, details_page, row):
+    allure.dynamic.title(f"{row['tc_no']} {row['tc_name']}")
     # Note: Fixtures (login_page, etc.) are already initialized with the driver in conftest.py
 
     # --- 1. Navigate & Create ---
