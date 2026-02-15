@@ -1,0 +1,15 @@
+{
+  "account_holder_name": "Meera Iyer",
+  "account_id": "8566080",
+  "account_type": "Salary",
+  "address": "45 Anna Salai, Chennai, TN",
+  "balance": "85000.25",
+  "dob": "1985-07-19",
+  "email": "meera.iyer@example.com",
+  "gender": "Female",
+  "marketing_opt_in": "false",
+  "phone": "+91-9123456780",
+  "services": "Internet Banking",
+  "status": "Active",
+  "zip_code": "600002"
+}
