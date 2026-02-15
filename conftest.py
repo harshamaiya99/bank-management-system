@@ -71,7 +71,7 @@ def pytest_sessionfinish(session, exitstatus):
     project_root = os.getcwd()
     results_dir = os.path.join(project_root, "tests", "reports", "allure-results")
     report_dir = os.path.join(project_root, "tests", "reports", "allure-report")
-    config_file = os.path.join(project_root, "allure.config.json")
+    config_file = os.path.join(project_root, "allurerc.yml")
 
     allure_cmd = shutil.which("allure")
     if not allure_cmd:
@@ -96,7 +96,7 @@ def pytest_sessionfinish(session, exitstatus):
                 "--config",
                 config_file,
                 "--history-limit",
-                "10"
+                "20"
             ],
             check=True
         )
