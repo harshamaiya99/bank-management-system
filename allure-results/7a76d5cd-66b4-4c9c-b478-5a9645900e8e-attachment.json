@@ -1,0 +1,15 @@
+{
+  "account_holder_name": "David Brown",
+  "account_id": "6281298",
+  "account_type": "Current",
+  "address": "500 Elm St, Dallas, TX",
+  "balance": "120000.00",
+  "dob": "1979-12-05",
+  "email": "david.brown@example.com",
+  "gender": "Male",
+  "marketing_opt_in": "true",
+  "phone": "+1-555-0303",
+  "services": "Internet Banking,SMS Alerts",
+  "status": "Active",
+  "zip_code": "75201"
+}
