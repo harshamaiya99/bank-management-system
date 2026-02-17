@@ -1,0 +1,7 @@
+Expected (Regex):
+Toast title: Account Opened
+Toast Description: Successfully created account \d{7} for John Doe
+
+Actual:
+Toast title: Account Opened
+Toast Description: Successfully created account 7812729 for John Doe
