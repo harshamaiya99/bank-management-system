@@ -1,0 +1,15 @@
+{
+  "account_holder_name": "John Doe",
+  "account_id": "7984311",
+  "account_type": "Savings",
+  "address": "123 Main St, New York, NY",
+  "balance": "1000.5",
+  "dob": "1999-08-10",
+  "email": "john.doe@example.com",
+  "gender": "Male",
+  "marketing_opt_in": "true",
+  "phone": "+1-555-0199",
+  "services": "Internet Banking,Debit Card",
+  "status": "Active",
+  "zip_code": "576225"
+}
