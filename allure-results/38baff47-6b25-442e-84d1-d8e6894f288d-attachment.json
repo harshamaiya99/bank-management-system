@@ -1,0 +1,28 @@
+{
+  "status_code": 200,
+  "headers": {
+    "date": "Thu, 19 Feb 2026 19:25:48 GMT",
+    "server": "uvicorn",
+    "content-length": "385",
+    "content-type": "application/json",
+    "x-request-id": "81c06bbe-c596-4805-b6bf-a1e58c1db3c1",
+    "x-process-id": "e7e2f613-f40a-4023-be1a-fd1fb78e8dea"
+  },
+  "body": {
+    "account_id": "4833123",
+    "account_holder_name": "Ravi K.",
+    "dob": "1992-11-02",
+    "gender": "Male",
+    "email": "ravi.k@example.com",
+    "phone": "+91-9876543210",
+    "address": "22 Brigade Rd, Bengaluru, KA",
+    "zip_code": "560025",
+    "account_type": "Savings",
+    "balance": 175000.0,
+    "date_opened": "2026-02-19",
+    "status": "Active",
+    "services": "Cheque Book,Internet Banking",
+    "marketing_opt_in": false,
+    "agreed_to_terms": true
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "method": "POST",
+  "url": "http://127.0.0.1:9000/accounts",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW5hZ2VyIiwicm9sZSI6Im1hbmFnZXIiLCJleHAiOjE3NzE1MzA5NDl9.UEif-fUisQuwj4wgRlK8KfjZ5lqdb6jHDtCQtv2tbdw",
+    "Idempotency-Id": "b92fc0df-73d4-43e4-a84d-0c58caf0686c",
+    "X-Process-Id": "cb7c3612-eb20-46b4-a9a5-98c9c97d01e3"
+  },
+  "payload": {
+    "balance": 25000.75,
+    "status": "Active",
+    "agreed_to_terms": true,
+    "account_holder_name": "Alice Smith",
+    "gender": "Female",
+    "email": "alice.smith@example.com",
+    "phone": "-755",
+    "address": "78 Park Lane, Chicago, IL",
+    "zip_code": "60616",
+    "account_type": "Current",
+    "services": "Internet Banking,SMS Alerts",
+    "marketing_opt_in": false
+  }
+}
