@@ -1,0 +1,15 @@
+{
+  "account_holder_name": "Ravi Kumar",
+  "account_id": "7620258",
+  "account_type": "Savings",
+  "address": "12 MG Road, Bengaluru, KA",
+  "balance": "150000",
+  "dob": "1992-11-02",
+  "email": "ravi.kumar@example.com",
+  "gender": "Male",
+  "marketing_opt_in": "true",
+  "phone": "+91-9876543210",
+  "services": "Internet Banking,Debit Card,Cheque Book",
+  "status": "Active",
+  "zip_code": "560001"
+}
