@@ -1,0 +1,25 @@
+{
+  "method": "POST",
+  "url": "http://127.0.0.1:9000/accounts",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW5hZ2VyIiwicm9sZSI6Im1hbmFnZXIiLCJleHAiOjE3NzE3MDIzNDF9.DJxiSItbMRzvCTtgdaxMHjWn1HqQAzwDyF-aGczMJfY",
+    "Idempotency-Id": "cefc087d-48b7-443e-b394-599f904060af",
+    "X-Process-Id": "e37c5566-ba90-4abe-af82-7592c0f1118b"
+  },
+  "payload": {
+    "balance": 150000.0,
+    "status": "Active",
+    "agreed_to_terms": true,
+    "account_holder_name": "Ravi Kumar",
+    "dob": "02-11-1992",
+    "email": "ravi.kumar@example.com",
+    "phone": "-9876543119",
+    "address": "12 MG Road, Bengaluru, KA",
+    "zip_code": "560001",
+    "account_type": "Savings",
+    "services": "Cheque Book,Internet Banking,Debit Card",
+    "marketing_opt_in": true
+  }
+}

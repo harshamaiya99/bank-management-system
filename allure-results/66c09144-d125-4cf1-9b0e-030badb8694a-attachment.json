@@ -1,0 +1,28 @@
+{
+  "status_code": 200,
+  "headers": {
+    "date": "Sat, 21 Feb 2026 19:02:20 GMT",
+    "server": "uvicorn",
+    "content-length": "394",
+    "content-type": "application/json",
+    "x-request-id": "6d69e138-5021-4d30-a7d3-421c245d203a",
+    "x-process-id": "79dece3e-6a7c-464d-99eb-4387cf7a64fb"
+  },
+  "body": {
+    "account_id": "7046131",
+    "account_holder_name": "Alice Johnson",
+    "dob": "1988-03-15",
+    "gender": "Female",
+    "email": "alice.johnson@example.com",
+    "phone": "+1-555-0201",
+    "address": "90 Lake View Rd, Chicago, IL",
+    "zip_code": "60618",
+    "account_type": "Current",
+    "balance": 27000.0,
+    "date_opened": "2026-02-21",
+    "status": "Active",
+    "services": "Internet Banking,Cheque Book",
+    "marketing_opt_in": true,
+    "agreed_to_terms": true
+  }
+}
