@@ -1,0 +1,25 @@
+{
+  "method": "PUT",
+  "url": "http://127.0.0.1:9000/accounts/6276667",
+  "headers": {
+    "content-type": "application/json",
+    "accept": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW5hZ2VyIiwicm9sZSI6Im1hbmFnZXIiLCJleHAiOjE3NzE5NjMzNDV9.9HQG-byCAOeXTL2KznX6OuVqQuu1jovm2TsHdqerNPw",
+    "X-Process-Id": "4b4b9987-c747-4d30-89e2-e2019969c65a"
+  },
+  "payload": {
+    "account_holder_name": "Alice Johnson",
+    "dob": "1988-03-15",
+    "gender": "Female",
+    "email": "alice.johnson@example.com",
+    "phone": "+1-555-0201",
+    "address": "90 Lake View Rd, Chicago, IL",
+    "zip_code": "60618",
+    "account_type": "Current",
+    "balance": 27000.0,
+    "status": "Active",
+    "services": "Internet Banking,Cheque Book",
+    "marketing_opt_in": true,
+    "agreed_to_terms": true
+  }
+}
