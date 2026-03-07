@@ -1,0 +1,28 @@
+{
+  "status_code": 200,
+  "headers": {
+    "date": "Sat, 07 Mar 2026 15:51:07 GMT",
+    "server": "uvicorn",
+    "content-length": "378",
+    "content-type": "application/json",
+    "x-request-id": "a93add27-1d1b-428c-9365-82cde25789e2",
+    "x-process-id": "682216cf-d19a-400a-9dd7-28b7907b2b84"
+  },
+  "body": {
+    "account_id": "1588329",
+    "account_holder_name": "John Doe Updated",
+    "dob": "1990-01-21",
+    "gender": "Female",
+    "email": "john.new@example.com",
+    "phone": "+1-555-0199",
+    "address": "456 New Ave, New York, NY",
+    "zip_code": "566006",
+    "account_type": "Current",
+    "balance": 5000.0,
+    "date_opened": "2026-03-07",
+    "status": "Active",
+    "services": "Internet Banking",
+    "marketing_opt_in": false,
+    "agreed_to_terms": true
+  }
+}
