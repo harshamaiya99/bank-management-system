@@ -1,5 +1,6 @@
 .env
 logs/
+tests/logs
 *.log
 .idea/
 .vscode/
