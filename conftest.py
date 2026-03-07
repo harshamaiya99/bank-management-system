@@ -6,6 +6,19 @@ import socket
 from datetime import datetime
 import pytest
 
+from tests.api_pytest.utils.logger import api_logger
+
+@pytest.fixture(autouse=True)
+def log_test_execution(request):
+    # Print a newline to stop Loguru from attaching to Pytest's first line
+    print("\n")
+
+    test_name = request.node.name
+    api_logger.info(f"RUNNING: {test_name}")
+
+    yield
+    print()
+    api_logger.info(f"FINISHED: {test_name}")
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_allure_environment():
