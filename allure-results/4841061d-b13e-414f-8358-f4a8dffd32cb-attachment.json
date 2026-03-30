@@ -1,0 +1,26 @@
+{
+  "method": "POST",
+  "url": "http://127.0.0.1:9000/accounts",
+  "headers": {
+    "content-type": "application/json",
+    "accept": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW5hZ2VyIiwicm9sZSI6Im1hbmFnZXIiLCJleHAiOjE3NzQ5MDExNzF9._kFfddeE989Nnufv_DhmH6KBkVocKHcODGjetgj3wA4",
+    "Idempotency-Id": "5fbcb450-7870-438e-b479-09ce9e94b8e8",
+    "X-Process-Id": "1c047d33-4736-44f6-a897-095d1bb0935d"
+  },
+  "payload": {
+    "account_holder_name": "Meera Iyer",
+    "dob": "1985-07-19",
+    "gender": "Female",
+    "email": "meera.iyer@example.com",
+    "phone": "+91-9123456780",
+    "address": "45 Anna Salai, Chennai, TN",
+    "zip_code": "600002",
+    "account_type": "Salary",
+    "balance": 85000.25,
+    "status": "Inactive",
+    "services": "Internet Banking",
+    "marketing_opt_in": false,
+    "agreed_to_terms": true
+  }
+}

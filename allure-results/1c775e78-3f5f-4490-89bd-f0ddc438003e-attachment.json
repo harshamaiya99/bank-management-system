@@ -1,0 +1,28 @@
+{
+  "status_code": 200,
+  "headers": {
+    "date": "Mon, 30 Mar 2026 19:36:10 GMT",
+    "server": "uvicorn",
+    "content-length": "389",
+    "content-type": "application/json",
+    "x-request-id": "ce71e3a0-b44e-42e5-a3f9-0624484b0f36",
+    "x-process-id": "5a298356-6343-44c9-88c9-a743f8cfaacd"
+  },
+  "body": {
+    "account_id": "4223739",
+    "account_holder_name": "David Brown Jr",
+    "dob": "1979-12-05",
+    "gender": "Male",
+    "email": "david.brownjr@example.com",
+    "phone": "+1-555-0303",
+    "address": "700 Oak St, Dallas, TX",
+    "zip_code": "75202",
+    "account_type": "Current",
+    "balance": 118000.0,
+    "date_opened": "2026-03-30",
+    "status": "Active",
+    "services": "Internet Banking,Cheque Book",
+    "marketing_opt_in": false,
+    "agreed_to_terms": true
+  }
+}
