@@ -1,0 +1,14 @@
+{
+  "status_code": 200,
+  "headers": {
+    "date": "Mon, 06 Apr 2026 19:36:52 GMT",
+    "server": "uvicorn",
+    "content-length": "42",
+    "content-type": "application/json",
+    "x-request-id": "ae542424-c18a-4e58-a006-fc31018f1685",
+    "x-process-id": "6b6aedbf-18cc-4959-8441-9533c708a3b4"
+  },
+  "body": {
+    "message": "Account deleted successfully"
+  }
+}
