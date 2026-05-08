@@ -1,0 +1,24 @@
+{
+  "method": "POST",
+  "url": "http://127.0.0.1:9000/accounts",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW5hZ2VyIiwicm9sZSI6Im1hbmFnZXIiLCJleHAiOjE3NzgyNzE4NjB9.jSkgkmY0AbilSqKAUzOBKSE5BDI1ALTeJmoVJz6CA9c",
+    "Idempotency-Id": "a625f5fb-430f-488c-bfd6-eddba55067af",
+    "X-Process-Id": "1a8eb0bd-34cd-460d-886d-7e3405bfe7b2"
+  },
+  "payload": {
+    "balance": 1000.5,
+    "status": "Active",
+    "agreed_to_terms": true,
+    "gender": "Male",
+    "email": "john.doe@example.com",
+    "phone": "-753",
+    "address": "123 Main St, New York, NY",
+    "zip_code": "576225",
+    "account_type": "Savings",
+    "services": "Internet Banking,Debit Card",
+    "marketing_opt_in": true
+  }
+}

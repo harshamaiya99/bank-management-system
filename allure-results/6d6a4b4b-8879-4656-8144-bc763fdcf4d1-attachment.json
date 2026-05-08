@@ -1,0 +1,28 @@
+{
+  "status_code": 200,
+  "headers": {
+    "date": "Fri, 08 May 2026 19:54:19 GMT",
+    "server": "uvicorn",
+    "content-length": "399",
+    "content-type": "application/json",
+    "x-request-id": "fb37934e-9a62-4bca-b1b3-c84858b2eaaf",
+    "x-process-id": "bfee7056-d9e1-437c-a940-2c821e1dadf2"
+  },
+  "body": {
+    "account_id": "5627829",
+    "account_holder_name": "Ravi Kumar",
+    "dob": "1992-11-02",
+    "gender": "Male",
+    "email": "ravi.kumar@example.com",
+    "phone": "+91-9876543210",
+    "address": "12 MG Road, Bengaluru, KA",
+    "zip_code": "560001",
+    "account_type": "Savings",
+    "balance": 150000.0,
+    "date_opened": "2026-05-08",
+    "status": "Active",
+    "services": "Cheque Book,Internet Banking,Debit Card",
+    "marketing_opt_in": true,
+    "agreed_to_terms": true
+  }
+}
