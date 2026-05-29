@@ -1,0 +1,25 @@
+{
+  "method": "POST",
+  "url": "http://127.0.0.1:9000/accounts",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW5hZ2VyIiwicm9sZSI6Im1hbmFnZXIiLCJleHAiOjE3ODAwODkxOTV9.fDOJQlBIAPX4dh7dgHcPdouaazAyI6saHii5Lv1TSqo",
+    "Idempotency-Id": "5e500791-1881-463c-aac7-442d3570c09c",
+    "X-Process-Id": "6fd6b49e-0baf-4b8e-a7d3-32e3af6288e3"
+  },
+  "payload": {
+    "balance": 120000.0,
+    "status": "Active",
+    "agreed_to_terms": true,
+    "account_holder_name": "David Brown",
+    "dob": "05-12-1979",
+    "gender": "Male",
+    "email": "david.brown@example.com",
+    "address": "500 Elm St, Dallas, TX",
+    "zip_code": "75201",
+    "account_type": "Current",
+    "services": "Internet Banking,SMS Alerts",
+    "marketing_opt_in": true
+  }
+}
