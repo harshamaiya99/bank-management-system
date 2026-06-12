@@ -1,0 +1,25 @@
+{
+  "method": "POST",
+  "url": "http://127.0.0.1:9000/accounts",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW5hZ2VyIiwicm9sZSI6Im1hbmFnZXIiLCJleHAiOjE3ODEyOTgzNjd9.8sVBAZtaAK3TwwsUjBt0cDEbP2VhwzWHuQic9rgcoPs",
+    "Idempotency-Id": "e4aab58b-24e9-4407-85d1-f1e916d396a0",
+    "X-Process-Id": "c4ebccc3-116d-414a-8deb-bd6358915ead"
+  },
+  "payload": {
+    "balance": 42000.0,
+    "status": "Active",
+    "agreed_to_terms": true,
+    "account_holder_name": "Sara Khan",
+    "dob": "28-05-1996",
+    "gender": "Female",
+    "email": "sara.khan@example.com",
+    "phone": "-9988776564",
+    "address": "101 Jubilee Hills, Hyderabad, TS",
+    "zip_code": "500033",
+    "account_type": "Savings",
+    "marketing_opt_in": true
+  }
+}

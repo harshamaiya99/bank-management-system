@@ -1,0 +1,25 @@
+{
+  "method": "PUT",
+  "url": "http://127.0.0.1:9000/accounts/7681188",
+  "headers": {
+    "content-type": "application/json",
+    "accept": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW5hZ2VyIiwicm9sZSI6Im1hbmFnZXIiLCJleHAiOjE3ODEyOTgzNjd9.8sVBAZtaAK3TwwsUjBt0cDEbP2VhwzWHuQic9rgcoPs",
+    "X-Process-Id": "b2a08509-b9c9-4873-99ad-f9ff24e9fb4b"
+  },
+  "payload": {
+    "account_holder_name": "David Brown Jr",
+    "dob": "1979-12-05",
+    "gender": "Male",
+    "email": "david.brownjr@example.com",
+    "phone": "+1-555-0303",
+    "address": "700 Oak St, Dallas, TX",
+    "zip_code": "75202",
+    "account_type": "Current",
+    "balance": 118000.0,
+    "status": "Active",
+    "services": "Internet Banking,Cheque Book",
+    "marketing_opt_in": false,
+    "agreed_to_terms": true
+  }
+}
