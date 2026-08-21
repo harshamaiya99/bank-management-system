@@ -1,0 +1,16 @@
+{
+  "status_code": 200,
+  "headers": {
+    "date": "Fri, 21 Aug 2026 19:07:01 GMT",
+    "server": "uvicorn",
+    "content-length": "92",
+    "content-type": "application/json",
+    "x-request-id": "cb2b960f-59ad-4ce8-b608-9ffe26109615",
+    "x-process-id": "03fabee9-9139-418f-b46b-6f620abf8158"
+  },
+  "body": {
+    "account_id": "4139270",
+    "date_opened": "2026-08-21",
+    "message": "Account created successfully"
+  }
+}
