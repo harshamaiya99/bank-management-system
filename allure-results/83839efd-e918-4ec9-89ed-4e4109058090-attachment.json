@@ -1,0 +1,23 @@
+{
+  "status_code": 422,
+  "headers": {
+    "date": "Fri, 18 Sep 2026 21:07:06 GMT",
+    "server": "uvicorn",
+    "content-length": "92",
+    "content-type": "application/json",
+    "x-request-id": "44b0f5dd-0f4a-457f-a96f-039b5dd1e795",
+    "x-process-id": "6915f2bc-b994-4643-b283-09a9566d01e1"
+  },
+  "body": {
+    "detail": [
+      {
+        "loc": [
+          "body",
+          "zip_code"
+        ],
+        "msg": "field required",
+        "type": "value_error.missing"
+      }
+    ]
+  }
+}

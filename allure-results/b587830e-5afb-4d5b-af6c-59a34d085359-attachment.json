@@ -1,0 +1,28 @@
+{
+  "status_code": 200,
+  "headers": {
+    "date": "Fri, 18 Sep 2026 21:07:06 GMT",
+    "server": "uvicorn",
+    "content-length": "381",
+    "content-type": "application/json",
+    "x-request-id": "ce3944b6-8d5c-4c32-a809-ba3d975b1e9b",
+    "x-process-id": "460903ae-b500-4e57-abc1-7afa1f44dc4b"
+  },
+  "body": {
+    "account_id": "8829604",
+    "account_holder_name": "Meera Iyer",
+    "dob": "1985-07-19",
+    "gender": "Female",
+    "email": "meera.iyer@example.com",
+    "phone": "+91-9123456780",
+    "address": "45 Anna Salai, Chennai, TN",
+    "zip_code": "600002",
+    "account_type": "Salary",
+    "balance": 85000.25,
+    "date_opened": "2026-09-18",
+    "status": "Inactive",
+    "services": "Internet Banking",
+    "marketing_opt_in": false,
+    "agreed_to_terms": true
+  }
+}

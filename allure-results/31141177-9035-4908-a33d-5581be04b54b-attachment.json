@@ -1,0 +1,28 @@
+{
+  "status_code": 200,
+  "headers": {
+    "date": "Fri, 18 Sep 2026 21:07:06 GMT",
+    "server": "uvicorn",
+    "content-length": "382",
+    "content-type": "application/json",
+    "x-request-id": "5d72db9f-414f-4a8f-a26d-4904478d7ce9",
+    "x-process-id": "9042c371-35ff-4133-becd-23f9fa74e939"
+  },
+  "body": {
+    "account_id": "5431208",
+    "account_holder_name": "David Brown",
+    "dob": "1979-12-05",
+    "gender": "Male",
+    "email": "david.brown@example.com",
+    "phone": "+1-555-0303",
+    "address": "500 Elm St, Dallas, TX",
+    "zip_code": "75201",
+    "account_type": "Current",
+    "balance": 120000.0,
+    "date_opened": "2026-09-18",
+    "status": "Active",
+    "services": "Internet Banking,SMS Alerts",
+    "marketing_opt_in": true,
+    "agreed_to_terms": true
+  }
+}
