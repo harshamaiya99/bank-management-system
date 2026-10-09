@@ -1,0 +1,25 @@
+{
+  "method": "POST",
+  "url": "http://127.0.0.1:9000/accounts",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW5hZ2VyIiwicm9sZSI6Im1hbmFnZXIiLCJleHAiOjE3OTE1ODc5NTN9.4cdi4ryJlAPBlfCZmDQ2uesRL2EdCDGwZWUvcTRxBKo",
+    "Idempotency-Id": "215fa219-f4b8-48a8-99b2-700b66e4b775",
+    "X-Process-Id": "56561dac-2f0e-409e-a0ae-150c33fee70a"
+  },
+  "payload": {
+    "balance": 42000.0,
+    "status": "Active",
+    "agreed_to_terms": true,
+    "account_holder_name": "Sara Khan",
+    "dob": "28-05-1996",
+    "gender": "Female",
+    "email": "sara.khan@example.com",
+    "phone": "-9988776564",
+    "zip_code": "500033",
+    "account_type": "Savings",
+    "services": "Cheque Book,Debit Card",
+    "marketing_opt_in": true
+  }
+}

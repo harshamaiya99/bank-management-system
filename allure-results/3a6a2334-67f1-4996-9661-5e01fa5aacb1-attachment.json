@@ -1,0 +1,11 @@
+{
+  "method": "GET",
+  "url": "http://127.0.0.1:9000/accounts/4730546",
+  "headers": {
+    "content-type": "application/json",
+    "accept": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW5hZ2VyIiwicm9sZSI6Im1hbmFnZXIiLCJleHAiOjE3OTE1ODc5NTN9.4cdi4ryJlAPBlfCZmDQ2uesRL2EdCDGwZWUvcTRxBKo",
+    "X-Process-Id": "c6054f35-f9ac-4386-9a58-16591eb4fcfc"
+  },
+  "payload": null
+}
